@@ -1,2 +1,56 @@
 # SampleDB API Wrapper
 
+## What is currently working
+
+- [ ] Authentication
+- [ ] Objects
+    - [ ] Reading a list of all objects
+    - [ ] Getting the current object version
+    - [ ] Reading an object version
+    - [ ] Creating a new object
+    - [ ] Updating an object / Creating a new object version
+- [ ] Object permissions
+    - [ ] Reading whether an object is public
+    - [ ] Setting whether an object is public
+    - [ ] Reading all users' permissions
+    - [ ] Reading a user's permissions
+    - [ ] Setting a user's permissions
+    - [ ] Reading all groups' permissions
+    - [ ] Reading a group's permissions
+    - [ ] Setting a group's permissions
+    - [ ] Reading all projects' permissions
+    - [ ] Reading a project's permissions
+    - [ ] Setting a project's permissions
+- [ ] Instruments
+    - [ ] Reading a list of all instruments
+    - [ ] Reading an instrument
+- [ ] Instrument log entries
+    - [ ] Reading a list of all log entries for an instrument
+    - [ ] Reading an instrument log entry
+    - [ ] Reading a list of all log categories for an instrument
+    - [ ] Reading an instrument log category
+    - [ ] Reading a list of all file attachments for a log entry
+    - [ ] Reading a file attachment for a log entry
+    - [ ] Reading a list of all object attachments for a log entry
+    - [ ] Reading an object attachment for a log entry
+    - [ ] Creating an instrument log entry
+- [ ] Actions
+    - [ ] Reading a list of all actions
+    - [ ] Reading an action
+- [ ] Action types
+    - [ ] Reading a list of all action types
+    - [ ] Reading an action type
+- [ ] Users
+    - [ ] Reading a list of all users
+    - [ ] Reading a user
+    - [ ] Reading the current user
+- [ ] Locations
+    - [ ] Reading a list of all locations
+    - [ ] Reading a location
+    - [ ] Reading a list of an object's locations
+    - [ ] Reading an object's location
+- [ ] Files
+    - [ ] Reading a list of an object's files
+    - [ ] Reading information for a file
+    - [ ] Uploading a file
+    - [ ] Posting a link
