@@ -2,7 +2,7 @@
 
 ## What is currently working
 
-- [ ] Authentication
+- [x] Authentication
 - [ ] Objects
     - [ ] Reading a list of all objects
     - [ ] Getting the current object version
