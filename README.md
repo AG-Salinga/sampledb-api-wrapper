@@ -1,4 +1,32 @@
 # SampleDB API Wrapper
+## What it does
+This package is a simple Python wrapper for the [HTTP API](https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html) of [SampleDB](https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/), a web-based sample and measurement metadata database developed at PGI and JCNS.
+
+This Python wrapper may also be used e.g. in Matlab and Julia.
+
+## Installation
+User installation using pip:
+```
+pip install --upgrade --user sampledbapi
+```
+
+System installation using pip:
+```
+pip install --upgrade sampledbapi
+```
+
+## Example usage
+```python
+from sampledbapi import *
+
+server_address = ...
+api_key = ...
+
+authenticate(server_address, api_key)
+print(objects.getList())
+print(objects.get(123))
+print(instruments.getList())
+```
 
 ## What works
 
