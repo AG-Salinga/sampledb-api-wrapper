@@ -4,26 +4,26 @@
 
 - [x] Authentication
 - [ ] Objects
-    - [ ] Reading a list of all objects
-    - [ ] Getting the current object version
-    - [ ] Reading an object version
+    - [x] Reading a list of all objects
+    - [x] Getting the current object version
+    - [x] Reading an object version
     - [ ] Creating a new object
     - [ ] Updating an object / Creating a new object version
 - [ ] Object permissions
-    - [ ] Reading whether an object is public
+    - [x] Reading whether an object is public
     - [ ] Setting whether an object is public
-    - [ ] Reading all users' permissions
-    - [ ] Reading a user's permissions
+    - [x] Reading all users' permissions
+    - [x] Reading a user's permissions
     - [ ] Setting a user's permissions
-    - [ ] Reading all groups' permissions
+    - [x] Reading all groups' permissions
     - [ ] Reading a group's permissions
-    - [ ] Setting a group's permissions
+    - [x] Setting a group's permissions
     - [ ] Reading all projects' permissions
-    - [ ] Reading a project's permissions
+    - [x] Reading a project's permissions
     - [ ] Setting a project's permissions
-- [ ] Instruments
-    - [ ] Reading a list of all instruments
-    - [ ] Reading an instrument
+- [x] Instruments
+    - [x] Reading a list of all instruments
+    - [x] Reading an instrument
 - [ ] Instrument log entries
     - [ ] Reading a list of all log entries for an instrument
     - [ ] Reading an instrument log entry
