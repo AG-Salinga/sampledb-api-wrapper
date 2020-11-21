@@ -1,6 +1,6 @@
 # SampleDB API Wrapper
 
-## What is currently working
+## What works
 
 - [x] Authentication
 - [ ] Objects
@@ -16,41 +16,41 @@
     - [x] Reading a user's permissions
     - [ ] Setting a user's permissions
     - [x] Reading all groups' permissions
-    - [ ] Reading a group's permissions
-    - [x] Setting a group's permissions
-    - [ ] Reading all projects' permissions
+    - [x] Reading a group's permissions
+    - [ ] Setting a group's permissions
+    - [x] Reading all projects' permissions
     - [x] Reading a project's permissions
     - [ ] Setting a project's permissions
 - [x] Instruments
     - [x] Reading a list of all instruments
     - [x] Reading an instrument
 - [ ] Instrument log entries
-    - [ ] Reading a list of all log entries for an instrument
-    - [ ] Reading an instrument log entry
-    - [ ] Reading a list of all log categories for an instrument
-    - [ ] Reading an instrument log category
-    - [ ] Reading a list of all file attachments for a log entry
-    - [ ] Reading a file attachment for a log entry
-    - [ ] Reading a list of all object attachments for a log entry
-    - [ ] Reading an object attachment for a log entry
+    - [x] Reading a list of all log entries for an instrument
+    - [x] Reading an instrument log entry
+    - [x] Reading a list of all log categories for an instrument
+    - [x] Reading an instrument log category
+    - [x] Reading a list of all file attachments for a log entry
+    - [x] Reading a file attachment for a log entry
+    - [x] Reading a list of all object attachments for a log entry
+    - [x] Reading an object attachment for a log entry
     - [ ] Creating an instrument log entry
-- [ ] Actions
-    - [ ] Reading a list of all actions
-    - [ ] Reading an action
-- [ ] Action types
-    - [ ] Reading a list of all action types
-    - [ ] Reading an action type
-- [ ] Users
-    - [ ] Reading a list of all users
-    - [ ] Reading a user
-    - [ ] Reading the current user
-- [ ] Locations
-    - [ ] Reading a list of all locations
-    - [ ] Reading a location
-    - [ ] Reading a list of an object's locations
-    - [ ] Reading an object's location
+- [x] Actions
+    - [x] Reading a list of all actions
+    - [x] Reading an action
+- [x] Action types
+    - [x] Reading a list of all action types
+    - [x] Reading an action type
+- [x] Users
+    - [x] Reading a list of all users
+    - [x] Reading a user
+    - [x] Reading the current user
+- [x] Locations
+    - [x] Reading a list of all locations
+    - [x] Reading a location
+    - [x] Reading a list of an object's locations
+    - [x] Reading an object's location
 - [ ] Files
-    - [ ] Reading a list of an object's files
-    - [ ] Reading information for a file
+    - [x] Reading a list of an object's files
+    - [x] Reading information for a file
     - [ ] Uploading a file
     - [ ] Posting a link
