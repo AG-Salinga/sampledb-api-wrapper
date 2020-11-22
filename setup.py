@@ -22,7 +22,7 @@ out = setup(
     # http://packaging.python.org/en/latest/tutorial.html#version
     version=re.sub('^v', '', os.popen('git describe').read().strip()),
 
-    description="Data analysis software",
+    description="API wrapper for SampleDB",
     long_description=long_description,  # this is the
 
     # The project's main homepage.
@@ -44,8 +44,8 @@ out = setup(
         "Development Status :: 3 - Alpha",
 
         # Indicate who your project is intended for
-        "Intended Audience :: Developers",
-        "Topic :: Software Development :: Build Tools",
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering",
 
         # Pick your license as you wish (should match "license" above)
         "License :: OSI Approved :: MIT License",
