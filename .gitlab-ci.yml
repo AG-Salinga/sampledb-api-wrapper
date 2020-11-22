@@ -40,5 +40,6 @@ deploy_production:
     paths:
       - dist/
       - doc/_build/
+    expire_in: 4 weeks
   only:
     - tags
