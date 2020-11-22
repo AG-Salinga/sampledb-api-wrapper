@@ -3,7 +3,7 @@ import requests
 from typing import Dict, List
 
 __all__ = ["authenticate", "actions", "actiontypes", "files",
-           "instruments", "locations", "objects", "permissions", "users"]
+           "instruments", "locations", "objects", "users"]
 
 _address = None
 _api_key = None
