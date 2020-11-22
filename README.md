@@ -30,7 +30,7 @@ print(instruments.getList())
 
 ## Documentation
 
-The API documentation can be found [here](https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper/-/jobs/artifacts/master/file/doc/_build/index.html?job=deploy_production).
+The current API documentation can be found [here](https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper/-/jobs/artifacts/v0.0.3/file/doc/_build/index.html?job=deploy_production).
 
 ## What works
 
