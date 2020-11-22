@@ -1,3 +1,7 @@
+"""
+This is the module docstring.
+"""
+
 from typing import Dict, List
 
 from sampledbapi import getData
