@@ -28,6 +28,10 @@ print(objects.get(123))
 print(instruments.getList())
 ```
 
+## Documentation
+
+The API documentation can be found [here](https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper/-/jobs/artifacts/master/file/doc/_build/index.html?job=deploy_production).
+
 ## What works
 
 - [x] Authentication
