@@ -30,7 +30,7 @@ print(instruments.getList())
 
 ## Documentation
 
-The current API documentation can be found [here](https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper/-/jobs/artifacts/v0.0.7/file/doc/_build/index.html?job=deploy_production).
+The current API documentation can be found [here](https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper/-/jobs/artifacts/v0.1.0/file/doc/_build/index.html?job=deploy_production).
 Further details on the input and output of each function (usually JSON) can be found in the documentation of the [HTTP API](https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html).
 
 ## What works
