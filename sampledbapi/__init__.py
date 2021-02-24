@@ -31,13 +31,13 @@ def getData(path: str) -> str:
                         "\nJSON was\n" + r.text)
 
 
-def postData(path: str, data: str) -> requests.Response:
+def postData(path: str, data) -> requests.Response:
     address = _address + "/api/v1/" + path
     data = json.dumps(data)
     return requests.post(address, headers=__headers(), data=data)
 
 
-def putData(path: str, data: str) -> requests.Response:
+def putData(path: str, data) -> requests.Response:
     address = _address + "/api/v1/" + path
     data = json.dumps(data)
     return requests.put(address, headers=__headers(), data=data)

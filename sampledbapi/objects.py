@@ -7,8 +7,8 @@ from requests import Response
 
 from sampledbapi import getData, postData, putData
 
-__all__ = ["getList", "get", "getVersion", "getPublic", "setPublic",
-           "getAllUsersPermissions", "getUserPermissions",
+__all__ = ["getList", "get", "getVersion", "create", "update", "getPublic",
+           "setPublic", "getAllUsersPermissions", "getUserPermissions",
            "setUserPermissions", "getAllGroupsPermissions",
            "getGroupPermissions", "setGroupPermissions",
            "getAllProjectGroupsPermissions", "getProjectGroupPermissions",
@@ -42,6 +42,23 @@ def getVersion(object_id: int, version_id: int) -> Dict:
         return getData(
             "objects/{}/versions/{}" % (object_id, version_id)
         )
+    else:
+        raise TypeError()
+
+
+def create(action_id: int, data: dict) -> Response:
+    """Create a new object."""
+    if isinstance(action_id, int) and isinstance(data, dict):
+        return postData("objects/", {"action_id": action_id, "data": data})
+    else:
+        raise TypeError()
+
+
+def update(object_id: int, data: dict) -> Response:
+    """Create a new version of an object (object_id)."""
+    if isinstance(object_id, int) and isinstance(data, dict):
+        return postData("objects/{}/versions/".format(object_id),
+                        {"data": data})
     else:
         raise TypeError()
 
