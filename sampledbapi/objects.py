@@ -7,11 +7,14 @@ from requests import Response
 
 from sampledbapi import getData, postData, putData
 
-__all__ = ["getList", "get", "getVersion", "getPublic",
+__all__ = ["getList", "get", "getVersion", "getPublic", "setPublic",
            "getAllUsersPermissions", "getUserPermissions",
-           "getAllGroupsPermissions", "getGroupPermissions",
-           "getAllProjectsPermissions", "getProjectPermissions",
-           "getLocationList", "getLocation", "getFileList", "getFileInfo"]
+           "setUserPermissions", "getAllGroupsPermissions",
+           "getGroupPermissions", "setGroupPermissions",
+           "getAllProjectGroupsPermissions", "getProjectGroupPermissions",
+           "setProjectGroupPermissions", "getLocationList", "getLocation",
+           "getFileList", "getFileInfo", "uploadFile", "uploadFileRaw",
+           "postLink", "getCommentList", "getComment", "postComment"]
 
 
 def getList() -> List:
