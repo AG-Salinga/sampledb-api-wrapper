@@ -85,7 +85,7 @@ def getGroupPermissions(object_id: int, group_id: int) -> str:
         raise TypeError()
 
 
-def getAllProjectsPermissions(object_id: int) -> Dict:
+def getAllProjectGroupsPermissions(object_id: int) -> Dict:
     """Get a mapping of group IDs to their permissions."""
     if isinstance(object_id, int):
         return getData("objects/{}/permissions/projects".format(object_id))
@@ -93,7 +93,7 @@ def getAllProjectsPermissions(object_id: int) -> Dict:
         raise TypeError()
 
 
-def getProjectPermissions(object_id: int, project_id: int) -> str:
+def getProjectGroupPermissions(object_id: int, project_id: int) -> str:
     """Get the permissions of a group for an object."""
     if isinstance(object_id, int) and isinstance(project_id, int):
         return getData(

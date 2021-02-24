@@ -31,6 +31,7 @@ print(instruments.getList())
 ## Documentation
 
 The current API documentation can be found [here](https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper/-/jobs/artifacts/v0.0.3/file/doc/_build/index.html?job=deploy_production).
+Further details on the input and output of each function (usually JSON) can be found in the documentation of the [HTTP API](https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html).
 
 ## What works
 
@@ -50,9 +51,9 @@ The current API documentation can be found [here](https://zivgitlab.uni-muenster
     - [x] Reading all groups' permissions
     - [x] Reading a group's permissions
     - [ ] Setting a group's permissions
-    - [x] Reading all projects' permissions
-    - [x] Reading a project's permissions
-    - [ ] Setting a project's permissions
+    - [x] Reading all project groups' permissions
+    - [x] Reading a project group's permissions
+    - [ ] Setting a project group's permissions
 - [x] Instruments
     - [x] Reading a list of all instruments
     - [x] Reading an instrument
@@ -86,3 +87,7 @@ The current API documentation can be found [here](https://zivgitlab.uni-muenster
     - [x] Reading information for a file
     - [ ] Uploading a file
     - [ ] Posting a link
+- [ ] Comments
+    - [ ] Reading a list of an object’s comments
+    - [ ] Reading information for a comment
+    - [ ] Posting a comment
