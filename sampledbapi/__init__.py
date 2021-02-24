@@ -1,9 +1,10 @@
 import json
-import requests
 from typing import Dict, List
 
-__all__ = ["authenticate", "actions", "actiontypes", "files",
-           "instruments", "locations", "objects", "users"]
+import requests
+
+__all__ = ["authenticate", "actions", "actiontypes", "instruments",
+           "locations", "objects", "users"]
 
 _address = None
 _api_key = None
@@ -26,4 +27,17 @@ def getData(path: str) -> str:
         return json.loads(r.text)
     except Exception as e:
         # We need better error handling here
-        raise Exception("JSON could not be parsed.")
+        raise Exception("JSON could not be parsed: " + str(e) +
+                        "\nJSON was\n" + r.text)
+
+
+def postData(path: str, data: str) -> requests.Response:
+    address = _address + "/api/v1/" + path
+    data = json.dumps(data)
+    return requests.post(address, headers=__headers(), data=data)
+
+
+def putData(path: str, data: str) -> requests.Response:
+    address = _address + "/api/v1/" + path
+    data = json.dumps(data)
+    return requests.put(address, headers=__headers(), data=data)

@@ -42,18 +42,18 @@ Further details on the input and output of each function (usually JSON) can be f
     - [x] Reading an object version
     - [ ] Creating a new object
     - [ ] Updating an object / Creating a new object version
-- [ ] Object permissions
+- [x] Object permissions
     - [x] Reading whether an object is public
-    - [ ] Setting whether an object is public
+    - [x] Setting whether an object is public
     - [x] Reading all users' permissions
     - [x] Reading a user's permissions
-    - [ ] Setting a user's permissions
+    - [x] Setting a user's permissions
     - [x] Reading all groups' permissions
     - [x] Reading a group's permissions
-    - [ ] Setting a group's permissions
+    - [x] Setting a group's permissions
     - [x] Reading all project groups' permissions
     - [x] Reading a project group's permissions
-    - [ ] Setting a project group's permissions
+    - [x] Setting a project group's permissions
 - [x] Instruments
     - [x] Reading a list of all instruments
     - [x] Reading an instrument
@@ -82,12 +82,12 @@ Further details on the input and output of each function (usually JSON) can be f
     - [x] Reading a location
     - [x] Reading a list of an object's locations
     - [x] Reading an object's location
-- [ ] Files
+- [x] Files
     - [x] Reading a list of an object's files
     - [x] Reading information for a file
-    - [ ] Uploading a file
-    - [ ] Posting a link
-- [ ] Comments
-    - [ ] Reading a list of an object’s comments
-    - [ ] Reading information for a comment
-    - [ ] Posting a comment
+    - [x] Uploading a file
+    - [x] Posting a link
+- [x] Comments
+    - [x] Reading a list of an object’s comments
+    - [x] Reading information for a comment
+    - [x] Posting a comment

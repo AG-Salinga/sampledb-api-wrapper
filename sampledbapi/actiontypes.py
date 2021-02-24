@@ -4,6 +4,7 @@ from sampledbapi import getData
 
 __all__ = ["getList", "get"]
 
+
 def getList() -> List:
     """Get a list of all action types."""
     return getData("action_types")
