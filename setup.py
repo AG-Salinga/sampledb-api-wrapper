@@ -1,5 +1,4 @@
 import os
-import re
 from codecs import open  # To use a consistent encoding
 
 from setuptools import find_packages, setup  # Prefer setuptools over distutils
@@ -20,7 +19,7 @@ out = setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version=re.sub('^v', '', os.popen('git describe').read().strip()),
+    version="0.0.6",
 
     description="API wrapper for SampleDB",
     long_description=long_description,  # this is the
