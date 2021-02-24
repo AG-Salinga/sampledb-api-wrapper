@@ -36,12 +36,12 @@ Further details on the input and output of each function (usually JSON) can be f
 ## What works
 
 - [x] Authentication
-- [ ] Objects
+- [x] Objects
     - [x] Reading a list of all objects
     - [x] Getting the current object version
     - [x] Reading an object version
-    - [ ] Creating a new object
-    - [ ] Updating an object / Creating a new object version
+    - [x] Creating a new object
+    - [x] Updating an object / Creating a new object version
 - [x] Object permissions
     - [x] Reading whether an object is public
     - [x] Setting whether an object is public
@@ -57,7 +57,7 @@ Further details on the input and output of each function (usually JSON) can be f
 - [x] Instruments
     - [x] Reading a list of all instruments
     - [x] Reading an instrument
-- [ ] Instrument log entries
+- [x] Instrument log entries
     - [x] Reading a list of all log entries for an instrument
     - [x] Reading an instrument log entry
     - [x] Reading a list of all log categories for an instrument
@@ -66,7 +66,7 @@ Further details on the input and output of each function (usually JSON) can be f
     - [x] Reading a file attachment for a log entry
     - [x] Reading a list of all object attachments for a log entry
     - [x] Reading an object attachment for a log entry
-    - [ ] Creating an instrument log entry
+    - [x] Creating an instrument log entry
 - [x] Actions
     - [x] Reading a list of all actions
     - [x] Reading an action

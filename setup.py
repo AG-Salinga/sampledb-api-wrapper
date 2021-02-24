@@ -19,10 +19,10 @@ out = setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version="0.0.7",
+    version="0.1.0",
 
     description="API wrapper for SampleDB",
-    long_description=long_description,  # this is the
+    long_description=long_description,
 
     # The project's main homepage.
     url="https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper",
@@ -40,7 +40,7 @@ out = setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
 
         # Indicate who your project is intended for
         "Intended Audience :: Science/Research",
@@ -72,9 +72,9 @@ out = setup(
     # install_requires=requirements,
 
     # Entry point (none so far)
-    entry_points={
-        "console_scripts": [
-            # "puzzlestream = puzzlestream.launch:launchPuzzlestream",
-        ]
-    },
+    # entry_points={
+    #     "console_scripts": [
+    #         "puzzlestream = puzzlestream.launch:launchPuzzlestream",
+    #     ]
+    # },
 )

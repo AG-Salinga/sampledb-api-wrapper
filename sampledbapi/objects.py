@@ -47,7 +47,17 @@ def getVersion(object_id: int, version_id: int) -> Dict:
 
 
 def create(action_id: int, data: dict) -> Response:
-    """Create a new object."""
+    """Create a new object.
+
+    The data is a dictionary that has to be formatted according to the action's
+    schema. Exemplary data:
+    ```
+    {"name": {
+        "_type": "text",
+        "text": "Example Object"
+    }}
+    ```
+    """
     if isinstance(action_id, int) and isinstance(data, dict):
         return postData("objects/", {"action_id": action_id, "data": data})
     else:
@@ -55,7 +65,16 @@ def create(action_id: int, data: dict) -> Response:
 
 
 def update(object_id: int, data: dict) -> Response:
-    """Create a new version of an object (object_id)."""
+    """Create a new version of an object (object_id).
+
+    The data is a dictionary that has to be formatted according to the action's
+    schema. Exemplary data:
+    ```
+    {"name": {
+        "_type": "text",
+        "text": "Example Object"
+    }}
+    """
     if isinstance(object_id, int) and isinstance(data, dict):
         return postData("objects/{}/versions/".format(object_id),
                         {"data": data})
@@ -224,6 +243,9 @@ def uploadFile(object_id: int, path: str) -> Response:
     Args:
         object_id (int): ID of the object
         path (str): Path of the file to be uploaded.
+
+    Returns:
+        HTTPResponse: The HTTP response.
     """
     if isinstance(object_id, int) and isinstance(path, str):
         with open(path, "rb") as f:
@@ -240,6 +262,9 @@ def uploadFileRaw(object_id: int, name: str, file_obj: BinaryIO) -> Response:
         object_id (int): ID of the object
         name (str): Name that the file will have online.
         file_obj (BinaryIO): A binary stream that can be read to be uploaded.
+
+    Returns:
+        HTTPResponse: The HTTP response.
     """
     if (isinstance(object_id, int) and isinstance(name, str) and
             isinstance(file_obj, IOBase)):
