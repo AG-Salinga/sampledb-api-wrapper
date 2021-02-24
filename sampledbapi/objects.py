@@ -1,7 +1,7 @@
 import base64
 import os
 from io import IOBase
-from typing import BinaryIO, Dict, List
+from typing import BinaryIO, Dict, List, Type
 
 from requests import Response
 
@@ -17,15 +17,52 @@ __all__ = ["getList", "get", "getVersion", "create", "update", "getPublic",
            "postLink", "getCommentList", "getComment", "postComment"]
 
 
-def getList() -> List:
+def getList(q: str = "", action_id: int = -1, action_type: str = "",
+            limit: int = -1, offset: int = -1,
+            name_only: bool = False) -> List:
     """Get a list of all objects visible to the current user.
 
     The list only contains the current version of each object. By passing the
     parameter q to the query, the Advanced Search can be used. By passing the
     parameters action_id or action_type objects can be filtered by the action
     they were created with or by their type (e.g. sample or measurement).
+
+    Instead of returning all objects, the parameters limit and offset can be
+    used to reduce to maximum number of objects returned and to provide an
+    offset in the returned set, so allow simple pagination.
+
+    If the parameter name_only is provided, the object data and schema will be
+    reduced to the name property, omitting all other properties and schema
+    information.
     """
-    return getData("objects")
+    if (isinstance(q, str) and isinstance(action_id, int) and
+            isinstance(action_type, str) and isinstance(limit, int) and
+            isinstance(offset, int) and isinstance(name_only, bool)):
+        s = "objects"
+        pars = {}
+        if q != "":
+            pars["q"] = q
+        if action_id > 0:
+            pars["action_id"] = action_id
+        if action_type != "":
+            pars["action_type"] = action_type
+        if limit > 0:
+            pars["limit"] = limit
+        if offset > 0:
+            pars["offset"] = offset
+        if name_only:
+            pars["name_only"] = "true"
+
+        if len(pars) > 0:
+            s += "?"
+        for i, p in enumerate(pars):
+            s += "{}={}".format(p, pars[p])
+            if i < len(pars) - 1:
+                s += "&"
+
+        return getData(s)
+    else:
+        raise TypeError()
 
 
 def get(object_id: int) -> Dict:
