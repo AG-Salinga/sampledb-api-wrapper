@@ -13,12 +13,23 @@ __all__ = ["getList", "get", "getLogEntryList", "getLogEntry",
 
 
 def getList() -> List:
-    """Get a list of all instruments."""
+    """Get a list of all instruments.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instruments>`_
+    """
     return getData("instruments")
 
 
 def get(instrument_id: int) -> Dict:
-    """Get the specific instrument (instrument_id)."""
+    """Get the specific instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the specific instrument.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int):
         return getData("instruments/{}".format(instrument_id))
     else:
@@ -29,7 +40,14 @@ def get(instrument_id: int) -> Dict:
 
 
 def getLogEntryList(instrument_id: int) -> List:
-    """Get a list of all log entries for a specific instrument (instrument_id)."""
+    """Get a list of all log entries for a specific instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the specific instrument.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int):
         return getData("instruments/{}/log_entries".format(instrument_id))
     else:
@@ -37,7 +55,15 @@ def getLogEntryList(instrument_id: int) -> List:
 
 
 def getLogEntry(instrument_id: int, log_entry_id: int) -> Dict:
-    """Get the specific log entry (log_entry_id) for an instrument (instrument_id)."""
+    """Get the specific log entry (log_entry_id) for an instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the instrument.
+        log_entry_id (int): ID of the specific log entry.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int) and isinstance(log_entry_id, int):
         return getData("instruments/{}/log_entries/{}".format(
             instrument_id, log_entry_id))
@@ -46,7 +72,14 @@ def getLogEntry(instrument_id: int, log_entry_id: int) -> Dict:
 
 
 def getLogCategoryList(instrument_id: int) -> List:
-    """Get a list of all log category for a specific instrument (instrument_id)."""
+    """Get a list of all log category for a specific instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the instrument.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int):
         return getData("instruments/{}/log_categories".format(instrument_id))
     else:
@@ -54,7 +87,15 @@ def getLogCategoryList(instrument_id: int) -> List:
 
 
 def getLogCategory(instrument_id: int, log_category_id: int) -> Dict:
-    """Get the specific log categories (log_category_id) for an instrument (instrument_id)."""
+    """Get the specific log category (log_category_id) for an instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the instrument.
+        log_category_id (int): ID of the specific log category.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int) and isinstance(log_category_id, int):
         return getData("instruments/{}/log_categories/{}".format(
             instrument_id, log_category_id))
@@ -63,7 +104,15 @@ def getLogCategory(instrument_id: int, log_category_id: int) -> Dict:
 
 
 def getFileAttachmentList(instrument_id: int, log_entry_id: int) -> List:
-    """Get a list of file attachments for a specific log entry (log_entry_id) for an instrument (instrument_id)."""
+    """Get a list of file attachments for a specific log entry (log_entry_id) for an instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the instrument.
+        log_entry_id (int): ID of the specific log entry.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int) and isinstance(log_entry_id, int):
         return getData("instruments/{}/log_entries/{}/file_attachments".format(
             instrument_id, log_entry_id))
@@ -71,8 +120,18 @@ def getFileAttachmentList(instrument_id: int, log_entry_id: int) -> List:
         raise TypeError()
 
 
-def getFileAttachment(instrument_id: int, log_entry_id: int, file_attachment_id: int) -> Dict:
-    """Get a specific file attachment (file_attachment_id) for a log entry (log_entry_id) for an instrument (instrument_id)."""
+def getFileAttachment(instrument_id: int, log_entry_id: int,
+                      file_attachment_id: int) -> Dict:
+    """Get a specific file attachment (file_attachment_id) for a log entry (log_entry_id) for an instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the instrument.
+        log_entry_id (int): ID of the specific log entry.
+        file_attachment_id (int): ID of the file attachment.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if (isinstance(instrument_id, int) and isinstance(log_entry_id, int) and
             isinstance(file_attachment_id, int)):
         return getData("instruments/{}/log_entries/{}/file_attachments/{}".format(
@@ -82,7 +141,15 @@ def getFileAttachment(instrument_id: int, log_entry_id: int, file_attachment_id:
 
 
 def getObjectAttachmentList(instrument_id: int, log_entry_id: int) -> List:
-    """Get a list of object attachments for a specific log entry (log_entry_id) for an instrument (instrument_id)."""
+    """Get a list of object attachments for a specific log entry (log_entry_id) for an instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the instrument.
+        log_entry_id (int): ID of the specific log entry.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int) and isinstance(log_entry_id, int):
         return getData("instruments/{}/log_entries/{}/object_attachments".format(
             instrument_id, log_entry_id))
@@ -91,7 +158,16 @@ def getObjectAttachmentList(instrument_id: int, log_entry_id: int) -> List:
 
 
 def getObjectAttachment(instrument_id: int, log_entry_id: int, object_attachment_id: int) -> Dict:
-    """Get a specific file attachment (file_attachment_id) for a log entry (log_entry_id) for an instrument (instrument_id)."""
+    """Get a specific file attachment (file_attachment_id) for a log entry (log_entry_id) for an instrument (instrument_id).
+
+    Args:
+        instrument_id (int): ID of the instrument.
+        log_entry_id (int): ID of the specific log entry.
+        object_attachment_id (int): ID of the object attachment.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+    """
     if isinstance(instrument_id, int) and isinstance(log_entry_id, int) and isinstance(object_attachment_id, int):
         return getData("instruments/{}/log_entries/{}/object_attachments/{}".format(
             instrument_id, log_entry_id, object_attachment_id))
@@ -103,7 +179,7 @@ def createLogEntry(instrument_id: int, content: str, category_ids: List = [],
                    file_attachments: List = [],
                    object_attachments: List = []) -> Response:
     """Create a log entry for an instrument (instrument_id) and optionally attach files and objects to it.
-    
+
     Args:
         instrument_id (int): Instrument ID for which the log entry is created.
         content (str): Log message.
@@ -112,7 +188,7 @@ def createLogEntry(instrument_id: int, content: str, category_ids: List = [],
         object_attachments (list of integers): Object IDs to be attached to the log entry.
 
     Returns:
-        HTTPResponse: The HTTP response.
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
     """
     if (isinstance(instrument_id, int) and isinstance(content, str) and
             isinstance(category_ids, list) and

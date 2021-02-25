@@ -35,6 +35,8 @@ Further details on the input and output of each function (usually JSON) can be f
 
 ## What works
 
+The full HTTP API of SampleDB is supported. This includes
+
 - [x] Authentication
 - [x] Objects
     - [x] Reading a list of all objects

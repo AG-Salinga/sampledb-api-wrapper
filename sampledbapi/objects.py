@@ -34,6 +34,17 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
     If the parameter name_only is provided, the object data and schema will be
     reduced to the name property, omitting all other properties and schema
     information.
+
+    Args:
+        q (str): Search string for advanced search, `see here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/user_guide/objects.html#advanced-search>`_
+        action_id (int): Filter by action ID.
+        action_type (str): Filter by action type.
+        limit (int): Limit number of results (helpful for pagination).
+        offset (int): Offset for limited retrieval of results (pagination).
+        name_only (bool): Only names will be returned, no other information.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#objects>`_
     """
     if (isinstance(q, str) and isinstance(action_id, int) and
             isinstance(action_type, str) and isinstance(limit, int) and
@@ -66,7 +77,14 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
 
 
 def get(object_id: int) -> Dict:
-    """Get the current version of an object (object_id)."""
+    """Get the current version of an object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#objects>`_
+    """
     if isinstance(object_id, int):
         return getData("objects/{}".format(object_id))
     else:
@@ -74,7 +92,15 @@ def get(object_id: int) -> Dict:
 
 
 def getVersion(object_id: int, version_id: int) -> Dict:
-    """Get the specific version (version_id) of an object (object_id)."""
+    """Get the specific version (version_id) of an object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+        version_id (int): ID of the version to be retrieved.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#objects>`_
+    """
     if isinstance(object_id, int) and isinstance(version_id, int):
         return getData(
             "objects/{}/versions/{}" % (object_id, version_id)
@@ -123,7 +149,14 @@ def update(object_id: int, data: dict) -> Response:
 
 
 def getPublic(object_id: int) -> bool:
-    """Get whether or not an object is public."""
+    """Get whether or not an object is public.
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        bool: Whether the object is public or not.
+    """
     if isinstance(object_id, int):
         return getData("objects/{}/permissions/public".format(object_id))
     else:
@@ -131,7 +164,15 @@ def getPublic(object_id: int) -> bool:
 
 
 def setPublic(object_id: int, public: bool) -> Response:
-    """Set whether or not an object is public."""
+    """Set whether or not an object is public.
+
+    Args:
+        object_id (int): ID of the object.
+        public (bool): Whether the object is public or not.
+
+    Returns:
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+    """
     if isinstance(object_id, int) and isinstance(public, bool):
         return putData("objects/{}/permissions/public".format(object_id),
                        public)
@@ -140,7 +181,14 @@ def setPublic(object_id: int, public: bool) -> Response:
 
 
 def getAllUsersPermissions(object_id: int) -> Dict:
-    """Get a mapping of user IDs to their permissions."""
+    """Get a mapping of user IDs to their permissions.
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        Dict: Mapping of user IDs to permissions.
+    """
     if isinstance(object_id, int):
         return getData("objects/{}/permissions/users".format(object_id))
     else:
@@ -148,7 +196,15 @@ def getAllUsersPermissions(object_id: int) -> Dict:
 
 
 def getUserPermissions(object_id: int, user_id: int) -> str:
-    """Get the permissions of a user for an object."""
+    """Get the permissions of a user for an object.
+
+    Args:
+        object_id (int): ID of the object.
+        user_id (int): ID of the user.
+
+    Returns:
+        str: Permissions of user for the object.
+    """
     if isinstance(object_id, int) and isinstance(user_id, int):
         return getData(
             "objects/{}/permissions/users/{}".format(object_id, user_id)
@@ -159,7 +215,16 @@ def getUserPermissions(object_id: int, user_id: int) -> str:
 
 def setUserPermissions(object_id: int, user_id: int,
                        permissions: str) -> Response:
-    """Set the permissions of a user for an object."""
+    """Set the permissions of a user for an object.
+
+    Args:
+        object_id (int): ID of the object.
+        user_id (int): ID of the user.
+        permissions (str): Permissions of user for the object.
+
+    Returns:
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+    """
     if (isinstance(object_id, int) and isinstance(user_id, int) and
             isinstance(permissions, str)):
         return putData(
@@ -171,7 +236,14 @@ def setUserPermissions(object_id: int, user_id: int,
 
 
 def getAllGroupsPermissions(object_id: int) -> Dict:
-    """Get a mapping of basic group IDs to their permissions."""
+    """Get a mapping of basic group IDs to their permissions.
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        Dict: Mapping of group IDs to permissions.
+    """
     if isinstance(object_id, int):
         return getData("objects/{}/permissions/groups".format(object_id))
     else:
@@ -179,7 +251,15 @@ def getAllGroupsPermissions(object_id: int) -> Dict:
 
 
 def getGroupPermissions(object_id: int, group_id: int) -> str:
-    """Get the permissions of a basic group for an object."""
+    """Get the permissions of a basic group for an object.
+
+    Args:
+        object_id (int): ID of the object.
+        group_id (int): ID of the group.
+
+    Returns:
+        str: Permissions of group for the object.
+    """
     if isinstance(object_id, int) and isinstance(group_id, int):
         return getData(
             "objects/{}/permissions/groups/{}" % (object_id, group_id)
@@ -190,7 +270,16 @@ def getGroupPermissions(object_id: int, group_id: int) -> str:
 
 def setGroupPermissions(object_id: int, group_id: int,
                         permissions: str) -> Response:
-    """Set the permissions of a basic group for an object."""
+    """Set the permissions of a basic group for an object.
+
+    Args:
+        object_id (int): ID of the object.
+        group_id (int): ID of the group.
+        permissions (str): Permissions of group for the object.
+
+    Returns:
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+    """
     if (isinstance(object_id, int) and isinstance(group_id, int) and
             isinstance(permissions, str)):
         return putData(
@@ -202,7 +291,14 @@ def setGroupPermissions(object_id: int, group_id: int,
 
 
 def getAllProjectGroupsPermissions(object_id: int) -> Dict:
-    """Get a mapping of project group IDs to their permissions."""
+    """Get a mapping of project group IDs to their permissions.
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        Dict: Mapping of project group IDs to permissions.
+    """
     if isinstance(object_id, int):
         return getData("objects/{}/permissions/projects".format(object_id))
     else:
@@ -210,7 +306,15 @@ def getAllProjectGroupsPermissions(object_id: int) -> Dict:
 
 
 def getProjectGroupPermissions(object_id: int, project_id: int) -> str:
-    """Get the permissions of a project group for an object."""
+    """Get the permissions of a project group for an object.
+
+    Args:
+        object_id (int): ID of the object.
+        project_id (int): ID of the project group.
+
+    Returns:
+        str: Permissions of project group for the object.
+    """
     if isinstance(object_id, int) and isinstance(project_id, int):
         return getData(
             "objects/{}/permissions/projects/{}" % (object_id, project_id)
@@ -221,7 +325,16 @@ def getProjectGroupPermissions(object_id: int, project_id: int) -> str:
 
 def setProjectGroupPermissions(object_id: int, project_id: int,
                                permissions: str) -> Response:
-    """Set the permissions of a project group for an object."""
+    """Set the permissions of a project group for an object.
+
+    Args:
+        object_id (int): ID of the object.
+        project_id (int): ID of the project group.
+        permissions (str): Permissions of project group for the object.
+
+    Returns:
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+    """
     if (isinstance(object_id, int) and isinstance(project_id, int) and
             isinstance(permissions, str)):
         return putData(
@@ -236,7 +349,14 @@ def setProjectGroupPermissions(object_id: int, project_id: int,
 
 
 def getLocationList(object_id: int) -> List:
-    """Get a list of all object locations assignments for a specific object (object_id)."""
+    """Get a list of all object locations assignments for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#locations>`_
+    """
     if isinstance(object_id, int):
         return getData("objects/{}/locations".format(object_id))
     else:
@@ -244,7 +364,15 @@ def getLocationList(object_id: int) -> List:
 
 
 def getLocation(object_id: int, location_id: int) -> Dict:
-    """Get a specific object location assignment (location_id) for a specific object (object_id)."""
+    """Get a specific object location assignment (location_id) for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+        location_id (int): ID of the location.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#locations>`_
+    """
     if isinstance(object_id, int) and isinstance(location_id, int):
         return getData(
             "objects/{}/locations/{}" % (object_id, location_id)
@@ -257,7 +385,14 @@ def getLocation(object_id: int, location_id: int) -> Dict:
 
 
 def getFileList(object_id: int) -> List:
-    """Get a list of all files for a specific object (object_id)."""
+    """Get a list of all files for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+    """
     if isinstance(object_id, int):
         return getData("objects/{}/files".format(object_id))
     else:
@@ -265,7 +400,15 @@ def getFileList(object_id: int) -> List:
 
 
 def getFileInfo(object_id: int, file_id: int) -> Dict:
-    """Get a specific file (file_id) for a specific object (object_id)."""
+    """Get a specific file (file_id) for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+        file_id (int): ID of the file.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+    """
     if isinstance(object_id, int) and isinstance(file_id, int):
         return getData(
             "objects/{}/files/{}" % (object_id, file_id)
@@ -278,11 +421,11 @@ def uploadFile(object_id: int, path: str) -> Response:
     """Create a new file with local storage for a specific object (object_id).
 
     Args:
-        object_id (int): ID of the object
+        object_id (int): ID of the object.
         path (str): Path of the file to be uploaded.
 
     Returns:
-        HTTPResponse: The HTTP response.
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
     """
     if isinstance(object_id, int) and isinstance(path, str):
         with open(path, "rb") as f:
@@ -296,12 +439,12 @@ def uploadFileRaw(object_id: int, name: str, file_obj: BinaryIO) -> Response:
     """Create a new file with local storage for a specific object (object_id).
 
     Args:
-        object_id (int): ID of the object
+        object_id (int): ID of the object.
         name (str): Name that the file will have online.
         file_obj (BinaryIO): A binary stream that can be read to be uploaded.
 
     Returns:
-        HTTPResponse: The HTTP response.
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
     """
     if (isinstance(object_id, int) and isinstance(name, str) and
             isinstance(file_obj, IOBase)):
@@ -314,7 +457,15 @@ def uploadFileRaw(object_id: int, name: str, file_obj: BinaryIO) -> Response:
 
 
 def postLink(object_id: int, url: str) -> Response:
-    """Create a new file with url storage for a specific object (object_id)."""
+    """Create a new file with url storage for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+        url (str): URL to be stored.
+
+    Returns:
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+    """
     if isinstance(object_id, int) and isinstance(url, str):
         return postData("objects/{}/files/".format(object_id),
                         {"storage": "url", "url": url})
@@ -326,7 +477,14 @@ def postLink(object_id: int, url: str) -> Response:
 
 
 def getCommentList(object_id: int) -> List:
-    """Get a list of all comments for a specific object (object_id)."""
+    """Get a list of all comments for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+
+    Returns:
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`_
+    """
     if isinstance(object_id, int):
         return getData("objects/{}/comments".format(object_id))
     else:
@@ -334,7 +492,15 @@ def getCommentList(object_id: int) -> List:
 
 
 def getComment(object_id: int, comment_id: int) -> Dict:
-    """Get specific comment (comment_id) for a specific object (object_id)."""
+    """Get specific comment (comment_id) for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+        comment_id (int): ID of the comment.
+
+    Returns:
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`_
+    """
     if isinstance(object_id, int) and isinstance(comment_id, int):
         return getData("objects/{}/comments/{}".format(object_id, comment_id))
     else:
@@ -342,7 +508,15 @@ def getComment(object_id: int, comment_id: int) -> Dict:
 
 
 def postComment(object_id: int, comment: str) -> Response:
-    """Create a new comment for a specific object (object_id)."""
+    """Create a new comment for a specific object (object_id).
+
+    Args:
+        object_id (int): ID of the object.
+        comment (str): Comment to be posted.
+
+    Returns:
+        HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`_
+    """
     if isinstance(object_id, int) and isinstance(comment, str):
         return postData("objects/{}/comments/".format(object_id),
                         {"content": comment})
