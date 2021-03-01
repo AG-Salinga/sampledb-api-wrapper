@@ -103,7 +103,7 @@ def getVersion(object_id: int, version_id: int) -> Dict:
     """
     if isinstance(object_id, int) and isinstance(version_id, int):
         return getData(
-            "objects/{}/versions/{}" % (object_id, version_id)
+            "objects/{}/versions/{}".format(object_id, version_id)
         )
     else:
         raise TypeError()
@@ -262,7 +262,7 @@ def getGroupPermissions(object_id: int, group_id: int) -> str:
     """
     if isinstance(object_id, int) and isinstance(group_id, int):
         return getData(
-            "objects/{}/permissions/groups/{}" % (object_id, group_id)
+            "objects/{}/permissions/groups/{}".format(object_id, group_id)
         )
     else:
         raise TypeError()
@@ -317,7 +317,7 @@ def getProjectGroupPermissions(object_id: int, project_id: int) -> str:
     """
     if isinstance(object_id, int) and isinstance(project_id, int):
         return getData(
-            "objects/{}/permissions/projects/{}" % (object_id, project_id)
+            "objects/{}/permissions/projects/{}".format(object_id, project_id)
         )
     else:
         raise TypeError()
@@ -375,7 +375,7 @@ def getLocation(object_id: int, location_id: int) -> Dict:
     """
     if isinstance(object_id, int) and isinstance(location_id, int):
         return getData(
-            "objects/{}/locations/{}" % (object_id, location_id)
+            "objects/{}/locations/{}".format(object_id, location_id)
         )
     else:
         raise TypeError()
@@ -411,7 +411,7 @@ def getFileInfo(object_id: int, file_id: int) -> Dict:
     """
     if isinstance(object_id, int) and isinstance(file_id, int):
         return getData(
-            "objects/{}/files/{}" % (object_id, file_id)
+            "objects/{}/files/{}".format(object_id, file_id)
         )
     else:
         raise TypeError()
