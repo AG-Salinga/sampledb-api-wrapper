@@ -2,7 +2,13 @@ from typing import Dict, List
 
 from sampledbapi import getData
 
-__all__ = ["getList", "get", "getCurrent"]
+__all__ = ["User", "getList", "get", "getCurrent"]
+
+
+class User:
+
+    user_id: int = None
+    name: str = None
 
 
 def getList() -> List:

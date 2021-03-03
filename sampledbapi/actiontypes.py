@@ -2,7 +2,15 @@ from typing import Dict, List
 
 from sampledbapi import getData
 
-__all__ = ["getList", "get"]
+__all__ = ["ActionType", "getList", "get"]
+
+
+class ActionType:
+
+    type_id: int = None
+    name: str = None
+    object_name: str = None
+    admin_only: bool = None
 
 
 def getList() -> List:

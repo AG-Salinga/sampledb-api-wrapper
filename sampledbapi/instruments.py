@@ -6,10 +6,19 @@ from requests import Response
 
 from sampledbapi import getData, postData
 
-__all__ = ["getList", "get", "getLogEntryList", "getLogEntry",
+__all__ = ["Instrument", "getList", "get", "getLogEntryList", "getLogEntry",
            "getLogCategoryList", "getLogCategory",
            "getFileAttachmentList", "getFileAttachment",
            "getObjectAttachmentList", "getObjectAttachment", "createLogEntry"]
+
+
+class Instrument:
+
+    instrument_id: int = None
+    name: str = None
+    description: str = None
+    is_hidden: bool = None
+    instrument_scientists: List = None
 
 
 def getList() -> List:

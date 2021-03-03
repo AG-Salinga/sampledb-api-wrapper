@@ -6,7 +6,19 @@ from typing import Dict, List
 
 from sampledbapi import getData
 
-__all__ = ["getList", "get"]
+__all__ = ["Action", "getList", "get"]
+
+
+class Action:
+
+    action_id: int = None
+    instrument_id: int = None
+    type: str = None
+    type_id: int = None
+    name: str = None
+    description: str = None
+    is_hidden: bool = None
+    schema: dict = None
 
 
 def getList() -> List:

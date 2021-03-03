@@ -2,7 +2,15 @@ from typing import Dict, List
 
 from sampledbapi import getData
 
-__all__ = ["getList", "get"]
+__all__ = ["Location", "getList", "get"]
+
+
+class Location:
+
+    location_id: int = None
+    name: str = None
+    description: str = None
+    parent_location_id: int = None
 
 
 def getList() -> List:

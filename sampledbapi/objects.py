@@ -7,14 +7,24 @@ from requests import Response
 
 from sampledbapi import getData, postData, putData
 
-__all__ = ["getList", "get", "getVersion", "create", "update", "getPublic",
-           "setPublic", "getAllUsersPermissions", "getUserPermissions",
-           "setUserPermissions", "getAllGroupsPermissions",
-           "getGroupPermissions", "setGroupPermissions",
-           "getAllProjectGroupsPermissions", "getProjectGroupPermissions",
-           "setProjectGroupPermissions", "getLocationList", "getLocation",
-           "getFileList", "getFileInfo", "uploadFile", "uploadFileRaw",
-           "postLink", "getCommentList", "getComment", "postComment"]
+__all__ = ["Object", "getList", "get", "getVersion", "create", "update",
+           "getPublic", "setPublic", "getAllUsersPermissions",
+           "getUserPermissions", "setUserPermissions",
+           "getAllGroupsPermissions", "getGroupPermissions",
+           "setGroupPermissions", "getAllProjectGroupsPermissions",
+           "getProjectGroupPermissions", "setProjectGroupPermissions",
+           "getLocationList", "getLocation", "getFileList", "getFileInfo",
+           "uploadFile", "uploadFileRaw", "postLink", "getCommentList",
+           "getComment", "postComment"]
+
+
+class Object:
+
+    object_id: int = None
+    version_id: int = None
+    action_id: int = None
+    schema: dict = None
+    data: dict = None
 
 
 def getList(q: str = "", action_id: int = -1, action_type: str = "",
