@@ -2,7 +2,6 @@ sampledbapi.objects module
 ==========================
 
 .. automodule:: sampledbapi.objects
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
+    :members:
+    :undoc-members:
+    :show-inheritance:

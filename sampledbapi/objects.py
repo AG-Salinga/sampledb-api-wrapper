@@ -1,11 +1,12 @@
 import base64
 import os
+from datetime import datetime
 from io import IOBase
-from typing import BinaryIO, Dict, List, Type
+from typing import BinaryIO, Dict, List
 
 from requests import Response
 
-from sampledbapi import getData, postData, putData
+from sampledbapi import SampleDBObject, getData, locations, postData, putData
 
 __all__ = ["Object", "getList", "get", "getVersion", "create", "update",
            "getPublic", "setPublic", "getAllUsersPermissions",
@@ -18,7 +19,7 @@ __all__ = ["Object", "getList", "get", "getVersion", "create", "update",
            "getComment", "postComment"]
 
 
-class Object:
+class Object(SampleDBObject):
 
     object_id: int = None
     version_id: int = None
@@ -29,7 +30,7 @@ class Object:
 
 def getList(q: str = "", action_id: int = -1, action_type: str = "",
             limit: int = -1, offset: int = -1,
-            name_only: bool = False) -> List:
+            name_only: bool = False) -> List[Object]:
     """Get a list of all objects visible to the current user.
 
     The list only contains the current version of each object. By passing the
@@ -54,7 +55,7 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
         name_only (bool): Only names will be returned, no other information.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#objects>`_
+        List: List of :class:`~sampledbapi.objects.Object`.
     """
     if (isinstance(q, str) and isinstance(action_id, int) and
             isinstance(action_type, str) and isinstance(limit, int) and
@@ -81,22 +82,22 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
             if i < len(pars) - 1:
                 s += "&"
 
-        return getData(s)
+        return [Object(o) for o in getData(s)]
     else:
         raise TypeError()
 
 
-def get(object_id: int) -> Dict:
+def get(object_id: int) -> Object:
     """Get the current version of an object (object_id).
 
     Args:
         object_id (int): ID of the object.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#objects>`_
+        Object: Requested :class:`~sampledbapi.objects.Object`.
     """
     if isinstance(object_id, int):
-        return getData("objects/{}".format(object_id))
+        return Object(getData("objects/{}".format(object_id)))
     else:
         raise TypeError()
 
@@ -358,22 +359,23 @@ def setProjectGroupPermissions(object_id: int, project_id: int,
 """Locations"""
 
 
-def getLocationList(object_id: int) -> List:
+def getLocationList(object_id: int) -> List[locations.Location]:
     """Get a list of all object locations assignments for a specific object (object_id).
 
     Args:
         object_id (int): ID of the object.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#locations>`_
+        List: List of :class:`~sampledbapi.locations.Location`.
     """
     if isinstance(object_id, int):
-        return getData("objects/{}/locations".format(object_id))
+        return [locations.Location(loc)
+                for loc in getData("objects/{}/locations".format(object_id))]
     else:
         raise TypeError()
 
 
-def getLocation(object_id: int, location_id: int) -> Dict:
+def getLocation(object_id: int, location_id: int) -> locations.Location:
     """Get a specific object location assignment (location_id) for a specific object (object_id).
 
     Args:
@@ -381,12 +383,12 @@ def getLocation(object_id: int, location_id: int) -> Dict:
         location_id (int): ID of the location.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#locations>`_
+        Location: The requested :class:`~sampledbapi.locations.Location`.
     """
     if isinstance(object_id, int) and isinstance(location_id, int):
-        return getData(
+        return locations.Location(getData(
             "objects/{}/locations/{}".format(object_id, location_id)
-        )
+        ))
     else:
         raise TypeError()
 
@@ -486,22 +488,38 @@ def postLink(object_id: int, url: str) -> Response:
 """Comments"""
 
 
-def getCommentList(object_id: int) -> List:
+class Comment(SampleDBObject):
+
+    object_id: int = None
+    user_id: int = None
+    comment_id: int = None
+    content: str = None
+    utc_datetime: datetime = None
+
+    def __init__(self, d: Dict = None):
+        """Initialize a new comment from dictionary."""
+        super().__init__(d)
+        if d is not None and "utc_datetime" in d:
+            self.utc_datetime = datetime.strptime(d["utc_datetime"])
+
+
+def getCommentList(object_id: int) -> List[Comment]:
     """Get a list of all comments for a specific object (object_id).
 
     Args:
         object_id (int): ID of the object.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`_
+        List: List of :class:`~sampledbapi.objects.Comment`.
     """
     if isinstance(object_id, int):
-        return getData("objects/{}/comments".format(object_id))
+        return [Comment(c)
+                for c in getData("objects/{}/comments".format(object_id))]
     else:
         raise TypeError()
 
 
-def getComment(object_id: int, comment_id: int) -> Dict:
+def getComment(object_id: int, comment_id: int) -> Comment:
     """Get specific comment (comment_id) for a specific object (object_id).
 
     Args:
@@ -509,10 +527,13 @@ def getComment(object_id: int, comment_id: int) -> Dict:
         comment_id (int): ID of the comment.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`_
+        Object: Requested :class:`~sampledbapi.objects.Comment`.
     """
     if isinstance(object_id, int) and isinstance(comment_id, int):
-        return getData("objects/{}/comments/{}".format(object_id, comment_id))
+        return Comment(
+            Comment(getData(
+                "objects/{}/comments/{}".format(object_id, comment_id)))
+        )
     else:
         raise TypeError()
 

@@ -2,14 +2,14 @@
 This is the module docstring.
 """
 
-from typing import Dict, List
+from typing import List
 
-from sampledbapi import getData
+from sampledbapi import SampleDBObject, getData
 
 __all__ = ["Action", "getList", "get"]
 
 
-class Action:
+class Action(SampleDBObject):
 
     action_id: int = None
     instrument_id: int = None
@@ -21,25 +21,25 @@ class Action:
     schema: dict = None
 
 
-def getList() -> List:
+def getList() -> List[Action]:
     """Get a list of all actions.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#actions>`_
+        List: List of :class:`~sampledbapi.actions.Action` objects.
     """
-    return getData("actions")
+    return [Action(a) for a in getData("actions")]
 
 
-def get(action_id: int) -> Dict:
+def get(action_id: int) -> Action:
     """Get the specific action (action_id).
 
     Args:
         action_id (int): ID of the action to be retrieved.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#actions>`_
+        Action: The requested :class:`~sampledbapi.action.Action`.
     """
     if isinstance(action_id, int):
-        return getData("actions/{}".format(action_id))
+        return Action(getData("actions/{}".format(action_id)))
     else:
         raise TypeError()

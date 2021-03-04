@@ -1,11 +1,12 @@
-from typing import Dict, List
+from typing import List
 
-from sampledbapi import getData
+from sampledbapi import SampleDBObject, getData
+from sampledbapi.actions import Action
 
 __all__ = ["ActionType", "getList", "get"]
 
 
-class ActionType:
+class ActionType(SampleDBObject):
 
     type_id: int = None
     name: str = None
@@ -13,25 +14,25 @@ class ActionType:
     admin_only: bool = None
 
 
-def getList() -> List:
+def getList() -> List[ActionType]:
     """Get a list of all action types.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#action-types>`_
+        List: List of :class:`~sampledbapi.actiontypes.Actiontype` objects.
     """
-    return getData("action_types")
+    return [ActionType(a) for a in getData("action_types")]
 
 
-def get(type_id: int) -> Dict:
+def get(type_id: int) -> ActionType:
     """Get the specific action type (type_id).
 
     Args:
         type_id (int): ID of the action type.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#action-types>`_
+        ActionType: The requested :class:`~sampledbapi.actiontypes.ActionType`.
     """
     if isinstance(type_id, int):
-        return getData("actions/{}".format(type_id))
+        return ActionType(getData("actions/{}".format(type_id)))
     else:
         raise TypeError()

@@ -1,11 +1,11 @@
-from typing import Dict, List
+from typing import List
 
-from sampledbapi import getData
+from sampledbapi import SampleDBObject, getData
 
 __all__ = ["Location", "getList", "get"]
 
 
-class Location:
+class Location(SampleDBObject):
 
     location_id: int = None
     name: str = None
@@ -13,25 +13,25 @@ class Location:
     parent_location_id: int = None
 
 
-def getList() -> List:
+def getList() -> List[Location]:
     """Get a list of all locations.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#locations>`_
+        List: List of :class:`~sampledbapi.locations.Location` objects.
     """
-    return getData("locations")
+    return [Location(loc) for loc in getData("locations")]
 
 
-def get(location_id: int) -> Dict:
+def get(location_id: int) -> Location:
     """Get the specific location (location_id).
 
     Args:
         location_id (int): ID of the location to be retrieved.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#locations>`_
+        Location: The requested :class:`~sampledbapi.locations.Location`.
     """
     if isinstance(location_id, int):
-        return getData("locations/{}".format(location_id))
+        return Location(getData("locations/{}".format(location_id)))
     else:
         raise TypeError()

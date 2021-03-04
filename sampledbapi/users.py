@@ -1,44 +1,46 @@
-from typing import Dict, List
+from typing import List
 
-from sampledbapi import getData
+from sampledbapi import SampleDBObject, getData
 
 __all__ = ["User", "getList", "get", "getCurrent"]
 
 
-class User:
+class User(SampleDBObject):
 
     user_id: int = None
     name: str = None
+    orcid: str = None
+    affiliation: str = None
 
 
-def getList() -> List:
+def getList() -> List[User]:
     """Get a list of all users.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#users>`_
+        List: List of :class:`~sampledbapi.users.User` objects.
     """
-    return getData("users")
+    return [User(d) for d in getData("users")]
 
 
-def get(user_id: int) -> Dict:
+def get(user_id: int) -> User:
     """Get the specific user (user_id).
 
     Args:
         user_id (int): ID of the user to be retrieved.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#users>`_
+        User: Requested :class:`~sampledbapi.users.User`.
     """
     if isinstance(user_id, int):
-        return getData("users/{}".format(user_id))
+        return User(getData("users/{}".format(user_id)))
     else:
         raise TypeError()
 
 
-def getCurrent() -> Dict:
+def getCurrent() -> User:
     """Get the current user.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#actions>`_
+        User: Current :class:`~sampledbapi.users.User`.
     """
-    return getData("users/me")
+    return User(getData("users/me"))

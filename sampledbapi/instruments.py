@@ -1,10 +1,11 @@
 import base64
 import os
+from datetime import datetime
 from typing import Dict, List
 
 from requests import Response
 
-from sampledbapi import getData, postData
+from sampledbapi import SampleDBObject, getData, postData, users
 
 __all__ = ["Instrument", "getList", "get", "getLogEntryList", "getLogEntry",
            "getLogCategoryList", "getLogCategory",
@@ -12,22 +13,29 @@ __all__ = ["Instrument", "getList", "get", "getLogEntryList", "getLogEntry",
            "getObjectAttachmentList", "getObjectAttachment", "createLogEntry"]
 
 
-class Instrument:
+class Instrument(SampleDBObject):
 
     instrument_id: int = None
     name: str = None
     description: str = None
     is_hidden: bool = None
-    instrument_scientists: List = None
+    instrument_scientists: List[users.User] = None
+
+    def __init__(self, d: Dict = None):
+        """Initialize a new instrument from dictionary."""
+        super().__init__(d)
+        if d is not None and "instrument_scientists" in d:
+            self.instrument_scientists = [
+                users.get(i) for i in d["instrument_scientists"]]
 
 
-def getList() -> List:
+def getList() -> List[Instrument]:
     """Get a list of all instruments.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instruments>`_
+        List: List of :class:`~sampledbapi.instrument.Instrument` objects.
     """
-    return getData("instruments")
+    return [Instrument(i) for i in getData("instruments")]
 
 
 def get(instrument_id: int) -> Dict:
@@ -37,10 +45,10 @@ def get(instrument_id: int) -> Dict:
         instrument_id (int): ID of the specific instrument.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+        Instrument: The requested :class:`~sampledbapi.instrument.Instrument`.
     """
     if isinstance(instrument_id, int):
-        return getData("instruments/{}".format(instrument_id))
+        return Instrument(getData("instruments/{}".format(instrument_id)))
     else:
         raise TypeError()
 
@@ -48,22 +56,48 @@ def get(instrument_id: int) -> Dict:
 """Instrument log entries"""
 
 
-def getLogEntryList(instrument_id: int) -> List:
+class InstrumentLogCategory(SampleDBObject):
+
+    category_id: int = None
+    title: str = None
+
+
+class InstrumentLogEntry(SampleDBObject):
+
+    log_entry_id: int = None
+    utc_datetime: datetime = None
+    author: users.User = None
+    content: str = None
+    categories: List[InstrumentLogCategory] = None
+
+    def __init__(self, d: Dict = None):
+        """Initialize a new instrument from dictionary."""
+        super().__init__(d)
+        if d is not None:
+            if "categories" in d:
+                self.categories = [
+                    InstrumentLogCategory(c) for c in d["categories"]]
+            if "utc_datetime" in d:
+                self.utc_datetime = datetime.strptime(d["utc_datetime"])
+
+
+def getLogEntryList(instrument_id: int) -> List[InstrumentLogEntry]:
     """Get a list of all log entries for a specific instrument (instrument_id).
 
     Args:
         instrument_id (int): ID of the specific instrument.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+        List: List of :class:`~sampledbapi.instrument.InstrumentLogEntry`.
     """
     if isinstance(instrument_id, int):
-        return getData("instruments/{}/log_entries".format(instrument_id))
+        return [InstrumentLogEntry(log) for log in getData(
+            "instruments/{}/log_entries".format(instrument_id))]
     else:
         raise TypeError()
 
 
-def getLogEntry(instrument_id: int, log_entry_id: int) -> Dict:
+def getLogEntry(instrument_id: int, log_entry_id: int) -> InstrumentLogEntry:
     """Get the specific log entry (log_entry_id) for an instrument (instrument_id).
 
     Args:
@@ -71,31 +105,35 @@ def getLogEntry(instrument_id: int, log_entry_id: int) -> Dict:
         log_entry_id (int): ID of the specific log entry.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+        InstrumentLogEntry: The requested
+            :class:`~sampledbapi.instrument.InstrumentLogEntry`.
     """
     if isinstance(instrument_id, int) and isinstance(log_entry_id, int):
-        return getData("instruments/{}/log_entries/{}".format(
-            instrument_id, log_entry_id))
+        return InstrumentLogEntry(getData(
+            "instruments/{}/log_entries/{}".format(
+                instrument_id, log_entry_id)))
     else:
         raise TypeError()
 
 
-def getLogCategoryList(instrument_id: int) -> List:
+def getLogCategoryList(instrument_id: int) -> List[InstrumentLogCategory]:
     """Get a list of all log category for a specific instrument (instrument_id).
 
     Args:
         instrument_id (int): ID of the instrument.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+        List: List of :class:`~sampledbapi.instrument.InstrumentLogCategory`.
     """
     if isinstance(instrument_id, int):
-        return getData("instruments/{}/log_categories".format(instrument_id))
+        return [InstrumentLogCategory(c) for c in getData(
+            "instruments/{}/log_categories".format(instrument_id))]
     else:
         raise TypeError()
 
 
-def getLogCategory(instrument_id: int, log_category_id: int) -> Dict:
+def getLogCategory(instrument_id: int,
+                   log_category_id: int) -> InstrumentLogCategory:
     """Get the specific log category (log_category_id) for an instrument (instrument_id).
 
     Args:
@@ -103,11 +141,13 @@ def getLogCategory(instrument_id: int, log_category_id: int) -> Dict:
         log_category_id (int): ID of the specific log category.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+        InstrumentLogCategory: The requested
+            :class:`~sampledbapi.instrument.InstrumentLogCategory`.
     """
     if isinstance(instrument_id, int) and isinstance(log_category_id, int):
-        return getData("instruments/{}/log_categories/{}".format(
-            instrument_id, log_category_id))
+        return InstrumentLogCategory(getData(
+            "instruments/{}/log_categories/{}".format(
+                instrument_id, log_category_id)))
     else:
         raise TypeError()
 
@@ -157,7 +197,8 @@ def getObjectAttachmentList(instrument_id: int, log_entry_id: int) -> List:
         log_entry_id (int): ID of the specific log entry.
 
     Returns:
-        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+        #instrument-log-entries>`_
+        List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html
     """
     if isinstance(instrument_id, int) and isinstance(log_entry_id, int):
         return getData("instruments/{}/log_entries/{}/object_attachments".format(
@@ -166,8 +207,9 @@ def getObjectAttachmentList(instrument_id: int, log_entry_id: int) -> List:
         raise TypeError()
 
 
-def getObjectAttachment(instrument_id: int, log_entry_id: int, object_attachment_id: int) -> Dict:
-    """Get a specific file attachment (file_attachment_id) for a log entry (log_entry_id) for an instrument (instrument_id).
+def getObjectAttachment(instrument_id: int, log_entry_id: int,
+                        object_attachment_id: int) -> Dict:
+    """Get a specific object attachment (object_attachment_id) for a log entry (log_entry_id) for an instrument (instrument_id).
 
     Args:
         instrument_id (int): ID of the instrument.
@@ -175,7 +217,8 @@ def getObjectAttachment(instrument_id: int, log_entry_id: int, object_attachment
         object_attachment_id (int): ID of the object attachment.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
+        #instrument-log-entries>`_
+        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html
     """
     if isinstance(instrument_id, int) and isinstance(log_entry_id, int) and isinstance(object_attachment_id, int):
         return getData("instruments/{}/log_entries/{}/object_attachments/{}".format(

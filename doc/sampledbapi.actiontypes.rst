@@ -2,7 +2,6 @@ sampledbapi.actiontypes module
 ==============================
 
 .. automodule:: sampledbapi.actiontypes
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
+    :members:
+    :undoc-members:
+    :show-inheritance:

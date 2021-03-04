@@ -2,21 +2,19 @@ sampledbapi package
 ===================
 
 .. automodule:: sampledbapi
-   :members:
-   :undoc-members:
-   :show-inheritance:
-   :private-members:
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Submodules
 ----------
 
 .. toctree::
-   :maxdepth: 4
 
    sampledbapi.actions
    sampledbapi.actiontypes
-   sampledbapi.files
    sampledbapi.instruments
    sampledbapi.locations
    sampledbapi.objects
    sampledbapi.users
+
