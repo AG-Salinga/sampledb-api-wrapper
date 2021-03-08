@@ -2,6 +2,7 @@ import base64
 import os
 from datetime import datetime
 from io import IOBase
+from sampledbapi.users import User
 from typing import BinaryIO, Dict, List
 
 from requests import Response
@@ -26,6 +27,16 @@ class Object(SampleDBObject):
     action_id: int = None
     schema: dict = None
     data: dict = None
+
+
+class LocationOccurence(SampleDBObject):
+
+    object_id: int = None
+    location: locations.Location = None
+    responsible_user: User = None
+    user: User = None
+    description: str = None
+    datetime: datetime = None
 
 
 def getList(q: str = "", action_id: int = -1, action_type: str = "",
@@ -102,7 +113,7 @@ def get(object_id: int) -> Object:
         raise TypeError()
 
 
-def getVersion(object_id: int, version_id: int) -> Dict:
+def getVersion(object_id: int, version_id: int) -> Object:
     """Get the specific version (version_id) of an object (object_id).
 
     Args:
@@ -110,12 +121,12 @@ def getVersion(object_id: int, version_id: int) -> Dict:
         version_id (int): ID of the version to be retrieved.
 
     Returns:
-        Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#objects>`_
+        Object: Requested :class:`~sampledbapi.objects.Object`.
     """
     if isinstance(object_id, int) and isinstance(version_id, int):
-        return getData(
+        return Object(getData(
             "objects/{}/versions/{}".format(object_id, version_id)
-        )
+        ))
     else:
         raise TypeError()
 
