@@ -16,16 +16,44 @@ pip install --upgrade sampledbapi
 ```
 
 ## Example usage
+
+### Python
 ```python
 from sampledbapi import *
 
 server_address = ...
 api_key = ...
 
+# Authentication
 authenticate(server_address, api_key)
-print(objects.getList())
+
+# Simple queries
+print(actions.getList())
 print(objects.get(123))
 print(instruments.getList())
+
+# Advanced search
+print(objects.getList("material == \"Sb\""))
+```
+
+### Matlab
+
+You need a working installation of Python and `sampledbapi` installed for this to work.
+Some type conversions are needed (e.g. to pass integers).
+
+```matlab
+% Authentication
+py.sampledbapi.authenticate("https://...", "your_api_key")
+
+% Simple queries
+print(instruments.getList())
+py.sampledbapi.objects.get(py.int(123))
+py.sampledbapi.instruments.getList())
+
+% Advanced search
+l = py.sampledbapi.objects.getList('material == "Sb"')
+obj = l{1}
+obj.data
 ```
 
 ## Documentation
