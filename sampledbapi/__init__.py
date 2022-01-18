@@ -22,8 +22,13 @@ class SampleDBObject:
 
 def authenticate(address: str, api_key: str):
     global _address, _api_key
-    _address = address
-    _api_key = api_key
+    old_address, old_key = _address, _api_key
+    _address, _api_key = address, api_key
+    try:
+        getData("actions")
+    except requests.exceptions.HTTPError as e:
+        _address, _api_key = old_address, old_key
+        raise Exception("Authentication not successful: " + str(e))
 
 
 def __headers() -> Dict:
