@@ -28,18 +28,30 @@ deploy_production:
     - apt-get update
     - apt-get install wget software-properties-common apt-transport-https ca-certificates -y
     - apt-get update
-    - python -m pip install twine sphinx sphinx_rtd_theme
     - python setup.py install
     - python setup.py sdist bdist_wheel
     - twine upload dist/*
-    - cd doc
-    - sphinx-apidoc -o . ../sampledbapi -f -P -M -e
-    - sphinx-build -b html . _build
-    - cd ..
   artifacts:
     paths:
       - dist/
-      - doc/_build/
     expire_in: 6 months
   only:
     - tags
+
+pages:
+  stage: deploy
+  script:
+    - python -m pip install twine sphinx sphinx_rtd_theme
+    - mkdir .public
+    - cd doc
+    - sphinx-apidoc -o . ../sampledbapi -f -P -M -e
+    - sphinx-build -b html . _build
+    - mv _build/html/* ../.public/
+    - cd ..
+    - mv .public public
+  only:
+    - tags
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 hour
