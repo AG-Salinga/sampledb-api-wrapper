@@ -28,6 +28,7 @@ deploy_production:
     - apt-get update
     - apt-get install wget software-properties-common apt-transport-https ca-certificates -y
     - apt-get update
+    - python -m pip install twine
     - python setup.py install
     - python setup.py sdist bdist_wheel
     - twine upload dist/*
@@ -41,7 +42,8 @@ deploy_production:
 pages:
   stage: deploy
   script:
-    - python -m pip install twine sphinx sphinx_rtd_theme
+    - python -m pip install sphinx sphinx_rtd_theme
+    - python setup.py install
     - mkdir .public
     - cd doc
     - sphinx-apidoc -o . ../sampledbapi -f -P -M -e
