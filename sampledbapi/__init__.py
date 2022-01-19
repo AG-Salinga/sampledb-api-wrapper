@@ -21,6 +21,16 @@ class SampleDBObject:
 
 
 def authenticate(address: str, api_key: str):
+    """Authenticate with a SampleDB instance
+
+    To retrieve data from SampleDB and upload data to it, you have to
+    authenticate first.
+
+    Arguments:
+        address: URL of the SampleDB server.
+        api_key: API token you can generate using "Preferences/API Tokens".
+    """
+
     global _address, _api_key
     old_address, old_key = _address, _api_key
     _address, _api_key = address, api_key

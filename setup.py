@@ -6,7 +6,7 @@ from setuptools import find_packages, setup  # Prefer setuptools over distutils
 here = os.path.abspath(os.path.dirname(__file__))
 
 # Get the long description from the relevant file
-with open(os.path.join(here, "doc/description.rst"), encoding="utf-8") as f:
+with open(os.path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
 
 # with open("requirements.txt") as f:
@@ -23,6 +23,7 @@ out = setup(
 
     description="API wrapper for SampleDB",
     long_description=long_description,
+    long_description_content_type="text/markdown",
 
     # The project's main homepage.
     url="https://zivgitlab.uni-muenster.de/ag-salinga/sampledb-api-wrapper",

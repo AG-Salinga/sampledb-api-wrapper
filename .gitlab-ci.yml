@@ -41,7 +41,7 @@ deploy_production:
 pages:
   stage: deploy
   script:
-    - python -m pip install sphinx sphinx_rtd_theme
+    - python -m pip install sphinx sphinx_rtd_theme m2r2
     - python setup.py install
     - mkdir .public
     - cd doc
