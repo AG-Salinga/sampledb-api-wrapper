@@ -27,7 +27,6 @@ deploy_production:
   script:
     - apt-get update
     - apt-get install wget software-properties-common apt-transport-https ca-certificates -y
-    - apt-get update
     - python -m pip install twine
     - python setup.py install
     - python setup.py sdist bdist_wheel
