@@ -6,10 +6,13 @@ stages:
 
 test:
   stage: test
+  parallel:
+    matrix:
+      - IMAGE: ['python:3.7-slim', 'python:3.8-slim', 'python:3.9-slim', 'python:3.10-slim']
+  image: $IMAGE
   script:
-    - echo "Test"
-    - mkdir htmlcov
-    - python -m pip install --upgrade pytest coverage
+    # - mkdir htmlcov
+    # - python -m pip install --upgrade pytest coverage
     - python -m compileall -f .
     # - python -m pytest -v
     # - python -m coverage run --source "./" --omit "./sampledbapi/test/*" -m pytest
