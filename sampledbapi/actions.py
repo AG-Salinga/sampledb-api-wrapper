@@ -43,6 +43,6 @@ def get(action_id: int) -> Action:
         Action: The requested :class:`~sampledbapi.action.Action`.
     """
     if isinstance(action_id, int):
-        return Action(getData("actions/{}".format(action_id)))
+        return Action(getData(f"actions/{action_id}"))
     else:
         raise TypeError()

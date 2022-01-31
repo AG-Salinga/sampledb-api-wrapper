@@ -35,6 +35,6 @@ def get(location_id: int) -> Location:
         Location: The requested :class:`~sampledbapi.locations.Location`.
     """
     if isinstance(location_id, int):
-        return Location(getData("locations/{}".format(location_id)))
+        return Location(getData(f"locations/{location_id}"))
     else:
         raise TypeError()

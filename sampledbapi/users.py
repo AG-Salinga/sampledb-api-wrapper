@@ -35,7 +35,7 @@ def get(user_id: int) -> User:
         User: Requested :class:`~sampledbapi.users.User`.
     """
     if isinstance(user_id, int):
-        return User(getData("users/{}".format(user_id)))
+        return User(getData(f"users/{user_id}"))
     else:
         raise TypeError()
 

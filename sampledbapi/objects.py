@@ -249,7 +249,7 @@ class Object(SampleDBObject):
         Returns:
             Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
         """
-        if isinstance(object_id, int) and isinstance(file_id, int):
+        if isinstance(file_id, int):
             return getData(
                 f"objects/{self.object_id}/files/{file_id}"
             )
@@ -267,7 +267,8 @@ class Object(SampleDBObject):
         """
         if isinstance(path, str):
             with open(path, "rb") as f:
-                r = self.uploadFileRaw(self.object_id, os.path.basename(path), f)
+                r = self.uploadFileRaw(
+                    self.object_id, os.path.basename(path), f)
             return r
         else:
             raise TypeError()
@@ -411,7 +412,7 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
         if len(pars) > 0:
             s += "?"
         for i, p in enumerate(pars):
-            s += "{}={}".format(p, pars[p])
+            s += f"{p}={pars[p]}"
             if i < len(pars) - 1:
                 s += "&"
 
@@ -430,7 +431,7 @@ def get(object_id: int) -> Object:
         Object: Requested :class:`~sampledbapi.objects.Object`.
     """
     if isinstance(object_id, int):
-        return Object(getData("objects/{}".format(object_id)))
+        return Object(getData(f"objects/{object_id}"))
     else:
         raise TypeError()
 
