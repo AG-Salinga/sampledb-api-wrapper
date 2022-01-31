@@ -42,7 +42,7 @@ pages:
   stage: deploy
   script:
     - apt-get update
-    - apt-get install pandoc
+    - apt-get install pandoc -y
     - python -m pip install sphinx sphinx_rtd_theme IPython ipykernel nbsphinx m2r2
     - python setup.py install
     - mkdir .public
