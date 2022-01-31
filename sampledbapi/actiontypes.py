@@ -13,6 +13,9 @@ class ActionType(SampleDBObject):
     object_name: str = None
     admin_only: bool = None
 
+    def __repr__(self) -> str:
+        return f"ActionType {self.type_id} ({self.name})"
+
 
 def getList() -> List[ActionType]:
     """Get a list of all action types.

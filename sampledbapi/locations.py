@@ -12,6 +12,9 @@ class Location(SampleDBObject):
     description: str = None
     parent_location_id: int = None
 
+    def __repr__(self) -> str:
+        return f"Location {self.location_id} ({self.name})"
+
 
 def getList() -> List[Location]:
     """Get a list of all locations.

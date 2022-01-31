@@ -20,6 +20,9 @@ class Action(SampleDBObject):
     is_hidden: bool = None
     schema: dict = None
 
+    def __repr__(self) -> str:
+        return f"Action {self.action_id} ({self.name})"
+
 
 def getList() -> List[Action]:
     """Get a list of all actions.

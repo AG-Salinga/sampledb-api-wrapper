@@ -28,6 +28,9 @@ class Instrument(SampleDBObject):
             self.instrument_scientists = [
                 users.get(i) for i in d["instrument_scientists"]]
 
+    def __repr__(self) -> str:
+        return f"Instrument {self.instrument_id} ({self.name})"
+
 
 def getList() -> List[Instrument]:
     """Get a list of all instruments.
@@ -61,6 +64,9 @@ class InstrumentLogCategory(SampleDBObject):
     category_id: int = None
     title: str = None
 
+    def __repr__(self) -> str:
+        return f"Instrument {self.category_id} ({self.title})"
+
 
 class InstrumentLogEntry(SampleDBObject):
 
@@ -82,6 +88,9 @@ class InstrumentLogEntry(SampleDBObject):
             if "utc_datetime" in d:
                 self.utc_datetime = datetime.strptime(d["utc_datetime"])
 
+    def __repr__(self) -> str:
+        return f"Instrument {self.log_entry_id} (created {self.utc_datetime})"
+
 
 class InstrumentLogFileAttachment(SampleDBObject):
 
@@ -89,11 +98,19 @@ class InstrumentLogFileAttachment(SampleDBObject):
     file_name: str = None
     content: str = None
 
+    def __repr__(self) -> str:
+        return f"InstrumentLogFileAttachment {self.file_attachment_id} " + \
+            + f"({self.file_name})"
+
 
 class InstrumentLogObjectAttachment(SampleDBObject):
 
     object_attachment_id: int = None
     object_id: int = None
+
+    def __repr__(self) -> str:
+        return f"InstrumentLogObjectAttachment {self.objct_attachment_id} " \
+            + f"(for object {self.object_id})"
 
 
 def getLogEntryList(instrument_id: int) -> List[InstrumentLogEntry]:

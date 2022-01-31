@@ -36,6 +36,8 @@ print(instruments.getList())
 print(objects.getList("material == \"Sb\""))
 ```
 
+More examples for usage in Python can be found [here](https://ag-salinga.zivgitlabpages.uni-muenster.de/sampledb-api-wrapper/Examples.html).
+
 ### Matlab
 
 You need a working installation of Python and `sampledbapi` installed for this to work.
@@ -55,6 +57,8 @@ l = py.sampledbapi.objects.getList('material == "Sb"')
 obj = l{1}
 obj.data
 ```
+
+In an analogous way, the Python examples shown [here](https://ag-salinga.zivgitlabpages.uni-muenster.de/sampledb-api-wrapper/Examples.html) can be used in Matlab.
 
 ## Documentation
 

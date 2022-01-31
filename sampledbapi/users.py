@@ -12,6 +12,9 @@ class User(SampleDBObject):
     orcid: str = None
     affiliation: str = None
 
+    def __repr__(self) -> str:
+        return f"User {self.user_id} ({self.name})"
+
 
 def getList() -> List[User]:
     """Get a list of all users.
