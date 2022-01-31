@@ -45,13 +45,16 @@ class Object(SampleDBObject):
     def update(self, data: dict) -> Response:
         """Create a new version.
 
-        The data is a dictionary that has to be formatted according to the action's
-        schema. Exemplary data:
-        ```
-        {"name": {
-            "_type": "text",
-            "text": "Example Object"
-        }}
+        The data is a dictionary that has to be formatted according to the
+        action's schema. Exemplary data:
+
+        .. code-block::
+
+            {"name": {
+                "_type": "text",
+                "text": "Example Object"
+            }}
+
         """
         if isinstance(data, dict):
             return postData(f"objects/{self.object_id}/versions/",
@@ -74,7 +77,7 @@ class Object(SampleDBObject):
             public (bool): Whether the object is public or not.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(public, bool):
             return putData(f"objects/{self.object_id}/permissions/public",
@@ -114,7 +117,7 @@ class Object(SampleDBObject):
             permissions (str): Permissions of user for the object.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(user_id, int) and isinstance(permissions, str):
             return putData(
@@ -156,7 +159,7 @@ class Object(SampleDBObject):
             permissions (str): Permissions of group for the object.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(group_id, int) and isinstance(permissions, str):
             return putData(
@@ -199,7 +202,7 @@ class Object(SampleDBObject):
             permissions (str): Permissions of project group for the object.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(project_id, int) and isinstance(permissions, str):
             return putData(
@@ -236,7 +239,7 @@ class Object(SampleDBObject):
         """Get a list of all files.
 
         Returns:
-            List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+            List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         return getData(f"objects/{self.object_id}/files")
 
@@ -247,7 +250,7 @@ class Object(SampleDBObject):
             file_id (int): ID of the file.
 
         Returns:
-            Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+            Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(file_id, int):
             return getData(
@@ -263,7 +266,7 @@ class Object(SampleDBObject):
             path (str): Path of the file to be uploaded.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(path, str):
             with open(path, "rb") as f:
@@ -281,7 +284,7 @@ class Object(SampleDBObject):
             file_obj (BinaryIO): A binary stream that can be read to be uploaded.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(name, str) and isinstance(file_obj, IOBase):
             base64encoded = base64.b64encode(file_obj.read())
@@ -298,7 +301,7 @@ class Object(SampleDBObject):
             url (str): URL to be stored.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(url, str):
             return postData(f"objects/{self.object_id}/files/",
@@ -339,7 +342,7 @@ class Object(SampleDBObject):
             comment (str): Comment to be posted.
 
         Returns:
-            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`_
+            HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`__
         """
         if isinstance(comment, str):
             return postData(f"objects/{self.object_id}/comments/",
@@ -381,7 +384,7 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
     information.
 
     Args:
-        q (str): Search string for advanced search, `see here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/user_guide/objects.html#advanced-search>`_
+        q (str): Search string for advanced search, `see here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/user_guide/objects.html#advanced-search>`__
         action_id (int): Filter by action ID.
         action_type (str): Filter by action type.
         limit (int): Limit number of results (helpful for pagination).
@@ -441,12 +444,14 @@ def create(action_id: int, data: dict) -> Response:
 
     The data is a dictionary that has to be formatted according to the action's
     schema. Exemplary data:
-    ```
-    {"name": {
-        "_type": "text",
-        "text": "Example Object"
-    }}
-    ```
+
+    .. code-block::
+
+        {"name": {
+            "_type": "text",
+            "text": "Example Object"
+        }}
+
     """
     if isinstance(action_id, int) and isinstance(data, dict):
         return postData("objects/", {"action_id": action_id, "data": data})

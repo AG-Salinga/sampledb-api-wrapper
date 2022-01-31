@@ -9,7 +9,9 @@ from requests import Response
 
 from sampledbapi import SampleDBObject, getData, postData, users
 
-__all__ = ["Instrument", "getList", "get"]
+__all__ = ["Instrument", "InstrumentLogCategory", "InstrumentLogEntry",
+           "InstrumentLogFileAttachment", "InstrumentLogObjectAttachment",
+           "getList", "get"]
 
 
 class Instrument(SampleDBObject):
