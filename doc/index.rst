@@ -5,6 +5,7 @@
    :caption: API documentation
 
    sampledbapi
+   Examples.ipynb
 
 Index / search
 ==============

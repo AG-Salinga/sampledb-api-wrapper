@@ -41,7 +41,9 @@ deploy_production:
 pages:
   stage: deploy
   script:
-    - python -m pip install sphinx sphinx_rtd_theme m2r2
+    - apt-get update
+    - apt-get install pandoc
+    - python -m pip install sphinx sphinx_rtd_theme IPython ipykernel nbsphinx m2r2
     - python setup.py install
     - mkdir .public
     - cd doc
