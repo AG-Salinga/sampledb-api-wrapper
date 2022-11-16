@@ -4,7 +4,7 @@ from typing import Dict, List
 import requests
 
 __all__ = ["authenticate", "actions", "actiontypes", "instruments",
-           "locations", "objects", "users"]
+           "locations", "locationtypes","objects", "users"]
 
 _address = None
 _api_key = None
