@@ -21,6 +21,7 @@ test:
   artifacts:
     paths:
       - htmlcov/
+    expire_in: 1 month
 
 deploy_production:
   stage: deploy
