@@ -11,6 +11,8 @@ class Location(SampleDBObject):
     name: str = None
     description: str = None
     parent_location_id: int = None
+    type_id: int = None
+    is_hidden: bool = None
 
     def __repr__(self) -> str:
         return f"Location {self.location_id} ({self.name})"
