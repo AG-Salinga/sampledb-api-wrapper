@@ -36,6 +36,6 @@ def get(type_id: int) -> ActionType:
         ActionType: The requested :class:`~sampledbapi.actiontypes.ActionType`.
     """
     if isinstance(type_id, int):
-        return ActionType(getData(f"actions/{type_id}"))
+        return ActionType(getData(f"action_types/{type_id}"))
     else:
         raise TypeError()
