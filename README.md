@@ -116,6 +116,9 @@ The full HTTP API of SampleDB is supported. This includes
     - [x] Reading a location
     - [x] Reading a list of an object's locations
     - [x] Reading an object's location
+- [x] Location types
+    - [x] Reading a list of all location types
+    - [x] Reading a location type
 - [x] Files
     - [x] Reading a list of an object's files
     - [x] Reading information for a file
