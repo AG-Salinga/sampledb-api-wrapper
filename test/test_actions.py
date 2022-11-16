@@ -17,7 +17,7 @@ def mock_action():
 def mock_actions():
     return f'[{mock_action()},{mock_action()},{mock_action()}]'
 
-class TestLocations():
+class TestActions():
     
     @pytest.fixture(autouse=True)
     def test_init(self, requests_mock):
