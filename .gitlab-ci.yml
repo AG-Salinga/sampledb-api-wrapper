@@ -13,7 +13,7 @@ test:
   script:
     - mkdir htmlcov
     - mkdir mypycov
-    - python -m pip install --upgrade pytest pytest-html coverage requests-mock mypy types-requests
+    - python -m pip install --upgrade pytest pytest-html coverage requests-mock mypy types-requests lxml
     - python -m compileall -f .
     - python -m pytest -v
     - python -m pytest --html=report.html --self-contained-html
