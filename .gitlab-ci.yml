@@ -25,6 +25,7 @@ test:
       - report.html
       - htmlcov/
     expire_in: 1 month
+    when: always
 
 deploy_production:
   stage: deploy
