@@ -12,6 +12,7 @@ test:
   image: $IMAGE
   script:
     - mkdir htmlcov
+    - mkdir mypycov
     - python -m pip install --upgrade pytest pytest-html coverage requests-mock mypy types-requests
     - python -m compileall -f .
     - python -m pytest -v
@@ -19,11 +20,12 @@ test:
     - python -m coverage run --source "./" --omit "./test/*",setup.py -m pytest
     - python -m coverage report
     - python -m coverage html
-    - python -m mypy sampledbapi
+    - python -m mypy sampledbapi --html-report mypycov
   artifacts:
     paths:
       - report.html
       - htmlcov/
+      - mypycov/
     expire_in: 1 month
     when: always
 

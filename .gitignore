@@ -5,3 +5,4 @@ sampledbapi.egg-info/*
 *.pyc
 doc/_build/*
 .coverage
+mypycov/*
