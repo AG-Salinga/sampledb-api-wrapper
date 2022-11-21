@@ -26,20 +26,25 @@ class TestActions():
         test_authentication.mock_authenticate(requests_mock)
         
     def test_getList(self, requests_mock):
-        locs = actions.getList()
-        assert len(locs) == 3
+        acts = actions.getList()
+        assert len(acts) == 3
         
-    def test_get(self, requests_mock):
-        loc = actions.get(1)
-        assert loc != None
+    def test_get_fail(self, requests_mock):
+        with pytest.raises(TypeError):
+            actions.get('Test')
+                
+    def test_get_success(self, requests_mock):
+        act = actions.get(1)
+        assert act != None
       
     def test_properties(self, requests_mock):
-        loc = actions.get(1)
-        assert loc.action_id == 1
-        assert loc.instrument_id == 2
-        assert loc.type == "Sample"
-        assert loc.type_id == 3
-        assert loc.name == "Create"
-        assert loc.description == "Create"
-        assert loc.is_hidden == False
-        assert len(loc.schema) > 0
+        act = actions.get(1)
+        assert act.action_id == 1
+        assert act.instrument_id == 2
+        assert act.type == "Sample"
+        assert act.type_id == 3
+        assert act.name == "Create"
+        assert act.description == "Create"
+        assert act.is_hidden == False
+        assert len(act.schema) > 0
+        assert 'Action' in repr(act)

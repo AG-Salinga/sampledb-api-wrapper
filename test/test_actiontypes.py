@@ -22,16 +22,21 @@ class TestActiontypes():
         test_authentication.mock_authenticate(requests_mock)
         
     def test_getList(self, requests_mock):
-        locs = actiontypes.getList()
-        assert len(locs) == 3
+        acttyps = actiontypes.getList()
+        assert len(acttyps) == 3
         
-    def test_get(self, requests_mock):
-        loc = actiontypes.get(1)
-        assert loc != None
+    def test_get_fail(self, requests_mock):
+        with pytest.raises(TypeError):
+            actiontypes.get('Test')
+        
+    def test_get_success(self, requests_mock):
+        acttyp = actiontypes.get(1)
+        assert acttyp != None
       
     def test_properties(self, requests_mock):
-        loc = actiontypes.get(1)
-        assert loc.type_id == 1
-        assert loc.name == "Create Sample"
-        assert loc.object_name == "Sample"
-        assert loc.admin_only == False
+        acttyp = actiontypes.get(1)
+        assert acttyp.type_id == 1
+        assert acttyp.name == "Create Sample"
+        assert acttyp.object_name == "Sample"
+        assert acttyp.admin_only == False
+        assert 'ActionType' in repr(acttyp)

@@ -27,7 +27,11 @@ class TestLocations():
         locs = locations.getList()
         assert len(locs) == 3
         
-    def test_get(self, requests_mock):
+    def test_get_fail(self, requests_mock):
+        with pytest.raises(TypeError):
+            locations.get('Test')
+            
+    def test_get_success(self, requests_mock):
         loc = locations.get(1)
         assert loc != None
       
@@ -39,3 +43,4 @@ class TestLocations():
         assert loc.parent_location_id == 2
         assert loc.type_id == 3
         assert loc.is_hidden == False
+        assert 'Location' in repr(loc)

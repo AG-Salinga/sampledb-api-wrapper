@@ -20,14 +20,19 @@ class TestLocationTypes():
         test_authentication.mock_authenticate(requests_mock)
     
     def test_getList(self):
-        locs = locationtypes.getList()
-        assert len(locs) == 3
-        
-    def test_get(self):
-        loc = locationtypes.get(1)
-        assert loc != None
+        loctyps = locationtypes.getList()
+        assert len(loctyps) == 3
+    
+    def test_get_fail(self, requests_mock):
+        with pytest.raises(TypeError):
+            locationtypes.get('Test')
+            
+    def test_get_success(self):
+        loctyp = locationtypes.get(1)
+        assert loctyp != None
         
     def test_properties(self):
-        loc = locationtypes.get(1)
-        assert loc.location_type_id == 1
-        assert loc.name == 'Room'
+        loctyp = locationtypes.get(1)
+        assert loctyp.location_type_id == 1
+        assert loctyp.name == 'Room'
+        assert 'LocationType' in repr(loctyp)

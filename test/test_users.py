@@ -13,25 +13,35 @@ def mock_user():
 def mock_users():
     return f'[{mock_user()},{mock_user()},{mock_user()}]'
 
-class TestInstruments():
+class TestUsers():
     
     @pytest.fixture(autouse=True)
     def test_init(self, requests_mock):
         requests_mock.get("http://128.176.208.107:8000/api/v1/users", text=mock_users())
         requests_mock.get("http://128.176.208.107:8000/api/v1/users/1", text=mock_user())
+        requests_mock.get("http://128.176.208.107:8000/api/v1/users/me", text=mock_user())
         test_authentication.mock_authenticate(requests_mock)
         
     def test_getList(self, requests_mock):
-        locs = users.getList()
-        assert len(locs) == 3
+        usrs = users.getList()
+        assert len(usrs) == 3
         
-    def test_get(self, requests_mock):
-        loc = users.get(1)
-        assert loc != None
+    def test_get_fail(self, requests_mock):
+        with pytest.raises(TypeError):
+            users.get('Test')
+            
+    def test_get_success(self, requests_mock):
+        usr = users.get(1)
+        assert usr != None
       
     def test_properties(self, requests_mock):
-        loc = users.get(1)
-        assert loc.user_id == 1
-        assert loc.name == "Nils Weber"
-        assert loc.orcid == "12345"
-        assert loc.affiliation == "WWU Münster"
+        usr = users.get(1)
+        assert usr.user_id == 1
+        assert usr.name == "Nils Weber"
+        assert usr.orcid == "12345"
+        assert usr.affiliation == "WWU Münster"
+        assert 'User' in repr(usr)
+        
+    def test_getCurrent(self, requests_mock):
+        usr = users.getCurrent()
+        assert usr != None
