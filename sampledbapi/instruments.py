@@ -3,7 +3,7 @@ from __future__ import annotations
 import base64
 import os
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from requests import Response
 
@@ -16,11 +16,11 @@ __all__ = ["Instrument", "InstrumentLogCategory", "InstrumentLogEntry",
 
 class Instrument(SampleDBObject):
 
-    instrument_id: int = None
-    name: str = None
-    description: str = None
-    is_hidden: bool = None
-    instrument_scientists: List[users.User] = None
+    instrument_id: Optional[int] = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    is_hidden: Optional[bool] = None
+    instrument_scientists: Optional[List[users.User]] = None
 
     def __init__(self, d: Dict = None):
         """Initialize a new instrument from dictionary."""
@@ -153,8 +153,8 @@ def get(instrument_id: int) -> Dict:
 
 class InstrumentLogCategory(SampleDBObject):
 
-    category_id: int = None
-    title: str = None
+    category_id: Optional[int] = None
+    title: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"InstrumentLogCategory {self.category_id} ({self.title})"
@@ -162,12 +162,12 @@ class InstrumentLogCategory(SampleDBObject):
 
 class InstrumentLogEntry(SampleDBObject):
 
-    log_entry_id: int = None
-    instrument_id: int = None
-    utc_datetime: datetime = None
-    author: users.User = None
-    content: str = None
-    categories: List[InstrumentLogCategory] = None
+    log_entry_id: Optional[int] = None
+    instrument_id: Optional[int] = None
+    utc_datetime: Optional[datetime] = None
+    author: Optional[users.User] = None
+    content: Optional[str] = None
+    categories: Optional[List[InstrumentLogCategory]] = None
 
     def __init__(self, instrument_id: int, d: Dict = None):
         """Initialize a new instrument log entry from dictionary."""
@@ -247,9 +247,9 @@ class InstrumentLogEntry(SampleDBObject):
 
 class InstrumentLogFileAttachment(SampleDBObject):
 
-    file_attachment_id: int = None
-    file_name: str = None
-    content: str = None
+    file_attachment_id: Optional[int] = None
+    file_name: Optional[str] = None
+    content: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"InstrumentLogFileAttachment {self.file_attachment_id} " \
@@ -258,8 +258,8 @@ class InstrumentLogFileAttachment(SampleDBObject):
 
 class InstrumentLogObjectAttachment(SampleDBObject):
 
-    object_attachment_id: int = None
-    object_id: int = None
+    object_attachment_id: Optional[int] = None
+    object_id: Optional[int] = None
 
     def __repr__(self) -> str:
         return f"InstrumentLogObjectAttachment {self.object_attachment_id} " \

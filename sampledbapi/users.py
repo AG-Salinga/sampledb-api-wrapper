@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sampledbapi import SampleDBObject, getData
 
@@ -7,10 +7,10 @@ __all__ = ["User", "getList", "get", "getCurrent"]
 
 class User(SampleDBObject):
 
-    user_id: int = None
-    name: str = None
-    orcid: str = None
-    affiliation: str = None
+    user_id: Optional[int] = None
+    name: Optional[str] = None
+    orcid: Optional[str] = None
+    affiliation: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"User {self.user_id} ({self.name})"

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sampledbapi import SampleDBObject, getData
 from sampledbapi.actions import Action
@@ -8,10 +8,10 @@ __all__ = ["ActionType", "getList", "get"]
 
 class ActionType(SampleDBObject):
 
-    type_id: int = None
-    name: str = None
-    object_name: str = None
-    admin_only: bool = None
+    type_id: Optional[int] = None
+    name: Optional[str] = None
+    object_name: Optional[str] = None
+    admin_only: Optional[bool] = None
 
     def __repr__(self) -> str:
         return f"ActionType {self.type_id} ({self.name})"

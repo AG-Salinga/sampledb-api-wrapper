@@ -12,12 +12,13 @@ test:
   image: $IMAGE
   script:
     - mkdir htmlcov
-    - python -m pip install --upgrade pytest coverage requests-mock
+    - python -m pip install --upgrade pytest coverage requests-mock mypy types-requests
     - python -m compileall -f .
     - python -m pytest -v
     - python -m coverage run --source "./" --omit "./test/*",setup.py -m pytest
     - python -m coverage report
     - python -m coverage html
+    - python -m mypy sampledbapi
   artifacts:
     paths:
       - htmlcov/

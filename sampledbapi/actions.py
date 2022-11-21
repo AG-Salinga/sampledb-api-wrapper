@@ -2,7 +2,7 @@
 This is the module docstring.
 """
 
-from typing import List
+from typing import List, Optional
 
 from sampledbapi import SampleDBObject, getData
 
@@ -11,14 +11,14 @@ __all__ = ["Action", "getList", "get"]
 
 class Action(SampleDBObject):
 
-    action_id: int = None
-    instrument_id: int = None
-    type: str = None
-    type_id: int = None
-    name: str = None
-    description: str = None
-    is_hidden: bool = None
-    schema: dict = None
+    action_id: Optional[int] = None
+    instrument_id: Optional[int] = None
+    type: Optional[str] = None
+    type_id: Optional[int] = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    is_hidden: Optional[bool] = None
+    schema: Optional[dict] = None
 
     def __repr__(self) -> str:
         return f"Action {self.action_id} ({self.name})"

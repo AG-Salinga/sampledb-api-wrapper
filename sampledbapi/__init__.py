@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import requests
 
@@ -42,10 +42,13 @@ def authenticate(address: str, api_key: str):
 
 
 def __headers() -> Dict:
-    return {"Authorization": "Bearer " + _api_key}
+    if _api_key is not None:
+        return {"Authorization": "Bearer " + _api_key}
+    else:
+        raise Exception("You need to provide an API key.")
 
 
-def getData(path: str) -> str:
+def getData(path: str) -> Any:
     if _address is not None:
         address = _address + "/api/v1/" + path
         r = requests.get(address, headers=__headers())
@@ -62,7 +65,7 @@ def getData(path: str) -> str:
         raise Exception("You have to authenticate first.")
 
 
-def postData(path: str, data) -> requests.Response:
+def postData(path: str, data):
     if _address is not None:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)
@@ -71,7 +74,7 @@ def postData(path: str, data) -> requests.Response:
         raise Exception("You have to authenticate first.")
 
 
-def putData(path: str, data) -> requests.Response:
+def putData(path: str, data):
     if _address is not None:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)

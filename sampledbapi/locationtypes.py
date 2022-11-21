@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from sampledbapi import SampleDBObject, getData
 
@@ -7,8 +7,8 @@ __all__ = ["LocationType", "getList", "get"]
 
 class LocationType(SampleDBObject):
 
-    location_type_id: int = None
-    name: str = None
+    location_type_id: Optional[int] = None
+    name: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"LocationType {self.location_type_id} ({self.name})"
