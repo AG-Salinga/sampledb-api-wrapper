@@ -4,24 +4,24 @@ import base64
 import os
 from datetime import datetime
 from io import IOBase
-from typing import BinaryIO, Dict, List
+from typing import BinaryIO, Dict, List, Optional
 
 from requests import Response
 
 from sampledbapi import SampleDBObject, getData, locations, postData, putData
 from sampledbapi.users import User
 
-__all__ = ["Object", "LocationOccurence", "Comment", "getList", "get",
+__all__ = ["Object", "File", "Comment", "getList", "get",
            "create"]
 
 
 class Object(SampleDBObject):
 
-    object_id: int = None
-    version_id: int = None
-    action_id: int = None
-    schema: dict = None
-    data: dict = None
+    object_id: Optional[int] = None
+    version_id: Optional[int] = None
+    action_id: Optional[int] = None
+    schema: Optional[dict] = None
+    data: Optional[dict] = None
 
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
@@ -211,29 +211,8 @@ class Object(SampleDBObject):
             )
         else:
             raise TypeError()
-
-    def getLocationList(self) -> List[locations.Location]:
-        """Get a list of all object locations assignments.
-
-        Returns:
-            List: List of :class:`~sampledbapi.locations.Location`.
-        """
-        return [locations.Location(loc)
-                for loc in getData(f"objects/{self.object_id}/locations")]
-
-    def getLocation(self, location_id: int) -> locations.Location:
-        """Get a specific object location assignment (location_id).
-
-        Args:
-            location_id (int): ID of the location.
-
-        Returns:
-            Location: The requested :class:`~sampledbapi.locations.Location`.
-        """
-        if isinstance(location_id, int):
-            return locations.Location(getData(
-                f"objects/{self.object_id}/locations/{location_id}")
-            )
+            
+    #TODO LocationOccurence
 
     def getFileList(self) -> List:
         """Get a list of all files.
@@ -241,9 +220,9 @@ class Object(SampleDBObject):
         Returns:
             List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
-        return getData(f"objects/{self.object_id}/files")
+        return [File(i) for i in getData(f"objects/{self.object_id}/files")]
 
-    def getFileInfo(self, file_id: int) -> Dict:
+    def getFile(self, file_id: int) -> Dict:
         """Get a specific file (file_id).
 
         Args:
@@ -253,13 +232,13 @@ class Object(SampleDBObject):
             Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(file_id, int):
-            return getData(
+            return File(getData(
                 f"objects/{self.object_id}/files/{file_id}"
-            )
+            ))
         else:
             raise TypeError()
 
-    def uploadFile(self, path: str) -> Response:
+    def uploadFile(self, path: str, name: str = None) -> Response:
         """Create a new file with local storage.
 
         Args:
@@ -270,8 +249,8 @@ class Object(SampleDBObject):
         """
         if isinstance(path, str):
             with open(path, "rb") as f:
-                r = self.uploadFileRaw(
-                    self.object_id, os.path.basename(path), f)
+                f.name
+                r = self.uploadFileRaw(f.name if name == None else name, f)
             return r
         else:
             raise TypeError()
@@ -328,10 +307,8 @@ class Object(SampleDBObject):
             Object: Requested :class:`~sampledbapi.objects.Comment`.
         """
         if isinstance(comment_id, int):
-            return Comment(
-                Comment(getData(
+            return Comment(getData(
                     f"objects/{self.object_id}/comments/{comment_id}"))
-            )
         else:
             raise TypeError()
 
@@ -349,21 +326,6 @@ class Object(SampleDBObject):
                             {"content": comment})
         else:
             raise TypeError()
-
-
-class LocationOccurence(SampleDBObject):
-
-    object_id: int = None
-    location: locations.Location = None
-    responsible_user: User = None
-    user: User = None
-    description: str = None
-    datetime: datetime = None
-
-    def __repr__(self) -> str:
-        return f"LocationOccurence of object {self.object_id} " \
-            + "(at {self.location.name})"
-
 
 def getList(q: str = "", action_id: int = -1, action_type: str = "",
             limit: int = -1, offset: int = -1,
@@ -458,20 +420,31 @@ def create(action_id: int, data: dict) -> Response:
     else:
         raise TypeError()
 
+class File(SampleDBObject):
+    
+    object_id:  Optional[int] = None
+    file_id:  Optional[int] = None
+    storage:  Optional[str] = None
+    original_file_name:  Optional[str] = None
+    base64_content:  Optional[str] = None
+    
+    def __repr__(self) -> str:
+        return f"File {self.file_id}, " \
+            + f"Name {self.original_file_name}"
 
 class Comment(SampleDBObject):
 
-    object_id: int = None
-    user_id: int = None
-    comment_id: int = None
-    content: str = None
-    utc_datetime: datetime = None
+    object_id:  Optional[int] = None
+    user_id:  Optional[int] = None
+    comment_id:  Optional[int] = None
+    content:  Optional[str] = None
+    utc_datetime:  Optional[datetime] = None
 
     def __init__(self, d: Dict = None):
         """Initialize a new comment from dictionary."""
         super().__init__(d)
         if d is not None and "utc_datetime" in d:
-            self.utc_datetime = datetime.strptime(d["utc_datetime"])
+            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
 
     def __str__(self) -> str:
         return f"Comment on object {self.object_id}, " \
