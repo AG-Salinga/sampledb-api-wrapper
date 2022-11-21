@@ -11,7 +11,7 @@ class LocationType(SampleDBObject):
     name: str = None
 
     def __repr__(self) -> str:
-        return f"Location type {self.location_type_id} ({self.name})"
+        return f"LocationType {self.location_type_id} ({self.name})"
 
 
 def getList() -> List[LocationType]:

@@ -79,8 +79,8 @@ class Instrument(SampleDBObject):
         """
         if isinstance(log_category_id, int):
             return InstrumentLogCategory(getData(
-                f"instruments/{self.instrument_id}/log_categories/"
-                "{log_category_id}"))
+                f"instruments/{self.instrument_id}/log_categories/" +
+                f"{log_category_id}"))
         else:
             raise TypeError()
 
@@ -180,7 +180,7 @@ class InstrumentLogEntry(SampleDBObject):
             if "author" in d:
                 self.author = users.get(d["author"])
             if "utc_datetime" in d:
-                self.utc_datetime = datetime.strptime(d["utc_datetime"])
+                self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
 
     def __repr__(self) -> str:
         return f"InstrumentLogEntry {self.log_entry_id} " \
