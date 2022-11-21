@@ -4,7 +4,7 @@ import base64
 import os
 from datetime import datetime
 from io import IOBase
-from typing import BinaryIO, Dict, List, Optional
+from typing import BinaryIO, Dict, List, Optional, Any
 
 from requests import Response
 
@@ -222,7 +222,7 @@ class Object(SampleDBObject):
         """
         return [File(i) for i in getData(f"objects/{self.object_id}/files")]
 
-    def getFile(self, file_id: int) -> Dict:
+    def getFile(self, file_id: int) -> File:
         """Get a specific file (file_id).
 
         Args:
@@ -238,7 +238,7 @@ class Object(SampleDBObject):
         else:
             raise TypeError()
 
-    def uploadFile(self, path: str, name: str = None) -> Response:
+    def uploadFile(self, path: str, name: Optional[str] = None) -> Response:
         """Create a new file with local storage.
 
         Args:
@@ -250,7 +250,7 @@ class Object(SampleDBObject):
         if isinstance(path, str):
             with open(path, "rb") as f:
                 f.name
-                r = self.uploadFileRaw(f.name if name == None else name, f)
+                r = self.uploadFileRaw(f.name if name is None else name, f)
             return r
         else:
             raise TypeError()
@@ -360,7 +360,7 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
             isinstance(action_type, str) and isinstance(limit, int) and
             isinstance(offset, int) and isinstance(name_only, bool)):
         s = "objects"
-        pars = {}
+        pars : Dict[str, Any] = {}
         if q != "":
             pars["q"] = q
         if action_id > 0:
@@ -440,10 +440,10 @@ class Comment(SampleDBObject):
     content:  Optional[str] = None
     utc_datetime:  Optional[datetime] = None
 
-    def __init__(self, d: Dict = None):
+    def __init__(self, d: Dict):
         """Initialize a new comment from dictionary."""
         super().__init__(d)
-        if d is not None and "utc_datetime" in d:
+        if "utc_datetime" in d:
             self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
 
     def __str__(self) -> str:

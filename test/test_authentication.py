@@ -27,7 +27,7 @@ class TestAuthentication():
             objects.create(1, {'name': 'Test'})
             
     def test_AuthenticationRequired_put(self, requests_mock):
-        obj = objects.Object()
+        obj = objects.Object({})
         with pytest.raises(Exception):
             authenticate(None, None)
         with pytest.raises(Exception):

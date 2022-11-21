@@ -3,7 +3,7 @@ from __future__ import annotations
 import base64
 import os
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 
 from requests import Response
 
@@ -22,10 +22,10 @@ class Instrument(SampleDBObject):
     is_hidden: Optional[bool] = None
     instrument_scientists: Optional[List[users.User]] = None
 
-    def __init__(self, d: Dict = None):
+    def __init__(self, d: Dict):
         """Initialize a new instrument from dictionary."""
         super().__init__(d)
-        if d is not None and "instrument_scientists" in d:
+        if "instrument_scientists" in d:
             self.instrument_scientists = [
                 users.get(i) for i in d["instrument_scientists"]]
 
@@ -38,8 +38,11 @@ class Instrument(SampleDBObject):
         Returns:
             List: List of :class:`~sampledbapi.instrument.InstrumentLogEntry`.
         """
-        return [InstrumentLogEntry(self.instrument_id, log) for log in getData(
-            f"instruments/{self.instrument_id}/log_entries")]
+        if self.instrument_id is not None:
+            return [InstrumentLogEntry(self.instrument_id, log) for log in getData(
+                f"instruments/{self.instrument_id}/log_entries")]
+        else:
+            raise Exception('instrument_id can not be None')
 
     def getLogEntry(self, log_entry_id: int) -> InstrumentLogEntry:
         """Get the specific log entry (log_entry_id).
@@ -52,9 +55,12 @@ class Instrument(SampleDBObject):
                 :class:`~sampledbapi.instrument.InstrumentLogEntry`.
         """
         if isinstance(log_entry_id, int):
-            return InstrumentLogEntry(self.instrument_id, getData(
-                f"instruments/{self.instrument_id}/log_entries/{log_entry_id}"
-            ))
+            if self.instrument_id is not None:
+                return InstrumentLogEntry(self.instrument_id, getData(
+                    f"instruments/{self.instrument_id}/log_entries/{log_entry_id}"
+                ))
+            else:
+                raise Exception('instrument_id can not be None')
         else:
             raise TypeError()
 
@@ -101,7 +107,7 @@ class Instrument(SampleDBObject):
         if (isinstance(content, str) and isinstance(category_ids, list) and
                 isinstance(file_attachments, list) and
                 isinstance(object_attachments, list)):
-            data = {"content": content}
+            data : Dict[str, Any] = {"content": content}
 
             def conv_file(path: str):
                 with open(path, "rb") as f:
@@ -133,7 +139,7 @@ def getList() -> List[Instrument]:
     return [Instrument(i) for i in getData("instruments")]
 
 
-def get(instrument_id: int) -> Dict:
+def get(instrument_id: int) -> Instrument:
     """Get the specific instrument (instrument_id).
 
     Args:
@@ -169,18 +175,17 @@ class InstrumentLogEntry(SampleDBObject):
     content: Optional[str] = None
     categories: Optional[List[InstrumentLogCategory]] = None
 
-    def __init__(self, instrument_id: int, d: Dict = None):
+    def __init__(self, instrument_id: int, d: Dict):
         """Initialize a new instrument log entry from dictionary."""
         super().__init__(d)
         self.instrument_id = instrument_id
-        if d is not None:
-            if "categories" in d:
-                self.categories = [
-                    InstrumentLogCategory(c) for c in d["categories"]]
-            if "author" in d:
-                self.author = users.get(d["author"])
-            if "utc_datetime" in d:
-                self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+        if "categories" in d:
+            self.categories = [
+                InstrumentLogCategory(c) for c in d["categories"]]
+        if "author" in d:
+            self.author = users.get(d["author"])
+        if "utc_datetime" in d:
+            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
 
     def __repr__(self) -> str:
         return f"InstrumentLogEntry {self.log_entry_id} " \

@@ -12,12 +12,11 @@ _api_key = None
 
 class SampleDBObject:
 
-    def __init__(self, d: Dict = None):
+    def __init__(self, d: Dict):
         """Initialize class attributes from dictionary."""
-        if d is not None:
-            for key in dir(self):
-                if not key.startswith("__") and key in d:
-                    setattr(self, key, d[key])
+        for key in dir(self):
+            if not key.startswith("__") and key in d:
+                setattr(self, key, d[key])
 
 
 def authenticate(address: str, api_key: str):
