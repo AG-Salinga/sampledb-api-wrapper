@@ -8,7 +8,7 @@ from typing import BinaryIO, Dict, List, Optional, Any
 
 from requests import Response
 
-from sampledbapi import SampleDBObject, getData, locations, postData, putData
+from sampledbapi import SampleDBObject, getData, locations, users, postData, putData
 from sampledbapi.users import User
 
 __all__ = ["Object", "File", "Comment", "getList", "get",
@@ -212,7 +212,36 @@ class Object(SampleDBObject):
         else:
             raise TypeError()
             
-    #TODO LocationOccurence
+    def getLocationOccurences(self) -> List[LocationOccurence]:
+        """
+        Get a list of all object locations assignments for a specific object.
+
+        Args:
+
+        Returns:
+            List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#reading-a-list-of-an-object-s-locations>`__
+
+        """
+        return [LocationOccurence(i) for i in getData(f"objects/{self.object_id}/locations")]
+        
+    def getLocationOccurence(self, location_id: int) -> LocationOccurence:
+        """
+        Get a specific object location assignment (index) for a specific object.
+
+        Args:
+            location_id (int) : ID of the location
+
+        Returns:
+            LocationOccurence: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#reading-an-object-s-location>`__
+
+
+        """
+        if isinstance(location_id, int):
+            return LocationOccurence(getData(
+                f"objects/{self.object_id}/locations/{location_id}"
+            ))
+        else:
+            raise TypeError()
 
     def getFileList(self) -> List:
         """Get a list of all files.
@@ -431,6 +460,31 @@ class File(SampleDBObject):
     def __repr__(self) -> str:
         return f"File {self.file_id}, " \
             + f"Name {self.original_file_name}"
+            
+class LocationOccurence(SampleDBObject):
+
+    object_id: Optional[int] = None
+    location: Optional[locations.Location] = None
+    responsible_user: Optional[User] = None
+    user: Optional[User] = None
+    description: Optional[str] = None
+    utc_datetime: Optional[datetime] = None
+    
+    def __init__(self, d: Dict):
+        """Initialize a new instrument from dictionary."""
+        super().__init__(d)
+        if "location" in d:
+            self.location = locations.get(d["location"])
+        if "responsible_user" in d:
+            self.responsible_user = users.get(d["responsible_user"])
+        if "user" in d:
+            self.user = users.get(d["user"])
+        if "utc_datetime" in d:
+            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+
+    def __repr__(self) -> str:
+        return f"LocationOccurence of object {self.object_id} " \
+            + "(at {self.location.name})"
 
 class Comment(SampleDBObject):
 

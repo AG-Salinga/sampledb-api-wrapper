@@ -2,7 +2,7 @@ import pytest
 import io
 import tempfile
 from sampledbapi import objects
-from test import test_authentication
+from test import test_authentication, test_users, test_locations
 
 def mock_object():
     return '''{
@@ -21,6 +21,19 @@ def mock_permission():
     
 def mock_permissions():
     return '{"1": "TestPerm", "2": "TestPerm", "3": "TestPerm"}'
+
+def mock_locationOccurence():
+    return '''{
+            "object_id": 1,
+            "location": 1,
+            "responsible_user": 1,
+            "user": 1,
+            "description": "TestDescription",
+            "utc_datetime": "2022-11-21T09:39:08.470159"
+        }'''
+    
+def mock_locationOccurences():
+    return f'[{mock_locationOccurence()},{mock_locationOccurence()},{mock_locationOccurence()}]'
 
 def mock_file():
     return '''{
@@ -66,6 +79,10 @@ class TestObjects():
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/permissions/projects", text=mock_permissions())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/permissions/projects/1", text=mock_permission())
         requests_mock.put("http://128.176.208.107:8000/api/v1/objects/1/permissions/projects/1")
+        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/locations", text=mock_locationOccurences())
+        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/locations/1", text=mock_locationOccurence())
+        requests_mock.get("http://128.176.208.107:8000/api/v1/locations/1", text=test_locations.mock_location())
+        requests_mock.get("http://128.176.208.107:8000/api/v1/users/1", text=test_users.mock_user())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/files", text=mock_files())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/files/1", text=mock_file())
         requests_mock.post("http://128.176.208.107:8000/api/v1/objects/1/files/")
@@ -199,8 +216,27 @@ class TestObjects():
     def test_setProjectGroupPermissions_success(self, requests_mock):
         objects.get(1).setProjectGroupPermissions(1, 'TestPerm')  
     
-    #def test_locationOccurence(self, requests_mock):
-    #    assert False
+    def test_getLocationOccurences(self, requests_mock):
+        locOccs = objects.get(1).getLocationOccurences()
+        assert len(locOccs) == 3
+        
+    def test_getLocationOccurence_fail(self, requests_mock):
+        with pytest.raises(TypeError):
+            objects.get(1).getLocationOccurence('Test')
+            
+    def test_getLocationOccurence_success(self, requests_mock):
+        locOcc = objects.get(1).getLocationOccurence(1)
+        assert locOcc is not None
+        
+    def test_getLocationOccurence_properties(self, requests_mock):
+        locOcc = objects.get(1).getLocationOccurence(1)
+        assert locOcc.object_id == 1
+        assert locOcc.location is not None
+        assert locOcc.responsible_user is not None
+        assert locOcc.user is not None
+        assert locOcc.description == 'TestDescription'
+        assert locOcc.utc_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f') == '2022-11-21T09:39:08.470159'
+        assert 'LocationOccurence of object' in repr(locOcc)
     
     def test_getFileList(self, requests_mock):
         files = objects.get(1).getFileList()
