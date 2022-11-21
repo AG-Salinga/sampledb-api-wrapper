@@ -5,6 +5,7 @@
    :caption: API documentation
 
    sampledbapi
+   changelog
    Examples.ipynb
 
 Index / search
