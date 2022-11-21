@@ -16,20 +16,30 @@ class TestAuthentication():
     
     def test_AuthenticationRequired_get(self):
         with pytest.raises(Exception):
+            authenticate(None, None)
+        with pytest.raises(Exception):
             objects.getList()
             
     def test_AuthenticationRequired_post(self):
         with pytest.raises(Exception):
-            objects.create('Test', {'name': 'Test'})
-            
-    def test_AuthenticationRequired_put(self):
+            authenticate(None, None)
         with pytest.raises(Exception):
-            objects.get(1).setPublic(False) 
+            objects.create(1, {'name': 'Test'})
+            
+    def test_AuthenticationRequired_put(self, requests_mock):
+        obj = objects.Object()
+        with pytest.raises(Exception):
+            authenticate(None, None)
+        with pytest.raises(Exception):
+            obj.setPublic(False) 
         
     def test_authenticate_fail(self, requests_mock):
         requests_mock.get("http://128.176.208.107:8000/api/v1/actions", status_code=404)
         with pytest.raises(Exception):
             server_address = "http://128.176.208.107:8000"
+            api_key = None
+            authenticate(server_address, api_key)
+        with pytest.raises(Exception):
             api_key = "Failure"
             authenticate(server_address, api_key)
         
@@ -38,3 +48,10 @@ class TestAuthentication():
         server_address = "http://128.176.208.107:8000"
         api_key = "Success"
         authenticate(server_address, api_key)
+        
+    def test_json_fail(self, requests_mock):
+        requests_mock.get("http://128.176.208.107:8000/api/v1/actions", text="Fail")
+        server_address = "http://128.176.208.107:8000"
+        api_key = "Success"
+        with pytest.raises(Exception):
+            authenticate(server_address, api_key)

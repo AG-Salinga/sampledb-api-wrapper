@@ -271,7 +271,11 @@ class TestObjects():
         assert com.content == 'TestContent'
         assert com.utc_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f') == '2022-11-21T09:39:08.470159'
         assert 'Comment on object' in str(com)
+      
+    def test_postComment_fail(self, requests_mock):
+        with pytest.raises(TypeError):
+            objects.get(1).postComment(1)
         
-    def test_postComment(self, requests_mock):
+    def test_postComment_success(self, requests_mock):
         objects.get(1).postComment('TestComment')
     
