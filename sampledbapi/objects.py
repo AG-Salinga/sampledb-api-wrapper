@@ -10,8 +10,7 @@ from requests import Response
 from sampledbapi import SampleDBObject, get_data, locations, users, post_data, put_data
 from sampledbapi.users import User
 
-__all__ = ["Object", "File", "Comment", "get_list", "get",
-           "create"]
+__all__ = ["Object", "File", "Comment", "get_list", "get", "create"]
 
 
 class Object(SampleDBObject):
@@ -57,7 +56,7 @@ class Object(SampleDBObject):
         """
         if isinstance(data, dict):
             return post_data(f"objects/{self.object_id}/versions/",
-                            {"data": data})
+                             {"data": data})
         else:
             raise TypeError()
 
@@ -80,7 +79,7 @@ class Object(SampleDBObject):
         """
         if isinstance(public, bool):
             return put_data(f"objects/{self.object_id}/permissions/public",
-                           public)
+                            public)
         else:
             raise TypeError()
 
@@ -193,7 +192,7 @@ class Object(SampleDBObject):
             raise TypeError()
 
     def set_project_group_permissions(self, project_id: int,
-                                   permissions: str) -> Response:
+                                      permissions: str) -> Response:
         """Set the permissions of a project group.
 
         Args:
@@ -210,7 +209,7 @@ class Object(SampleDBObject):
             )
         else:
             raise TypeError()
-            
+
     def get_location_occurences(self) -> List[LocationOccurence]:
         """
         Get a list of all object locations assignments for a specific object.
@@ -222,7 +221,7 @@ class Object(SampleDBObject):
 
         """
         return [LocationOccurence(i) for i in get_data(f"objects/{self.object_id}/locations")]
-        
+
     def get_location_occurence(self, location_id: int) -> LocationOccurence:
         """
         Get a specific object location assignment (index) for a specific object.
@@ -296,8 +295,8 @@ class Object(SampleDBObject):
         if isinstance(name, str) and isinstance(file_obj, IOBase):
             base64encoded = base64.b64encode(file_obj.read())
             return post_data(f"objects/{self.object_id}/files/",
-                            {"storage": "local", "original_file_name": name,
-                             "base64_content": base64encoded.decode()})
+                             {"storage": "local", "original_file_name": name,
+                              "base64_content": base64encoded.decode()})
         else:
             raise TypeError()
 
@@ -312,7 +311,7 @@ class Object(SampleDBObject):
         """
         if isinstance(url, str):
             return post_data(f"objects/{self.object_id}/files/",
-                            {"storage": "url", "url": url})
+                             {"storage": "url", "url": url})
         else:
             raise TypeError()
 
@@ -336,7 +335,7 @@ class Object(SampleDBObject):
         """
         if isinstance(comment_id, int):
             return Comment(get_data(
-                    f"objects/{self.object_id}/comments/{comment_id}"))
+                f"objects/{self.object_id}/comments/{comment_id}"))
         else:
             raise TypeError()
 
@@ -351,13 +350,14 @@ class Object(SampleDBObject):
         """
         if isinstance(comment, str):
             return post_data(f"objects/{self.object_id}/comments/",
-                            {"content": comment})
+                             {"content": comment})
         else:
             raise TypeError()
 
+
 def get_list(q: str = "", action_id: int = -1, action_type: str = "",
-            limit: int = -1, offset: int = -1,
-            name_only: bool = False) -> List[Object]:
+             limit: int = -1, offset: int = -1,
+             name_only: bool = False) -> List[Object]:
     """Get a list of all objects visible to the current user.
 
     The list only contains the current version of each object. By passing the
@@ -388,7 +388,7 @@ def get_list(q: str = "", action_id: int = -1, action_type: str = "",
             isinstance(action_type, str) and isinstance(limit, int) and
             isinstance(offset, int) and isinstance(name_only, bool)):
         s = "objects"
-        pars : Dict[str, Any] = {}
+        pars: Dict[str, Any] = {}
         if q != "":
             pars["q"] = q
         if action_id > 0:
@@ -448,18 +448,20 @@ def create(action_id: int, data: dict) -> Response:
     else:
         raise TypeError()
 
+
 class File(SampleDBObject):
-    
-    object_id:  Optional[int] = None
-    file_id:  Optional[int] = None
-    storage:  Optional[str] = None
-    original_file_name:  Optional[str] = None
-    base64_content:  Optional[str] = None
-    
+
+    object_id: Optional[int] = None
+    file_id: Optional[int] = None
+    storage: Optional[str] = None
+    original_file_name: Optional[str] = None
+    base64_content: Optional[str] = None
+
     def __repr__(self) -> str:
         return f"File {self.file_id}, " \
             + f"Name {self.original_file_name}"
-            
+
+
 class LocationOccurence(SampleDBObject):
 
     object_id: Optional[int] = None
@@ -468,7 +470,7 @@ class LocationOccurence(SampleDBObject):
     user: Optional[User] = None
     description: Optional[str] = None
     utc_datetime: Optional[datetime] = None
-    
+
     def __init__(self, d: Dict):
         """Initialize a new instrument from dictionary."""
         super().__init__(d)
@@ -479,25 +481,28 @@ class LocationOccurence(SampleDBObject):
         if "user" in d:
             self.user = users.get(d["user"])
         if "utc_datetime" in d:
-            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+            self.utc_datetime = datetime.strptime(
+                d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
 
     def __repr__(self) -> str:
         return f"LocationOccurence of object {self.object_id} " \
             + "(at {self.location.name})"
 
+
 class Comment(SampleDBObject):
 
-    object_id:  Optional[int] = None
-    user_id:  Optional[int] = None
-    comment_id:  Optional[int] = None
-    content:  Optional[str] = None
-    utc_datetime:  Optional[datetime] = None
+    object_id: Optional[int] = None
+    user_id: Optional[int] = None
+    comment_id: Optional[int] = None
+    content: Optional[str] = None
+    utc_datetime: Optional[datetime] = None
 
     def __init__(self, d: Dict):
         """Initialize a new comment from dictionary."""
         super().__init__(d)
         if "utc_datetime" in d:
-            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+            self.utc_datetime = datetime.strptime(
+                d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
 
     def __str__(self) -> str:
         return f"Comment on object {self.object_id}, " \

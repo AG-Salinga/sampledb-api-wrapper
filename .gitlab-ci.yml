@@ -2,6 +2,7 @@ image: python:latest
 
 stages:
   - test
+  - mirror
   - deploy
 
 test:
@@ -13,7 +14,7 @@ test:
   script:
     - mkdir htmlcov
     - mkdir mypycov
-    - python -m pip install --upgrade pytest pytest-html coverage requests-mock mypy types-requests lxml
+    - python -m pip install --upgrade pytest pytest-html coverage requests-mock mypy types-requests lxml pycodestyle
     - python -m compileall -f .
     - python -m pytest -v
     - python -m pytest --html=report.html --self-contained-html
@@ -21,6 +22,7 @@ test:
     - python -m coverage report
     - python -m coverage html
     - python -m mypy sampledbapi --html-report mypycov
+    - python3 -m pycodestyle --ignore=E402,E501,W504,W601 sampledbapi
   artifacts:
     paths:
       - report.html
@@ -28,6 +30,21 @@ test:
       - mypycov/
     expire_in: 1 month
     when: always
+
+mirror:
+  stage: mirror
+  image: ubuntu:22.04
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - apt-get update
+    - apt-get install -y git
+    - mkdir --mode=700 ~/.ssh/
+    - echo "$PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - echo "github.com $GITHUB_HOST_KEY" >> ~/.ssh/known_hosts
+    - chmod 400 ~/.ssh/*
+    - git clone --mirror "$CI_REPOSITORY_URL" repo
+    - cd repo && git push --mirror git@github.com:AG-Salinga/sampledb-api-wrapper && cd -
 
 deploy_production:
   stage: deploy

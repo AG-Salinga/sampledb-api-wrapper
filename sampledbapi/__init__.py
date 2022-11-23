@@ -4,7 +4,7 @@ from typing import Any, Dict
 import requests
 
 __all__ = ["authenticate", "actions", "actiontypes", "instruments",
-           "locations", "locationtypes","objects", "users"]
+           "locations", "locationtypes", "objects", "users"]
 
 _address = None
 _api_key = None
@@ -68,7 +68,8 @@ def post_data(path: str, data):
     if _address is not None:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)
-        requests.post(address, headers=__headers(), data=data).raise_for_status()
+        requests.post(address, headers=__headers(),
+                      data=data).raise_for_status()
     else:
         raise Exception("You have to authenticate first.")
 
@@ -77,6 +78,7 @@ def put_data(path: str, data):
     if _address is not None:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)
-        requests.put(address, headers=__headers(), data=data).raise_for_status()
+        requests.put(address, headers=__headers(),
+                     data=data).raise_for_status()
     else:
         raise Exception("You have to authenticate first.")

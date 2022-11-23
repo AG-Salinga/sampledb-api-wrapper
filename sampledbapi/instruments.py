@@ -91,8 +91,8 @@ class Instrument(SampleDBObject):
             raise TypeError()
 
     def create_log_entry(self, content: str, category_ids: List = [],
-                       file_attachments: List = [],
-                       object_attachments: List = []) -> Response:
+                         file_attachments: List = [],
+                         object_attachments: List = []) -> Response:
         """Create a log entry for an instrument (instrument_id) and optionally attach files and objects to it.
 
         Args:
@@ -107,7 +107,7 @@ class Instrument(SampleDBObject):
         if (isinstance(content, str) and isinstance(category_ids, list) and
                 isinstance(file_attachments, list) and
                 isinstance(object_attachments, list)):
-            data : Dict[str, Any] = {"content": content}
+            data: Dict[str, Any] = {"content": content}
 
             def conv_file(path: str):
                 with open(path, "rb") as f:
@@ -185,7 +185,8 @@ class InstrumentLogEntry(SampleDBObject):
         if "author" in d:
             self.author = users.get(d["author"])
         if "utc_datetime" in d:
-            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+            self.utc_datetime = datetime.strptime(
+                d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
 
     def __repr__(self) -> str:
         return f"InstrumentLogEntry {self.log_entry_id} " \
@@ -203,7 +204,7 @@ class InstrumentLogEntry(SampleDBObject):
             f"{self.log_entry_id}/file_attachments")]
 
     def get_file_attachment(self, file_attachment_id: int
-                          ) -> InstrumentLogFileAttachment:
+                            ) -> InstrumentLogFileAttachment:
         """Get a specific file attachment (file_attachment_id).
 
         Args:
@@ -215,8 +216,8 @@ class InstrumentLogEntry(SampleDBObject):
         """
         if isinstance(file_attachment_id, int):
             return InstrumentLogFileAttachment(get_data(
-                f"instruments/{self.instrument_id}/log_entries/"
-                + f"{self.log_entry_id}/file_attachments/{file_attachment_id}"))
+                f"instruments/{self.instrument_id}/log_entries/" +
+                f"{self.log_entry_id}/file_attachments/{file_attachment_id}"))
         else:
             raise TypeError()
 
