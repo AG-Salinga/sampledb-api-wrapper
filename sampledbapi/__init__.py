@@ -34,7 +34,7 @@ def authenticate(address: str, api_key: str):
     old_address, old_key = _address, _api_key
     _address, _api_key = address, api_key
     try:
-        get_data("actions")
+        get_data("users/me")
     except requests.exceptions.HTTPError as e:
         _address, _api_key = old_address, old_key
         raise Exception("Authentication not successful: " + str(e))
