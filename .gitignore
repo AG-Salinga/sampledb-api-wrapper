@@ -3,7 +3,7 @@ build/*
 dist/*
 sampledbapi.egg-info/*
 *.pyc
-test/__pycache__
+test/__pycache__/*
 doc/_build/*
 .coverage
 mypycov/*
