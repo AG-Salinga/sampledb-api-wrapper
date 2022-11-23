@@ -4,9 +4,9 @@ This is the module docstring.
 
 from typing import List, Optional
 
-from sampledbapi import SampleDBObject, getData
+from sampledbapi import SampleDBObject, get_data
 
-__all__ = ["Action", "getList", "get"]
+__all__ = ["Action", "get_list", "get"]
 
 
 class Action(SampleDBObject):
@@ -24,13 +24,13 @@ class Action(SampleDBObject):
         return f"Action {self.action_id} ({self.name})"
 
 
-def getList() -> List[Action]:
+def get_list() -> List[Action]:
     """Get a list of all actions.
 
     Returns:
         List: List of :class:`~sampledbapi.actions.Action` objects.
     """
-    return [Action(a) for a in getData("actions")]
+    return [Action(a) for a in get_data("actions")]
 
 
 def get(action_id: int) -> Action:
@@ -43,6 +43,6 @@ def get(action_id: int) -> Action:
         Action: The requested :class:`~sampledbapi.action.Action`.
     """
     if isinstance(action_id, int):
-        return Action(getData(f"actions/{action_id}"))
+        return Action(get_data(f"actions/{action_id}"))
     else:
         raise TypeError()

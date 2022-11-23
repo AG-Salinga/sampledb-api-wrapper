@@ -23,8 +23,8 @@ class TestLocations():
         requests_mock.get("http://128.176.208.107:8000/api/v1/locations/1", text=mock_location())
         test_authentication.mock_authenticate(requests_mock)
         
-    def test_getList(self, requests_mock):
-        locs = locations.getList()
+    def test_get_list(self, requests_mock):
+        locs = locations.get_list()
         assert len(locs) == 3
         
     def test_get_fail(self, requests_mock):
@@ -33,7 +33,7 @@ class TestLocations():
             
     def test_get_success(self, requests_mock):
         loc = locations.get(1)
-        assert loc != None
+        assert loc is not None
       
     def test_properties(self, requests_mock):
         loc = locations.get(1)

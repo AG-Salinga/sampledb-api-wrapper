@@ -14,24 +14,24 @@ def mock_authenticate(requests_mock):
 
 class TestAuthentication():
     
-    def test_AuthenticationRequired_get(self):
+    def test_authentication_required_get(self):
         with pytest.raises(Exception):
             authenticate(None, None)
         with pytest.raises(Exception):
-            objects.getList()
+            objects.get_list()
             
-    def test_AuthenticationRequired_post(self):
+    def test_authentication_required_post(self):
         with pytest.raises(Exception):
             authenticate(None, None)
         with pytest.raises(Exception):
             objects.create(1, {'name': 'Test'})
             
-    def test_AuthenticationRequired_put(self, requests_mock):
+    def test_authentication_required_put(self, requests_mock):
         obj = objects.Object({})
         with pytest.raises(Exception):
             authenticate(None, None)
         with pytest.raises(Exception):
-            obj.setPublic(False) 
+            obj.set_public(False) 
         
     def test_authenticate_fail(self, requests_mock):
         requests_mock.get("http://128.176.208.107:8000/api/v1/actions", status_code=404)

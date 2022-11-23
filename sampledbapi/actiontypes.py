@@ -1,9 +1,8 @@
 from typing import List, Optional
 
-from sampledbapi import SampleDBObject, getData
-from sampledbapi.actions import Action
+from sampledbapi import SampleDBObject, get_data
 
-__all__ = ["ActionType", "getList", "get"]
+__all__ = ["ActionType", "get_list", "get"]
 
 
 class ActionType(SampleDBObject):
@@ -17,13 +16,13 @@ class ActionType(SampleDBObject):
         return f"ActionType {self.type_id} ({self.name})"
 
 
-def getList() -> List[ActionType]:
+def get_list() -> List[ActionType]:
     """Get a list of all action types.
 
     Returns:
         List: List of :class:`~sampledbapi.actiontypes.Actiontype` objects.
     """
-    return [ActionType(a) for a in getData("action_types")]
+    return [ActionType(a) for a in get_data("action_types")]
 
 
 def get(type_id: int) -> ActionType:
@@ -36,6 +35,6 @@ def get(type_id: int) -> ActionType:
         ActionType: The requested :class:`~sampledbapi.actiontypes.ActionType`.
     """
     if isinstance(type_id, int):
-        return ActionType(getData(f"action_types/{type_id}"))
+        return ActionType(get_data(f"action_types/{type_id}"))
     else:
         raise TypeError()

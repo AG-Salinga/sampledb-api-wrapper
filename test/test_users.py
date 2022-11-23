@@ -22,8 +22,8 @@ class TestUsers():
         requests_mock.get("http://128.176.208.107:8000/api/v1/users/me", text=mock_user())
         test_authentication.mock_authenticate(requests_mock)
         
-    def test_getList(self, requests_mock):
-        usrs = users.getList()
+    def test_get_list(self, requests_mock):
+        usrs = users.get_list()
         assert len(usrs) == 3
         
     def test_get_fail(self, requests_mock):
@@ -42,6 +42,6 @@ class TestUsers():
         assert usr.affiliation == "WWU Münster"
         assert 'User' in repr(usr)
         
-    def test_getCurrent(self, requests_mock):
-        usr = users.getCurrent()
+    def test_get_current(self, requests_mock):
+        usr = users.get_current()
         assert usr != None

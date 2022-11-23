@@ -21,8 +21,8 @@ class TestActiontypes():
         requests_mock.get("http://128.176.208.107:8000/api/v1/action_types/1", text=mock_actiontype())
         test_authentication.mock_authenticate(requests_mock)
         
-    def test_getList(self, requests_mock):
-        acttyps = actiontypes.getList()
+    def test_get_list(self, requests_mock):
+        acttyps = actiontypes.get_list()
         assert len(acttyps) == 3
         
     def test_get_fail(self, requests_mock):
@@ -31,7 +31,7 @@ class TestActiontypes():
         
     def test_get_success(self, requests_mock):
         acttyp = actiontypes.get(1)
-        assert acttyp != None
+        assert acttyp is not None
       
     def test_properties(self, requests_mock):
         acttyp = actiontypes.get(1)

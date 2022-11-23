@@ -1,8 +1,8 @@
 from typing import List, Optional
 
-from sampledbapi import SampleDBObject, getData
+from sampledbapi import SampleDBObject, get_data
 
-__all__ = ["Location", "getList", "get"]
+__all__ = ["Location", "get_list", "get"]
 
 
 class Location(SampleDBObject):
@@ -18,13 +18,13 @@ class Location(SampleDBObject):
         return f"Location {self.location_id} ({self.name})"
 
 
-def getList() -> List[Location]:
+def get_list() -> List[Location]:
     """Get a list of all locations.
 
     Returns:
         List: List of :class:`~sampledbapi.locations.Location` objects.
     """
-    return [Location(loc) for loc in getData("locations")]
+    return [Location(loc) for loc in get_data("locations")]
 
 
 def get(location_id: int) -> Location:
@@ -37,6 +37,6 @@ def get(location_id: int) -> Location:
         Location: The requested :class:`~sampledbapi.locations.Location`.
     """
     if isinstance(location_id, int):
-        return Location(getData(f"locations/{location_id}"))
+        return Location(get_data(f"locations/{location_id}"))
     else:
         raise TypeError()

@@ -1,17 +1,16 @@
 from __future__ import annotations
 
 import base64
-import os
 from datetime import datetime
 from io import IOBase
 from typing import BinaryIO, Dict, List, Optional, Any
 
 from requests import Response
 
-from sampledbapi import SampleDBObject, getData, locations, users, postData, putData
+from sampledbapi import SampleDBObject, get_data, locations, users, post_data, put_data
 from sampledbapi.users import User
 
-__all__ = ["Object", "File", "Comment", "getList", "get",
+__all__ = ["Object", "File", "Comment", "get_list", "get",
            "create"]
 
 
@@ -26,7 +25,7 @@ class Object(SampleDBObject):
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
 
-    def getVersion(self, version_id: int) -> Object:
+    def get_version(self, version_id: int) -> Object:
         """Get the specific version (version_id).
 
         Args:
@@ -36,7 +35,7 @@ class Object(SampleDBObject):
             Object: Requested :class:`~sampledbapi.objects.Object`.
         """
         if isinstance(version_id, int):
-            return Object(getData(
+            return Object(get_data(
                 f"objects/{self.object_id}/versions/{version_id}"
             ))
         else:
@@ -57,20 +56,20 @@ class Object(SampleDBObject):
 
         """
         if isinstance(data, dict):
-            return postData(f"objects/{self.object_id}/versions/",
+            return post_data(f"objects/{self.object_id}/versions/",
                             {"data": data})
         else:
             raise TypeError()
 
-    def getPublic(self) -> bool:
+    def get_public(self) -> bool:
         """Get whether or not the object is public.
 
         Returns:
             bool: Whether the object is public or not.
         """
-        return getData(f"objects/{self.object_id}/permissions/public")
+        return get_data(f"objects/{self.object_id}/permissions/public")
 
-    def setPublic(self, public: bool) -> Response:
+    def set_public(self, public: bool) -> Response:
         """Set whether or not the object is public.
 
         Args:
@@ -80,20 +79,20 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(public, bool):
-            return putData(f"objects/{self.object_id}/permissions/public",
+            return put_data(f"objects/{self.object_id}/permissions/public",
                            public)
         else:
             raise TypeError()
 
-    def getAllUsersPermissions(self) -> Dict:
+    def get_all_user_permissions(self) -> Dict:
         """Get a mapping of user IDs to their permissions.
 
         Returns:
             Dict: Mapping of user IDs to permissions.
         """
-        return getData(f"objects/{self.object_id}/permissions/users")
+        return get_data(f"objects/{self.object_id}/permissions/users")
 
-    def getUserPermissions(self, user_id: int) -> str:
+    def get_user_permissions(self, user_id: int) -> str:
         """Get the permissions of a user.
 
         Args:
@@ -103,13 +102,13 @@ class Object(SampleDBObject):
             str: Permissions of user for the object.
         """
         if isinstance(user_id, int):
-            return getData(
+            return get_data(
                 f"objects/{self.object_id}/permissions/users/{user_id}"
             )
         else:
             raise TypeError()
 
-    def setUserPermissions(self, user_id: int, permissions: str) -> Response:
+    def set_user_permissions(self, user_id: int, permissions: str) -> Response:
         """Set the permissions of a user.
 
         Args:
@@ -120,22 +119,22 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(user_id, int) and isinstance(permissions, str):
-            return putData(
+            return put_data(
                 f"objects/{self.object_id}/permissions/users/{user_id}",
                 permissions
             )
         else:
             raise TypeError()
 
-    def getAllGroupsPermissions(self) -> Dict:
+    def get_all_group_permissions(self) -> Dict:
         """Get a mapping of basic group IDs to their permissions.
 
         Returns:
             Dict: Mapping of group IDs to permissions.
         """
-        return getData(f"objects/{self.object_id}/permissions/groups")
+        return get_data(f"objects/{self.object_id}/permissions/groups")
 
-    def getGroupPermissions(self, group_id: int) -> str:
+    def get_group_permissions(self, group_id: int) -> str:
         """Get the permissions of a basic group.
 
         Args:
@@ -145,13 +144,13 @@ class Object(SampleDBObject):
             str: Permissions of group for the object.
         """
         if isinstance(group_id, int):
-            return getData(
+            return get_data(
                 f"objects/{self.object_id}/permissions/groups/{group_id}"
             )
         else:
             raise TypeError()
 
-    def setGroupPermissions(self, group_id: int, permissions: str) -> Response:
+    def set_group_permissions(self, group_id: int, permissions: str) -> Response:
         """Set the permissions of a basic group.
 
         Args:
@@ -162,22 +161,22 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(group_id, int) and isinstance(permissions, str):
-            return putData(
+            return put_data(
                 f"objects/{self.object_id}/permissions/groups/{group_id}",
                 permissions
             )
         else:
             raise TypeError()
 
-    def getAllProjectGroupsPermissions(self) -> Dict:
+    def get_all_project_group_permissions(self) -> Dict:
         """Get a mapping of project group IDs to their permissions.
 
         Returns:
             Dict: Mapping of project group IDs to permissions.
         """
-        return getData(f"objects/{self.object_id}/permissions/projects")
+        return get_data(f"objects/{self.object_id}/permissions/projects")
 
-    def getProjectGroupPermissions(self, project_id: int) -> str:
+    def get_project_group_permissions(self, project_id: int) -> str:
         """Get the permissions of a project group.
 
         Args:
@@ -187,13 +186,13 @@ class Object(SampleDBObject):
             str: Permissions of project group for the object.
         """
         if isinstance(project_id, int):
-            return getData(
+            return get_data(
                 f"objects/{self.object_id}/permissions/projects/{project_id}"
             )
         else:
             raise TypeError()
 
-    def setProjectGroupPermissions(self, project_id: int,
+    def set_project_group_permissions(self, project_id: int,
                                    permissions: str) -> Response:
         """Set the permissions of a project group.
 
@@ -205,14 +204,14 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(project_id, int) and isinstance(permissions, str):
-            return putData(
+            return put_data(
                 f"objects/{self.object_id}/permissions/projects/{project_id}",
                 permissions
             )
         else:
             raise TypeError()
             
-    def getLocationOccurences(self) -> List[LocationOccurence]:
+    def get_location_occurences(self) -> List[LocationOccurence]:
         """
         Get a list of all object locations assignments for a specific object.
 
@@ -222,9 +221,9 @@ class Object(SampleDBObject):
             List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#reading-a-list-of-an-object-s-locations>`__
 
         """
-        return [LocationOccurence(i) for i in getData(f"objects/{self.object_id}/locations")]
+        return [LocationOccurence(i) for i in get_data(f"objects/{self.object_id}/locations")]
         
-    def getLocationOccurence(self, location_id: int) -> LocationOccurence:
+    def get_location_occurence(self, location_id: int) -> LocationOccurence:
         """
         Get a specific object location assignment (index) for a specific object.
 
@@ -237,21 +236,21 @@ class Object(SampleDBObject):
 
         """
         if isinstance(location_id, int):
-            return LocationOccurence(getData(
+            return LocationOccurence(get_data(
                 f"objects/{self.object_id}/locations/{location_id}"
             ))
         else:
             raise TypeError()
 
-    def getFileList(self) -> List:
+    def get_file_list(self) -> List:
         """Get a list of all files.
 
         Returns:
             List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
-        return [File(i) for i in getData(f"objects/{self.object_id}/files")]
+        return [File(i) for i in get_data(f"objects/{self.object_id}/files")]
 
-    def getFile(self, file_id: int) -> File:
+    def get_file(self, file_id: int) -> File:
         """Get a specific file (file_id).
 
         Args:
@@ -261,13 +260,13 @@ class Object(SampleDBObject):
             Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(file_id, int):
-            return File(getData(
+            return File(get_data(
                 f"objects/{self.object_id}/files/{file_id}"
             ))
         else:
             raise TypeError()
 
-    def uploadFile(self, path: str, name: Optional[str] = None) -> Response:
+    def upload_file(self, path: str, name: Optional[str] = None) -> Response:
         """Create a new file with local storage.
 
         Args:
@@ -279,12 +278,12 @@ class Object(SampleDBObject):
         if isinstance(path, str):
             with open(path, "rb") as f:
                 f.name
-                r = self.uploadFileRaw(f.name if name is None else name, f)
+                r = self.upload_file_raw(f.name if name is None else name, f)
             return r
         else:
             raise TypeError()
 
-    def uploadFileRaw(self, name: str, file_obj: BinaryIO) -> Response:
+    def upload_file_raw(self, name: str, file_obj: BinaryIO) -> Response:
         """Create a new file with local storage.
 
         Args:
@@ -296,13 +295,13 @@ class Object(SampleDBObject):
         """
         if isinstance(name, str) and isinstance(file_obj, IOBase):
             base64encoded = base64.b64encode(file_obj.read())
-            return postData(f"objects/{self.object_id}/files/",
+            return post_data(f"objects/{self.object_id}/files/",
                             {"storage": "local", "original_file_name": name,
                              "base64_content": base64encoded.decode()})
         else:
             raise TypeError()
 
-    def postLink(self, url: str) -> Response:
+    def post_link(self, url: str) -> Response:
         """Create a new file with url storage.
 
         Args:
@@ -312,21 +311,21 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(url, str):
-            return postData(f"objects/{self.object_id}/files/",
+            return post_data(f"objects/{self.object_id}/files/",
                             {"storage": "url", "url": url})
         else:
             raise TypeError()
 
-    def getCommentList(self) -> List[Comment]:
+    def get_comment_list(self) -> List[Comment]:
         """Get a list of all comments.
 
         Returns:
             List: List of :class:`~sampledbapi.objects.Comment`.
         """
         return [Comment(c)
-                for c in getData(f"objects/{self.object_id}/comments")]
+                for c in get_data(f"objects/{self.object_id}/comments")]
 
-    def getComment(self, comment_id: int) -> Comment:
+    def get_comment(self, comment_id: int) -> Comment:
         """Get specific comment (comment_id).
 
         Args:
@@ -336,12 +335,12 @@ class Object(SampleDBObject):
             Object: Requested :class:`~sampledbapi.objects.Comment`.
         """
         if isinstance(comment_id, int):
-            return Comment(getData(
+            return Comment(get_data(
                     f"objects/{self.object_id}/comments/{comment_id}"))
         else:
             raise TypeError()
 
-    def postComment(self, comment: str) -> Response:
+    def post_comment(self, comment: str) -> Response:
         """Create a new comment.
 
         Args:
@@ -351,12 +350,12 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`__
         """
         if isinstance(comment, str):
-            return postData(f"objects/{self.object_id}/comments/",
+            return post_data(f"objects/{self.object_id}/comments/",
                             {"content": comment})
         else:
             raise TypeError()
 
-def getList(q: str = "", action_id: int = -1, action_type: str = "",
+def get_list(q: str = "", action_id: int = -1, action_type: str = "",
             limit: int = -1, offset: int = -1,
             name_only: bool = False) -> List[Object]:
     """Get a list of all objects visible to the current user.
@@ -410,7 +409,7 @@ def getList(q: str = "", action_id: int = -1, action_type: str = "",
             if i < len(pars) - 1:
                 s += "&"
 
-        return [Object(o) for o in getData(s)]
+        return [Object(o) for o in get_data(s)]
     else:
         raise TypeError()
 
@@ -425,7 +424,7 @@ def get(object_id: int) -> Object:
         Object: Requested :class:`~sampledbapi.objects.Object`.
     """
     if isinstance(object_id, int):
-        return Object(getData(f"objects/{object_id}"))
+        return Object(get_data(f"objects/{object_id}"))
     else:
         raise TypeError()
 
@@ -445,7 +444,7 @@ def create(action_id: int, data: dict) -> Response:
 
     """
     if isinstance(action_id, int) and isinstance(data, dict):
-        return postData("objects/", {"action_id": action_id, "data": data})
+        return post_data("objects/", {"action_id": action_id, "data": data})
     else:
         raise TypeError()
 

@@ -1,8 +1,8 @@
 from typing import List, Optional
 
-from sampledbapi import SampleDBObject, getData
+from sampledbapi import SampleDBObject, get_data
 
-__all__ = ["LocationType", "getList", "get"]
+__all__ = ["LocationType", "get_list", "get"]
 
 
 class LocationType(SampleDBObject):
@@ -14,13 +14,13 @@ class LocationType(SampleDBObject):
         return f"LocationType {self.location_type_id} ({self.name})"
 
 
-def getList() -> List[LocationType]:
+def get_list() -> List[LocationType]:
     """Get a list of all location types.
 
     Returns:
         List: List of :class:`~sampledbapi.locationtypes.LocationType` objects.
     """
-    return [LocationType(loct) for loct in getData("location_types")]
+    return [LocationType(loct) for loct in get_data("location_types")]
 
 
 def get(location_type_id: int) -> LocationType:
@@ -33,6 +33,6 @@ def get(location_type_id: int) -> LocationType:
         Location: The requested :class:`~sampledbapi.locationtypes.LocationType`.
     """
     if isinstance(location_type_id, int):
-        return LocationType(getData(f"location_types/{location_type_id}"))
+        return LocationType(get_data(f"location_types/{location_type_id}"))
     else:
         raise TypeError()

@@ -25,8 +25,8 @@ class TestActions():
         requests_mock.get("http://128.176.208.107:8000/api/v1/actions/1", text=mock_action())
         test_authentication.mock_authenticate(requests_mock)
         
-    def test_getList(self, requests_mock):
-        acts = actions.getList()
+    def test_get_list(self, requests_mock):
+        acts = actions.get_list()
         assert len(acts) == 3
         
     def test_get_fail(self, requests_mock):
@@ -35,7 +35,7 @@ class TestActions():
                 
     def test_get_success(self, requests_mock):
         act = actions.get(1)
-        assert act != None
+        assert act is not None
       
     def test_properties(self, requests_mock):
         act = actions.get(1)

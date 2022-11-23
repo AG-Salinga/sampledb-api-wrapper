@@ -22,7 +22,7 @@ def mock_permission():
 def mock_permissions():
     return '{"1": "TestPerm", "2": "TestPerm", "3": "TestPerm"}'
 
-def mock_locationOccurence():
+def mock_location_occurence():
     return '''{
             "object_id": 1,
             "location": 1,
@@ -32,8 +32,8 @@ def mock_locationOccurence():
             "utc_datetime": "2022-11-21T09:39:08.470159"
         }'''
     
-def mock_locationOccurences():
-    return f'[{mock_locationOccurence()},{mock_locationOccurence()},{mock_locationOccurence()}]'
+def mock_location_occurences():
+    return f'[{mock_location_occurence()},{mock_location_occurence()},{mock_location_occurence()}]'
 
 def mock_file():
     return '''{
@@ -79,8 +79,8 @@ class TestObjects():
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/permissions/projects", text=mock_permissions())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/permissions/projects/1", text=mock_permission())
         requests_mock.put("http://128.176.208.107:8000/api/v1/objects/1/permissions/projects/1")
-        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/locations", text=mock_locationOccurences())
-        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/locations/1", text=mock_locationOccurence())
+        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/locations", text=mock_location_occurences())
+        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/locations/1", text=mock_location_occurence())
         requests_mock.get("http://128.176.208.107:8000/api/v1/locations/1", text=test_locations.mock_location())
         requests_mock.get("http://128.176.208.107:8000/api/v1/users/1", text=test_users.mock_user())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/files", text=mock_files())
@@ -92,16 +92,16 @@ class TestObjects():
         
         test_authentication.mock_authenticate(requests_mock)
        
-    def test_getList_default(self, requests_mock):
-        objs = objects.getList()
+    def test_get_list_default(self, requests_mock):
+        objs = objects.get_list()
         assert len(objs) == 3
         
-    def test_getList_fail(self, requests_mock):
+    def test_get_list_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.getList(q=1)
+            objects.get_list(q=1)
         
-    def test_getList_success(self, requests_mock):
-        objs = objects.getList(q='Test', action_id=1, action_type='Create', limit=3, offset=3, name_only=True)
+    def test_get_list_success(self, requests_mock):
+        objs = objects.get_list(q='Test', action_id=1, action_type='Create', limit=3, offset=3, name_only=True)
         assert len(objs) == 3
         
     def test_get_fail(self, requests_mock):
@@ -110,7 +110,7 @@ class TestObjects():
             
     def test_get_success(self, requests_mock):
         obj = objects.get(1)
-        assert obj != None
+        assert obj is not None
       
     def test_properties(self, requests_mock):
         obj = objects.get(1)
@@ -128,13 +128,13 @@ class TestObjects():
     def test_create_success(self, requests_mock):
         objects.create(1, {'name': 'Test'})
         
-    def test_getVersion_fail(self, requests_mock):
+    def test_get_version_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).getVersion('Test')
+            objects.get(1).get_version('Test')
         
-    def test_getVersion_success(self, requests_mock):
-        obj = objects.get(1).getVersion(1)
-        assert obj != None 
+    def test_get_version_success(self, requests_mock):
+        obj = objects.get(1).get_version(1)
+        assert obj is not None 
         
     def test_update_fail(self, requests_mock):
         with pytest.raises(TypeError):
@@ -143,93 +143,93 @@ class TestObjects():
     def test_update_success(self, requests_mock):
         objects.get(1).update({"title": "Basic Sample Information"})
         
-    def test_getPublic(self, requests_mock):
-        assert objects.get(1).getPublic()
+    def test_get_public(self, requests_mock):
+        assert objects.get(1).get_public()
         
-    def test_setPublic_fail(self, requests_mock):
+    def test_set_public_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).setPublic('Test')
+            objects.get(1).set_public('Test')
         
-    def test_setPublic_success(self, requests_mock):
-        objects.get(1).setPublic(False) 
+    def test_set_public_success(self, requests_mock):
+        objects.get(1).set_public(False) 
         
-    def test_getAllUsersPermissions(self, requests_mock):
-        perm = objects.get(1).getAllUsersPermissions()
+    def test_get_all_user_permissions(self, requests_mock):
+        perm = objects.get(1).get_all_user_permissions()
         assert type(perm) == dict
         assert len(perm) == 3
         
-    def test_getUserPermissions_fail(self, requests_mock):
+    def test_get_user_permissions_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).getUserPermissions('Test')
+            objects.get(1).get_user_permissions('Test')
         
-    def test_getUserPermissions_success(self, requests_mock):
-        perm = objects.get(1).getUserPermissions(1)     
+    def test_get_user_permissions_success(self, requests_mock):
+        perm = objects.get(1).get_user_permissions(1)     
         assert type(perm) == str
-        assert perm != None
+        assert perm is not None
         
-    def test_setUserPermissions_fail(self, requests_mock):
+    def test_set_user_permissions_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).setUserPermissions('Test', 'TestPerm')
+            objects.get(1).set_user_permissions('Test', 'TestPerm')
         
-    def test_setUserPermissions_success(self, requests_mock):
-        objects.get(1).setUserPermissions(1, 'TestPerm')    
+    def test_set_user_permissions_success(self, requests_mock):
+        objects.get(1).set_user_permissions(1, 'TestPerm')    
         
-    def test_getAllGroupPermissions(self, requests_mock):
-        perm = objects.get(1).getAllGroupsPermissions()
+    def test_get_all_group_permissions(self, requests_mock):
+        perm = objects.get(1).get_all_group_permissions()
         assert type(perm) == dict
         assert len(perm) == 3
         
-    def test_getGroupPermissions_fail(self, requests_mock):
+    def test_get_group_permissions_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).getGroupPermissions('Test')
+            objects.get(1).get_group_permissions('Test')
         
-    def test_getGroupPermissions_success(self, requests_mock):
-        perm = objects.get(1).getGroupPermissions(1)     
+    def test_get_group_permissions_success(self, requests_mock):
+        perm = objects.get(1).get_group_permissions(1)     
         assert type(perm) == str
-        assert perm != None
+        assert perm is not None
         
-    def test_setGroupPermissions_fail(self, requests_mock):
+    def test_set_group_permissions_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).setGroupPermissions('Test', 'TestPerm')
+            objects.get(1).set_group_permissions('Test', 'TestPerm')
         
-    def test_setGroupPermissions_success(self, requests_mock):
-        objects.get(1).setGroupPermissions(1, 'TestPerm')   
+    def test_set_group_permissions_success(self, requests_mock):
+        objects.get(1).set_group_permissions(1, 'TestPerm')   
     
-    def test_getAllProjectGroupPermissions(self, requests_mock):
-        perm = objects.get(1).getAllProjectGroupsPermissions()
+    def test_get_all_project_group_permissions(self, requests_mock):
+        perm = objects.get(1).get_all_project_group_permissions()
         assert type(perm) == dict
         assert len(perm) == 3
         
-    def test_getProjectGroupPermissions_fail(self, requests_mock):
+    def test_get_project_group_permissions_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).getProjectGroupPermissions('Test')
+            objects.get(1).get_project_group_permissions('Test')
         
-    def test_getProjectGroupPermissions_success(self, requests_mock):
-        perm = objects.get(1).getProjectGroupPermissions(1)     
+    def test_get_project_group_permissions_success(self, requests_mock):
+        perm = objects.get(1).get_project_group_permissions(1)     
         assert type(perm) == str
-        assert perm != None
+        assert perm is not None
         
-    def test_setProjectGroupPermissions_fail(self, requests_mock):
+    def test_set_project_group_permissions_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).setProjectGroupPermissions('Test', 'TestPerm')
+            objects.get(1).set_project_group_permissions('Test', 'TestPerm')
         
-    def test_setProjectGroupPermissions_success(self, requests_mock):
-        objects.get(1).setProjectGroupPermissions(1, 'TestPerm')  
+    def test_set_project_group_permissions_success(self, requests_mock):
+        objects.get(1).set_project_group_permissions(1, 'TestPerm')  
     
-    def test_getLocationOccurences(self, requests_mock):
-        locOccs = objects.get(1).getLocationOccurences()
+    def test_get_location_occurences(self, requests_mock):
+        locOccs = objects.get(1).get_location_occurences()
         assert len(locOccs) == 3
         
-    def test_getLocationOccurence_fail(self, requests_mock):
+    def test_get_location_occurence_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).getLocationOccurence('Test')
+            objects.get(1).get_location_occurence('Test')
             
-    def test_getLocationOccurence_success(self, requests_mock):
-        locOcc = objects.get(1).getLocationOccurence(1)
+    def test_get_location_occurence_success(self, requests_mock):
+        locOcc = objects.get(1).get_location_occurence(1)
         assert locOcc is not None
         
-    def test_getLocationOccurence_properties(self, requests_mock):
-        locOcc = objects.get(1).getLocationOccurence(1)
+    def test_get_location_occurence_properties(self, requests_mock):
+        locOcc = objects.get(1).get_location_occurence(1)
         assert locOcc.object_id == 1
         assert locOcc.location is not None
         assert locOcc.responsible_user is not None
@@ -238,20 +238,20 @@ class TestObjects():
         assert locOcc.utc_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f') == '2022-11-21T09:39:08.470159'
         assert 'LocationOccurence of object' in repr(locOcc)
     
-    def test_getFileList(self, requests_mock):
-        files = objects.get(1).getFileList()
+    def test_get_file_list(self, requests_mock):
+        files = objects.get(1).get_file_list()
         assert len(files) == 3
     
-    def test_getFile_fail(self, requests_mock):
+    def test_get_file_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).getFile('Test')
+            objects.get(1).get_file('Test')
         
-    def test_getFile_success(self, requests_mock):
-        file = objects.get(1).getFile(1)
-        assert file != None
+    def test_get_file_success(self, requests_mock):
+        file = objects.get(1).get_file(1)
+        assert file is not None
         
-    def test_getFile_properties(self, requests_mock):
-        file = objects.get(1).getFile(1)
+    def test_get_file_properties(self, requests_mock):
+        file = objects.get(1).get_file(1)
         assert file.object_id == 1
         assert file.file_id == 1
         assert file.storage == 'database'
@@ -259,48 +259,48 @@ class TestObjects():
         assert file.base64_content == 'Test64'
         assert 'File' in repr(file)
     
-    def test_uploadFile_default(self, requests_mock):
+    def test_upload_file_default(self, requests_mock):
         f = tempfile.NamedTemporaryFile(delete=False)
         f.close()
-        objects.get(1).uploadFile(f.name)
+        objects.get(1).upload_file(f.name)
         
-    def test_uploadFile_fail(self, requests_mock):
+    def test_upload_file_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).uploadFile(1)
+            objects.get(1).upload_file(1)
         
-    def test_uploadFile_success(self, requests_mock):
+    def test_upload_file_success(self, requests_mock):
         f = tempfile.NamedTemporaryFile(delete=False)
         f.close()
-        objects.get(1).uploadFile(f.name, 'Testfile')
+        objects.get(1).upload_file(f.name, 'Testfile')
     
-    def test_uploadFileRaw_fail(self, requests_mock):
+    def test_upload_file_raw_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).uploadFileRaw(1, io.BytesIO(b"some initial binary data: \x00\x01"))
+            objects.get(1).upload_file_raw(1, io.BytesIO(b"some initial binary data: \x00\x01"))
         
-    def test_uploadFileRaw_success(self, requests_mock):
-        objects.get(1).uploadFileRaw('TestFile', io.BytesIO(b"some initial binary data: \x00\x01"))
+    def test_upload_file_raw_success(self, requests_mock):
+        objects.get(1).upload_file_raw('TestFile', io.BytesIO(b"some initial binary data: \x00\x01"))
     
-    def test_postLink_fail(self, requests_mock):
+    def test_post_link_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).postLink(1)
+            objects.get(1).post_link(1)
         
-    def test_postLink_success(self, requests_mock):
-        objects.get(1).postLink('http://128.176.208.107:8000/instruments/1#log_entry-1')
+    def test_post_link_success(self, requests_mock):
+        objects.get(1).post_link('http://128.176.208.107:8000/instruments/1#log_entry-1')
     
-    def test_getCommentList(self, requests_mock):
-        coms = objects.get(1).getCommentList()
+    def test_get_comment_list(self, requests_mock):
+        coms = objects.get(1).get_comment_list()
         assert len(coms) == 3
         
-    def test_getComment_fail(self, requests_mock):
+    def test_get_comment_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).getComment('Test')
+            objects.get(1).get_comment('Test')
         
-    def test_getComment_success(self, requests_mock):
-        com = objects.get(1).getComment(1)
-        assert com != None
+    def test_get_comment_success(self, requests_mock):
+        com = objects.get(1).get_comment(1)
+        assert com is not None
     
-    def test_getComment_properties(self, requests_mock):
-        com = objects.get(1).getComment(1)
+    def test_get_comment_properties(self, requests_mock):
+        com = objects.get(1).get_comment(1)
         assert com.object_id == 1
         assert com.user_id == 1
         assert com.comment_id == 1
@@ -308,10 +308,10 @@ class TestObjects():
         assert com.utc_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f') == '2022-11-21T09:39:08.470159'
         assert 'Comment on object' in str(com)
       
-    def test_postComment_fail(self, requests_mock):
+    def test_post_comment_fail(self, requests_mock):
         with pytest.raises(TypeError):
-            objects.get(1).postComment(1)
+            objects.get(1).post_comment(1)
         
     def test_postComment_success(self, requests_mock):
-        objects.get(1).postComment('TestComment')
+        objects.get(1).post_comment('TestComment')
     

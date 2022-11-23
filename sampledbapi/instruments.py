@@ -7,11 +7,11 @@ from typing import Dict, List, Optional, Any
 
 from requests import Response
 
-from sampledbapi import SampleDBObject, getData, postData, users
+from sampledbapi import SampleDBObject, get_data, post_data, users
 
 __all__ = ["Instrument", "InstrumentLogCategory", "InstrumentLogEntry",
            "InstrumentLogFileAttachment", "InstrumentLogObjectAttachment",
-           "getList", "get"]
+           "get_list", "get"]
 
 
 class Instrument(SampleDBObject):
@@ -32,19 +32,19 @@ class Instrument(SampleDBObject):
     def __repr__(self) -> str:
         return f"Instrument {self.instrument_id} ({self.name})"
 
-    def getLogEntryList(self) -> List[InstrumentLogEntry]:
+    def get_log_entry_list(self) -> List[InstrumentLogEntry]:
         """Get a list of all log entries.
 
         Returns:
             List: List of :class:`~sampledbapi.instrument.InstrumentLogEntry`.
         """
         if self.instrument_id is not None:
-            return [InstrumentLogEntry(self.instrument_id, log) for log in getData(
+            return [InstrumentLogEntry(self.instrument_id, log) for log in get_data(
                 f"instruments/{self.instrument_id}/log_entries")]
         else:
             raise Exception('instrument_id can not be None')
 
-    def getLogEntry(self, log_entry_id: int) -> InstrumentLogEntry:
+    def get_log_entry(self, log_entry_id: int) -> InstrumentLogEntry:
         """Get the specific log entry (log_entry_id).
 
         Args:
@@ -56,7 +56,7 @@ class Instrument(SampleDBObject):
         """
         if isinstance(log_entry_id, int):
             if self.instrument_id is not None:
-                return InstrumentLogEntry(self.instrument_id, getData(
+                return InstrumentLogEntry(self.instrument_id, get_data(
                     f"instruments/{self.instrument_id}/log_entries/{log_entry_id}"
                 ))
             else:
@@ -64,16 +64,16 @@ class Instrument(SampleDBObject):
         else:
             raise TypeError()
 
-    def getLogCategoryList(self) -> List[InstrumentLogCategory]:
+    def get_log_category_list(self) -> List[InstrumentLogCategory]:
         """Get a list of all log categories.
 
         Returns:
             List: List of :class:`~sampledbapi.instrument.InstrumentLogCategory`.
         """
-        return [InstrumentLogCategory(c) for c in getData(
+        return [InstrumentLogCategory(c) for c in get_data(
             f"instruments/{self.instrument_id}/log_categories")]
 
-    def getLogCategory(self, log_category_id: int) -> InstrumentLogCategory:
+    def get_log_category(self, log_category_id: int) -> InstrumentLogCategory:
         """Get a specific log category (log_category_id).
 
         Args:
@@ -84,13 +84,13 @@ class Instrument(SampleDBObject):
                 :class:`~sampledbapi.instrument.InstrumentLogCategory`.
         """
         if isinstance(log_category_id, int):
-            return InstrumentLogCategory(getData(
+            return InstrumentLogCategory(get_data(
                 f"instruments/{self.instrument_id}/log_categories/" +
                 f"{log_category_id}"))
         else:
             raise TypeError()
 
-    def createLogEntry(self, content: str, category_ids: List = [],
+    def create_log_entry(self, content: str, category_ids: List = [],
                        file_attachments: List = [],
                        object_attachments: List = []) -> Response:
         """Create a log entry for an instrument (instrument_id) and optionally attach files and objects to it.
@@ -124,19 +124,19 @@ class Instrument(SampleDBObject):
                 data["object_attachments"] = [
                     {"object_id": i} for i in object_attachments]
 
-            return postData(
+            return post_data(
                 f"instruments/{self.instrument_id}/log_entries/", data)
         else:
             raise TypeError()
 
 
-def getList() -> List[Instrument]:
+def get_list() -> List[Instrument]:
     """Get a list of all instruments.
 
     Returns:
         List: List of :class:`~sampledbapi.instrument.Instrument` objects.
     """
-    return [Instrument(i) for i in getData("instruments")]
+    return [Instrument(i) for i in get_data("instruments")]
 
 
 def get(instrument_id: int) -> Instrument:
@@ -149,7 +149,7 @@ def get(instrument_id: int) -> Instrument:
         Instrument: The requested :class:`~sampledbapi.instrument.Instrument`.
     """
     if isinstance(instrument_id, int):
-        return Instrument(getData(f"instruments/{instrument_id}"))
+        return Instrument(get_data(f"instruments/{instrument_id}"))
     else:
         raise TypeError()
 
@@ -191,18 +191,18 @@ class InstrumentLogEntry(SampleDBObject):
         return f"InstrumentLogEntry {self.log_entry_id} " \
             + f"(created {self.utc_datetime})"
 
-    def getFileAttachmentList(self) -> List[InstrumentLogFileAttachment]:
+    def get_file_attachment_list(self) -> List[InstrumentLogFileAttachment]:
         """Get a list of file attachments.
 
         Returns:
             List: List of
                 :class:`~sampledbapi.instrument.InstrumentLogFileAttachment`.
         """
-        return [InstrumentLogFileAttachment(f) for f in getData(
+        return [InstrumentLogFileAttachment(f) for f in get_data(
             f"instruments/{self.instrument_id}/log_entries/"
             f"{self.log_entry_id}/file_attachments")]
 
-    def getFileAttachment(self, file_attachment_id: int
+    def get_file_attachment(self, file_attachment_id: int
                           ) -> InstrumentLogFileAttachment:
         """Get a specific file attachment (file_attachment_id).
 
@@ -214,24 +214,24 @@ class InstrumentLogEntry(SampleDBObject):
                 :class:`~sampledbapi.instrument.InstrumentLogFileAttachment`.
         """
         if isinstance(file_attachment_id, int):
-            return InstrumentLogFileAttachment(getData(
+            return InstrumentLogFileAttachment(get_data(
                 f"instruments/{self.instrument_id}/log_entries/"
                 + f"{self.log_entry_id}/file_attachments/{file_attachment_id}"))
         else:
             raise TypeError()
 
-    def getObjectAttachmentList(self) -> List[InstrumentLogObjectAttachment]:
+    def get_object_attachment_list(self) -> List[InstrumentLogObjectAttachment]:
         """Get a list of object attachments.
 
         Returns:
             List: List of
                 :class:`~sampledbapi.instrument.InstrumentLogObjectAttachment`.
         """
-        return [InstrumentLogObjectAttachment(o) for o in getData(
+        return [InstrumentLogObjectAttachment(o) for o in get_data(
             f"instruments/{self.instrument_id}/log_entries/"
             f"{self.log_entry_id}/object_attachments")]
 
-    def getObjectAttachment(self, object_attachment_id: int) -> InstrumentLogObjectAttachment:
+    def get_object_attachment(self, object_attachment_id: int) -> InstrumentLogObjectAttachment:
         """Get a specific object attachment (object_attachment_id).
 
         Args:
@@ -242,7 +242,7 @@ class InstrumentLogEntry(SampleDBObject):
                 :class:`~sampledbapi.instrument.InstrumentLogObjectAttachment`.
         """
         if isinstance(object_attachment_id, int):
-            return InstrumentLogObjectAttachment(getData(
+            return InstrumentLogObjectAttachment(get_data(
                 f"instruments/{self.instrument_id}/log_entries/"
                 f"{self.log_entry_id}/object_attachments/"
                 f"{object_attachment_id}"))
