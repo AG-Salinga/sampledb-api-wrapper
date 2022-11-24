@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.6.1
+-------------
+
+- Update examples in Readme
+
 Version 0.6.0
 -------------
 
