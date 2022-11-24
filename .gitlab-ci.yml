@@ -40,7 +40,7 @@ mirror:
     - apt-get update
     - apt-get install -y git
     - mkdir --mode=700 ~/.ssh/
-    - cp "$PRIVATE_KEY" ~/.ssh/id_ed25519
+    - echo "$PRIVATE_KEY" > ~/.ssh/id_ed25519
     - echo "github.com ssh-ed25519 $GITHUB_HOST_KEY" >> ~/.ssh/known_hosts
     - chmod 400 ~/.ssh/*
     - git clone --mirror "$CI_REPOSITORY_URL" repo
