@@ -28,12 +28,12 @@ api_key = ...
 authenticate(server_address, api_key)
 
 # Simple queries
-print(actions.getList())
+print(actions.get_list())
 print(objects.get(123))
-print(instruments.getList())
+print(instruments.get_list())
 
 # Advanced search
-print(objects.getList("material == \"Sb\""))
+print(objects.get_list("material == \"Sb\""))
 ```
 
 More examples for usage in Python can be found [here](https://ag-salinga.zivgitlabpages.uni-muenster.de/sampledb-api-wrapper/Examples.html).
@@ -48,12 +48,12 @@ Some type conversions are needed (e.g. to pass integers).
 py.sampledbapi.authenticate("https://...", "your_api_key")
 
 % Simple queries
-print(instruments.getList())
+print(instruments.get_list())
 py.sampledbapi.objects.get(py.int(123))
-py.sampledbapi.instruments.getList())
+py.sampledbapi.instruments.get_list())
 
 % Advanced search
-l = py.sampledbapi.objects.getList('material == "Sb"')
+l = py.sampledbapi.objects.get_list('material == "Sb"')
 obj = l{1}
 obj.data
 ```
