@@ -37,7 +37,7 @@ mirror:
   variables:
     GIT_STRATEGY: none
   script:
-    - apt-get update
+    - apt-get update && apt-get upgrade -y
     - apt-get install -y git
     - mkdir --mode=700 ~/.ssh/
     - echo "$PRIVATE_KEY" > ~/.ssh/id_ed25519
