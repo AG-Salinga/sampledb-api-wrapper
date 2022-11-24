@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 0.6.0
+-------------
+
+- Breaking change: All methods are now snake case (instead of camel case)
+- Test user authentication based on "/users/me"
+- Repository is now mirrored to Github
+
 Version 0.5.0
 -------------
 
