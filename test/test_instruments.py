@@ -98,13 +98,25 @@ class TestInstruments():
         assert inst.instrument_scientists is not None
         assert 'Instrument' in repr(inst)
         
-    def test_get_log_entry_list(self, requests_mock):
+    def test_get_log_entry_list_success(self, requests_mock):
         logs = instruments.get(1).get_log_entry_list()
         assert len(logs) == 3
+        
+    def test_get_log_entry_list_fail(self, requests_mock):
+        with pytest.raises(Exception):
+            inst = instruments.get(1)
+            inst.instrument_id = None
+            inst.get_log_entry_list()
         
     def test_get_log_entry_fail(self, requests_mock):
         with pytest.raises(TypeError):
             instruments.get(1).get_log_entry('Test')
+            
+    def test_get_log_entry_fail2(self, requests_mock):
+        with pytest.raises(Exception):
+            inst = instruments.get(1)
+            inst.instrument_id = None
+            inst.get_log_entry(1)
         
     def test_get_log_entry_success(self, requests_mock):
         log = instruments.get(1).get_log_entry(1)

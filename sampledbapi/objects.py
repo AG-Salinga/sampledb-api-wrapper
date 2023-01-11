@@ -59,7 +59,7 @@ class Object(SampleDBObject):
                              {"data": data})
         else:
             raise TypeError()
-            
+
     def get_related_objects(self):
         """Gets objects related to an object.
 
