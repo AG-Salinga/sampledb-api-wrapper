@@ -59,6 +59,9 @@ def mock_comment():
 def mock_comments():
     return f'[{mock_comment()},{mock_comment()},{mock_comment()}]'
 
+def mock_related_objects():
+    return '{"referencing_objects":[{"object_id":1,"component_uuid":null}],"referenced_objects":[{"object_id":1,"component_uuid":null}]}'
+
 class TestObjects():
     
     @pytest.fixture(autouse=True)
@@ -68,6 +71,7 @@ class TestObjects():
         requests_mock.post("http://128.176.208.107:8000/api/v1/objects/", text=mock_objects())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/versions/1", text=mock_object())
         requests_mock.post("http://128.176.208.107:8000/api/v1/objects/1/versions/")
+        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/related_objects", text=mock_related_objects())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/permissions/public", text=mock_permissions())
         requests_mock.put("http://128.176.208.107:8000/api/v1/objects/1/permissions/public")
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/permissions/users", text=mock_permissions())
@@ -143,6 +147,13 @@ class TestObjects():
     def test_update_success(self, requests_mock):
         objects.get(1).update({"title": "Basic Sample Information"})
         
+    def test_get_related_objects(self, requests_mock):
+        referenced_objects, referencing_objects = objects.get(1).get_related_objects()
+        assert len(referenced_objects) > 0
+        assert referenced_objects[0] is not None
+        assert len(referencing_objects) > 0
+        assert referencing_objects[0] is not None
+    
     def test_get_public(self, requests_mock):
         assert objects.get(1).get_public()
         

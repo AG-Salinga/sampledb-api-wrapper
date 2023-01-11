@@ -59,6 +59,20 @@ class Object(SampleDBObject):
                              {"data": data})
         else:
             raise TypeError()
+            
+    def get_related_objects(self):
+        """Gets objects related to an object.
+
+        Returns:
+            Two lists containing referenced objects and referencing objects.
+
+        """
+        related_objects = get_data(f"objects/{self.object_id}/related_objects")
+        referenced_object_ids = related_objects['referenced_objects']
+        referencing_object_ids = related_objects['referencing_objects']
+        referenced_objects = list(map(get, map(lambda dic: dic['object_id'], referenced_object_ids)))
+        referencing_objects = list(map(get, map(lambda dic: dic['object_id'], referencing_object_ids)))
+        return referenced_objects, referencing_objects
 
     def get_public(self) -> bool:
         """Get whether or not the object is public.

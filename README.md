@@ -76,6 +76,7 @@ The full HTTP API of SampleDB is supported. This includes
     - [x] Reading an object version
     - [x] Creating a new object
     - [x] Updating an object / Creating a new object version
+    - [x] Getting related objects
 - [x] Object permissions
     - [x] Reading whether an object is public
     - [x] Setting whether an object is public
