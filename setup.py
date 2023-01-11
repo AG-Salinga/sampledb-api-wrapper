@@ -19,7 +19,7 @@ out = setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version="0.6.1",
+    version="0.6.2",
 
     description="API wrapper for SampleDB",
     long_description=long_description,

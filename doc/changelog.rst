@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.6.2
+-------------
+
+- Added new endpoint "Getting related objects"
+- Increased test coverage
+
 Version 0.6.1
 -------------
 
