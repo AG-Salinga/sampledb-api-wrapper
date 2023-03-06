@@ -20,7 +20,7 @@ def json2timeseries(data: dict) -> Optional[TimeSeries]:
 
 
 def timeseries2json(timeseries: TimeSeries) -> Dict:
-    return {'_type': 'timeseries', 'data': str(timeseries.data), 'units': str(timeseries.units)} 
+    return {'_type': 'timeseries', 'data': str(timeseries.data), 'units': str(timeseries.units)}
 
 
 def json2objectreference(data: dict) -> Optional[int]:
