@@ -19,7 +19,7 @@ def timeseries2json(timeseries: TimeSeries) -> Dict:
     return {'_type': 'timeseries', 'data': str(timeseries.data), 'units': str(timeseries.units)} 
     
 def json2objectreference(data: dict) -> int:
-    if data['_type'] != 'object_reference':
+    if type(data) != 'object_reference':
         return None
     return int(data['object_id'])
     
