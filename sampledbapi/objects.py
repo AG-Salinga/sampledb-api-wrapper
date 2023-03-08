@@ -7,7 +7,7 @@ from typing import BinaryIO, Dict, List, Optional, Any
 
 from requests import Response
 
-from sampledbapi import SampleDBObject, get_data, locations, users, post_data, put_data
+from sampledbapi import SampleDBObject, get_data, locations, users, post_data, put_data, utils
 from sampledbapi.users import User
 
 __all__ = ["Object", "File", "Comment", "get_list", "get", "create"]
@@ -17,9 +17,19 @@ class Object(SampleDBObject):
 
     object_id: Optional[int] = None
     version_id: Optional[int] = None
+    version_editor: Optional[User] = None
+    version_datetime: Optional[datetime] = None
     action_id: Optional[int] = None
     schema: Optional[dict] = None
     data: Optional[dict] = None
+
+    def __init__(self, d: Dict):
+        """Initialize a new instrument from dictionary."""
+        super().__init__(d)
+        if "utc_datetime" in d:
+            self.datetime = utils.str2datetime(d['utc_datetime'])
+        if "user_id" in d:
+            self.user = users.get(d['user_id'])
 
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
