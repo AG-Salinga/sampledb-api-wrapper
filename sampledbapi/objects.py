@@ -27,12 +27,25 @@ class Object(SampleDBObject):
         """Initialize a new instrument from dictionary."""
         super().__init__(d)
         if "utc_datetime" in d:
-            self.datetime = utils.str2datetime(d['utc_datetime'])
+            self.version_datetime = utils.str2datetime(d['utc_datetime'])
         if "user_id" in d:
-            self.user = users.get(d['user_id'])
+            self.version_editor = users.get(d['user_id'])
+        if "data" in d:
+            self.data = utils.convert_json(d['data'])
 
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
+    
+    
+    def from_json(data: dict) -> Object:
+        if '_type' not in data or data['_type'] != 'object_reference':
+            return None
+        return get(int(data['object_id']))
+
+
+    def to_json(self) -> Dict:
+        return {'_type': 'object_reference', 'object_id': str(self.object_id)}
+    
 
     def get_version(self, version_id: int) -> Object:
         """Get the specific version (version_id).
