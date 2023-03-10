@@ -70,7 +70,7 @@ class TestUtils():
         assert json2text('') is None
         assert json2text({'_type': 'test'}) is None
         
-    def test_json2quantity2json(self):
+    def test_json2text2json(self):
         json = {'_type': 'text', 'text': 'Test'}
         text = json2text(json)
         json2 = text2json(text)
