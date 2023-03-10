@@ -1,7 +1,8 @@
 from datetime import datetime
-from sampledbapi import objects, SampleDBObject
 from typing import Optional, Dict
 
+from .comm import SampleDBObject
+from . import objects
 
 class TimeSeries(SampleDBObject):
     data: Optional[float] = None

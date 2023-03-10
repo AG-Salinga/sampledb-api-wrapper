@@ -7,8 +7,8 @@ from typing import BinaryIO, Dict, List, Optional, Any
 
 from requests import Response
 
-from sampledbapi import SampleDBObject, get_data, locations, users, post_data, put_data
-from sampledbapi.users import User
+from . import locations, users
+from .comm import SampleDBObject, get_data, post_data, put_data
 
 __all__ = ["Object", "File", "Comment", "get_list", "get", "create"]
 
@@ -480,8 +480,8 @@ class LocationOccurence(SampleDBObject):
 
     object_id: Optional[int] = None
     location: Optional[locations.Location] = None
-    responsible_user: Optional[User] = None
-    user: Optional[User] = None
+    responsible_user: Optional[users.User] = None
+    user: Optional[users.User] = None
     description: Optional[str] = None
     utc_datetime: Optional[datetime] = None
 
