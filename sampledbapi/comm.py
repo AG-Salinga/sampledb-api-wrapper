@@ -61,21 +61,23 @@ def get_data(path: str) -> Any:
         raise Exception("You have to authenticate first.")
 
 
-def post_data(path: str, data):
+def post_data(path: str, data) -> requests.Response:
     if _address is not None:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)
-        requests.post(address, headers=__headers(),
-                      data=data).raise_for_status()
+        response = requests.post(address, headers=__headers(), data=data)
+        response.raise_for_status()
+        return response
     else:
         raise Exception("You have to authenticate first.")
 
 
-def put_data(path: str, data):
+def put_data(path: str, data) -> requests.Response:
     if _address is not None:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)
-        requests.put(address, headers=__headers(),
-                     data=data).raise_for_status()
+        response = requests.put(address, headers=__headers(), data=data)
+        response.raise_for_status()
+        return response
     else:
         raise Exception("You have to authenticate first.")
