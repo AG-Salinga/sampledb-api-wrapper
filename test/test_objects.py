@@ -326,3 +326,15 @@ class TestObjects():
     def test_postComment_success(self, requests_mock):
         objects.get(1).post_comment('TestComment')
     
+    def test_from_json_fail(self):
+        assert objects.from_json('') is None
+        assert objects.from_json({'_type': 'test'}) is None
+        
+    def test_from_json_to_json(self, requests_mock):
+        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1", text=mock_object())
+        test_authentication.mock_authenticate(requests_mock)
+        
+        json = {'_type': 'object_reference', 'object_id': '1'}
+        obj = objects.from_json(json)
+        json2 = objects.from_json(obj)
+        assert json == json2

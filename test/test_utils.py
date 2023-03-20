@@ -23,19 +23,6 @@ class TestUtils():
         json2 = objectreference2json(objectreference)
         assert json == json2
         
-    def test_json2object_fail(self):
-        assert json2object('') is None
-        assert json2object({'_type': 'test'}) is None
-        
-    def test_json2object2json(self, requests_mock):
-        requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1", text=test_users.mock_user())
-        test_authentication.mock_authenticate(requests_mock)
-        
-        json = {'_type': 'object_reference', 'object_id': '1'}
-        obj = json2object(json)
-        json2 = object2json(obj)
-        assert json == json2
-        
     def test_json2bool_fail(self):
         assert json2bool('') is None
         assert json2bool({'_type': 'test'}) is None
