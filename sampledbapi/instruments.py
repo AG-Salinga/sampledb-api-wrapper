@@ -7,7 +7,8 @@ from typing import Dict, List, Optional, Any
 
 from requests import Response
 
-from sampledbapi import SampleDBObject, get_data, post_data, users
+from .comm import SampleDBObject, get_data, post_data
+from . import users
 
 __all__ = ["Instrument", "InstrumentLogCategory", "InstrumentLogEntry",
            "InstrumentLogFileAttachment", "InstrumentLogObjectAttachment",

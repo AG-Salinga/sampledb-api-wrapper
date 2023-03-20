@@ -4,7 +4,7 @@ This is the module docstring.
 
 from typing import List, Optional
 
-from sampledbapi import SampleDBObject, get_data
+from .comm import SampleDBObject, get_data
 
 __all__ = ["Action", "get_list", "get"]
 

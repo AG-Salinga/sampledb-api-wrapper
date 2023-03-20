@@ -7,8 +7,8 @@ from typing import BinaryIO, Dict, List, Optional, Any
 
 from requests import Response
 
-from sampledbapi import SampleDBObject, get_data, locations, users, post_data, put_data, utils
-from sampledbapi.users import User
+from .comm import SampleDBObject, get_data, post_data, put_data
+from . import locations, users, utils
 
 __all__ = ["Object", "File", "Comment", "get_list", "get", "create"]
 
@@ -466,7 +466,7 @@ def get(object_id: int) -> Object:
         raise TypeError()
 
 
-def create(action_id: int, data: dict) -> Response:
+def create(action_id: int, data: dict) -> int:
     """Create a new object.
 
     The data is a dictionary that has to be formatted according to the action's
@@ -479,9 +479,12 @@ def create(action_id: int, data: dict) -> Response:
             "text": "Example Object"
         }}
 
+    Returns:
+        int:
     """
     if isinstance(action_id, int) and isinstance(data, dict):
-        return post_data("objects/", {"action_id": action_id, "data": data})
+        response = post_data("objects/", {"action_id": action_id, "data": data})
+        return int(response.headers['Location'].split('/')[-3])
     else:
         raise TypeError()
 
@@ -503,8 +506,8 @@ class LocationOccurence(SampleDBObject):
 
     object_id: Optional[int] = None
     location: Optional[locations.Location] = None
-    responsible_user: Optional[User] = None
-    user: Optional[User] = None
+    responsible_user: Optional[users.User] = None
+    user: Optional[users.User] = None
     description: Optional[str] = None
     utc_datetime: Optional[datetime] = None
 
