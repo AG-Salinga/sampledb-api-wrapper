@@ -35,17 +35,15 @@ class Object(SampleDBObject):
 
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
-    
+
     @classmethod
     def from_json(cls, data: dict) -> Optional[Object]:
         if '_type' not in data or data['_type'] != 'object_reference':
             return None
         return get(int(data['object_id']))
 
-
     def to_json(self) -> Dict:
         return {'_type': 'object_reference', 'object_id': str(self.object_id)}
-    
 
     def get_version(self, version_id: int) -> Object:
         """Get the specific version (version_id).
