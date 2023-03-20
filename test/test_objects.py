@@ -336,5 +336,5 @@ class TestObjects():
         
         json = {'_type': 'object_reference', 'object_id': '1'}
         obj = objects.Object.from_json(json)
-        json2 = objects.Object.to_json(obj)
+        json2 = obj.to_json()
         assert json == json2

@@ -17,7 +17,7 @@ class Object(SampleDBObject):
 
     object_id: Optional[int] = None
     version_id: Optional[int] = None
-    version_editor: Optional[User] = None
+    version_editor: Optional[users.User] = None
     version_datetime: Optional[datetime] = None
     action_id: Optional[int] = None
     schema: Optional[dict] = None
@@ -37,7 +37,7 @@ class Object(SampleDBObject):
         return f"Object {self.object_id}"
     
     
-    def from_json(data: dict) -> Object:
+    def from_json(cls, data: dict) -> Optional[Object]:
         if '_type' not in data or data['_type'] != 'object_reference':
             return None
         return get(int(data['object_id']))
