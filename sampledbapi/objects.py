@@ -36,7 +36,7 @@ class Object(SampleDBObject):
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
     
-    
+    @classmethod
     def from_json(cls, data: dict) -> Optional[Object]:
         if '_type' not in data or data['_type'] != 'object_reference':
             return None
