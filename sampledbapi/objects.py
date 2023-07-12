@@ -35,17 +35,15 @@ class Object(SampleDBObject):
 
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
-    
+
     @classmethod
     def from_json(cls, data: dict) -> Optional[Object]:
         if '_type' not in data or data['_type'] != 'object_reference':
             return None
         return get(int(data['object_id']))
 
-
     def to_json(self) -> Dict:
         return {'_type': 'object_reference', 'object_id': str(self.object_id)}
-    
 
     def get_version(self, version_id: int) -> Object:
         """Get the specific version (version_id).
@@ -483,7 +481,8 @@ def create(action_id: int, data: dict) -> int:
         int:
     """
     if isinstance(action_id, int) and isinstance(data, dict):
-        response = post_data("objects/", {"action_id": action_id, "data": data})
+        response = post_data(
+            "objects/", {"action_id": action_id, "data": data})
         return int(response.headers['Location'].rsplit("/objects/", 1)[1].split("/versions/", 1)[0])
     else:
         raise TypeError()
