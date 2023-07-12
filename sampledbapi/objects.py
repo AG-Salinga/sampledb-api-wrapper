@@ -466,7 +466,7 @@ def get(object_id: int) -> Object:
         raise TypeError()
 
 
-def create(action_id: int, data: dict) -> Response:
+def create(action_id: int, data: dict) -> int:
     """Create a new object.
 
     The data is a dictionary that has to be formatted according to the action's
@@ -479,9 +479,12 @@ def create(action_id: int, data: dict) -> Response:
             "text": "Example Object"
         }}
 
+    Returns:
+        int:
     """
     if isinstance(action_id, int) and isinstance(data, dict):
-        return post_data("objects/", {"action_id": action_id, "data": data})
+        response = post_data("objects/", {"action_id": action_id, "data": data})
+        return int(response.headers['Location'].rsplit("/objects/", 1)[1].split("/versions/", 1)[0])
     else:
         raise TypeError()
 
