@@ -68,7 +68,8 @@ class TestObjects():
     def test_init(self, requests_mock):
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects", text=mock_objects())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1", text=mock_object())
-        requests_mock.post("http://128.176.208.107:8000/api/v1/objects/", text=mock_objects())
+        requests_mock.post("http://128.176.208.107:8000/api/v1/objects/",
+                           headers={"Content-Type": "application/json", "Location": "/api/v1/objects/1/versions/0"})
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/versions/1", text=mock_object())
         requests_mock.post("http://128.176.208.107:8000/api/v1/objects/1/versions/")
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/related_objects", text=mock_related_objects())

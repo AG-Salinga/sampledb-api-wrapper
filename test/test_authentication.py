@@ -6,7 +6,8 @@ def mock_authenticate(requests_mock):
     requests_mock.get('http://128.176.208.107:8000/api/v1/users/me', text=test_users.mock_user())
     requests_mock.get("http://128.176.208.107:8000/api/v1/objects", text=test_objects.mock_objects())
     requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1", text=test_objects.mock_object())
-    requests_mock.post("http://128.176.208.107:8000/api/v1/objects/", text=test_objects.mock_objects())
+    requests_mock.post("http://128.176.208.107:8000/api/v1/objects/",
+                       headers={"Content-Type": "application/json", "Location": "/api/v1/objects/1/versions/0"})
     requests_mock.put("http://128.176.208.107:8000/api/v1/objects/1/permissions/public")
     server_address = "http://128.176.208.107:8000"
     api_key = "Success"
