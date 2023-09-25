@@ -18,7 +18,7 @@ class TestUtils():
         assert json2objectreference({'_type': 'test'}) is None
         
     def test_json2objectreference2json(self):
-        json = {'_type': 'object_reference', 'object_id': '1'}
+        json = {'_type': 'object_reference', 'object_id': 1}
         objectreference = json2objectreference(json)
         json2 = objectreference2json(objectreference)
         assert json == json2

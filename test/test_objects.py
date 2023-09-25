@@ -90,7 +90,8 @@ class TestObjects():
         requests_mock.get("http://128.176.208.107:8000/api/v1/users/1", text=test_users.mock_user())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/files", text=mock_files())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/files/1", text=mock_file())
-        requests_mock.post("http://128.176.208.107:8000/api/v1/objects/1/files/")
+        requests_mock.post("http://128.176.208.107:8000/api/v1/objects/1/files/",
+                           headers={"Content-Type": "application/json", "Location": "/api/v1/objects/1/files/0"})
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/comments", text=mock_comments())
         requests_mock.get("http://128.176.208.107:8000/api/v1/objects/1/comments/1", text=mock_comment())
         requests_mock.post("http://128.176.208.107:8000/api/v1/objects/1/comments/")
