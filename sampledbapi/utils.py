@@ -31,7 +31,7 @@ def json2objectreference(data: Dict) -> Optional[int]:
 
 
 def objectreference2json(obj_id: int) -> Dict:
-    return {'_type': 'object_reference', 'object_id': str(obj_id)}
+    return {'_type': 'object_reference', 'object_id': obj_id}
 
 
 def json2bool(data: Dict) -> Optional[bool]:
@@ -76,6 +76,9 @@ def text2json(text: str) -> Dict:
 
 def str2datetime(data: str) -> datetime:
     return datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
+    
+def file2json(file_id: int):
+    return {'_type': 'file', 'file_id': file_id}
 
 
 def convert_json(data: Dict):
