@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.6.3
+-------------
+
+- Added return of id if objects are created
+
 Version 0.6.2
 -------------
 
