@@ -76,7 +76,8 @@ def text2json(text: str) -> Dict:
 
 def str2datetime(data: str) -> datetime:
     return datetime.strptime(data, '%Y-%m-%d %H:%M:%S')
-    
+
+
 def file2json(file_id: int):
     return {'_type': 'file', 'file_id': file_id}
 

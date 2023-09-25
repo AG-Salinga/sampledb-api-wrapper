@@ -335,12 +335,12 @@ class Object(SampleDBObject):
             sha256 = hashlib.sha256()
             sha256.update(data)
             response = post_data(f"objects/{self.object_id}/files/",
-                             {"storage": "database", "original_file_name": name,
-                              "base64_content": base64encoded.decode(),
-                              "hash": {
-                                  "algorithm": "sha256",
-                                  "hexdigest": sha256.hexdigest()
-                              }})
+                                 {"storage": "database", "original_file_name": name,
+                                  "base64_content": base64encoded.decode(),
+                                  "hash": {
+                                      "algorithm": "sha256",
+                                      "hexdigest": sha256.hexdigest()
+                                  }})
 
             return int(response.headers['Location'].rsplit("/files/", 1)[1])
         else:
