@@ -7,6 +7,8 @@ from typing import BinaryIO, Dict, List, Optional, Any
 
 from requests import Response
 
+import hashlib
+
 from .comm import SampleDBObject, get_data, post_data, put_data
 from . import locations, users, utils
 
@@ -300,8 +302,8 @@ class Object(SampleDBObject):
         else:
             raise TypeError()
 
-    def upload_file(self, path: str, name: Optional[str] = None) -> Response:
-        """Create a new file with local storage.
+    def upload_file(self, path: str, name: Optional[str] = None) -> int:
+        """Create a new file.
 
         Args:
             path (str): Path of the file to be uploaded.
@@ -312,12 +314,12 @@ class Object(SampleDBObject):
         if isinstance(path, str):
             with open(path, "rb") as f:
                 f.name
-                r = self.upload_file_raw(f.name if name is None else name, f)
-            return r
+                i = self.upload_file_raw(f.name if name is None else name, f)
+            return i
         else:
             raise TypeError()
 
-    def upload_file_raw(self, name: str, file_obj: BinaryIO) -> Response:
+    def upload_file_raw(self, name: str, file_obj: BinaryIO) -> int:
         """Create a new file with local storage.
 
         Args:
@@ -328,10 +330,19 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(name, str) and isinstance(file_obj, IOBase):
-            base64encoded = base64.b64encode(file_obj.read())
-            return post_data(f"objects/{self.object_id}/files/",
-                             {"storage": "local", "original_file_name": name,
-                              "base64_content": base64encoded.decode()})
+            data = file_obj.read()
+            base64encoded = base64.b64encode(data)
+            sha256 = hashlib.sha256()
+            sha256.update(data)
+            response = post_data(f"objects/{self.object_id}/files/",
+                             {"storage": "database", "original_file_name": name,
+                              "base64_content": base64encoded.decode(),
+                              "hash": {
+                                  "algorithm": "sha256",
+                                  "hexdigest": sha256.hexdigest()
+                              }})
+
+            return int(response.headers['Location'].rsplit("/files/", 1)[1])
         else:
             raise TypeError()
 
