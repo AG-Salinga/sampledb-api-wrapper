@@ -420,7 +420,7 @@ def get_list(q: str = "", action_id: int = -1, action_type: str = "",
     information.
 
     Args:
-        q (str): Search string for advanced search, `see here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/user_guide/objects.html#advanced-search>`__
+        q (str): Search string for advanced search, `see here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/user_guide/search.html#advanced-search>`__
         action_id (int): Filter by action ID.
         action_type (str): Filter by action type.
         limit (int): Limit number of results (helpful for pagination).
