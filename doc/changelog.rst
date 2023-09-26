@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.6.4
+-------------
+
+- No changes
+
 Version 0.6.3
 -------------
 

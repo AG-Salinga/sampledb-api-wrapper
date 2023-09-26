@@ -21,7 +21,7 @@ import re
 # -- Project information -----------------------------------------------------
 
 project = 'SampleDB API wrapper'
-copyright = '2022, AG Salinga, WWU Münster'
+copyright = '2023, AG Salinga, WWU Münster'
 author = 'AG Salinga, WWU Münster'
 
 # The short X.Y version
