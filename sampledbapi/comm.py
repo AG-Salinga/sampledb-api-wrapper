@@ -2,6 +2,7 @@ import json
 from typing import Any, Dict
 
 import requests
+from requests import HTTPError
 
 _address = None
 _api_key = None
@@ -56,7 +57,12 @@ def get_data(path: str) -> Any:
                 raise Exception("JSON could not be parsed: " + str(e) +
                                 "\nJSON was\n" + r.text)
         else:
-            r.raise_for_status()
+            try:
+                r.raise_for_status()
+            except HTTPError as exc:
+                if 400 <= exc.response.status_code < 500:
+                    raise Exception(f'{exc}\nResponse text: {r.text}')
+                raise
     else:
         raise Exception("You have to authenticate first.")
 
@@ -66,7 +72,12 @@ def post_data(path: str, data) -> requests.Response:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)
         response = requests.post(address, headers=__headers(), data=data)
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except HTTPError as exc:
+            if 400 <= exc.response.status_code < 500:
+                raise Exception(f'{exc}\nResponse text: {response.text}')
+            raise
         return response
     else:
         raise Exception("You have to authenticate first.")
@@ -76,8 +87,13 @@ def put_data(path: str, data) -> requests.Response:
     if _address is not None:
         address = _address + "/api/v1/" + path
         data = json.dumps(data)
-        response = requests.put(address, headers=__headers(), data=data)
-        response.raise_for_status()
+        try:
+            response = requests.put(address, headers=__headers(), data=data)
+            response.raise_for_status()
+        except HTTPError as exc:
+            if 400 <= exc.response.status_code < 500:
+                raise Exception(f'{exc}\nResponse text: {response.text}')
+            raise
         return response
     else:
         raise Exception("You have to authenticate first.")
