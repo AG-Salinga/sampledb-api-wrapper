@@ -15,7 +15,10 @@ Submodules
 
    sampledbapi.actions
    sampledbapi.actiontypes
+   sampledbapi.comm
    sampledbapi.instruments
    sampledbapi.locations
+   sampledbapi.locationtypes
    sampledbapi.objects
    sampledbapi.users
+   sampledbapi.utils
