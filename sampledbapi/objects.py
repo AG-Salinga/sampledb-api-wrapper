@@ -506,6 +506,8 @@ class File(SampleDBObject):
     storage: Optional[str] = None
     original_file_name: Optional[str] = None
     base64_content: Optional[str] = None
+    url: Optional[str] = None
+    hash: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"File {self.file_id}, " \
