@@ -1,4 +1,4 @@
-from . import actions, actiontypes, instruments, locations, locationtypes, objects, users, utils
+from . import actions, actiontypes, instruments, locations, locationtypes, objects, object_log, users, utils
 from .comm import authenticate
 
 __all__ = [
@@ -9,6 +9,7 @@ __all__ = [
     "locations",
     "locationtypes",
     "objects",
+    "object_log",
     "users",
     "utils"
 ]

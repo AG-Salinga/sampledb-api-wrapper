@@ -1,4 +1,5 @@
 import json
+import typing
 from typing import Any, Dict
 
 import requests
@@ -45,10 +46,10 @@ def __headers() -> Dict:
         raise Exception("You need to provide an API key.")
 
 
-def get_data(path: str) -> Any:
+def get_data(path: str, params: typing.Dict[str, Any] = None) -> Any:
     if _address is not None:
         address = _address + "/api/v1/" + path
-        r = requests.get(address, headers=__headers())
+        r = requests.get(address, headers=__headers(), params=params)
         if r.status_code == 200 or r.status_code == 201:
             try:
                 return json.loads(r.text)
