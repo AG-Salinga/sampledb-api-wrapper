@@ -46,7 +46,7 @@ def __headers() -> Dict:
         raise Exception("You need to provide an API key.")
 
 
-def get_data(path: str, params: typing.Dict[str, Any] = None) -> Any:
+def get_data(path: str, params: typing.Dict[str, Any] | None = None) -> Any:
     if _address is not None:
         address = _address + "/api/v1/" + path
         r = requests.get(address, headers=__headers(), params=params)
@@ -61,8 +61,9 @@ def get_data(path: str, params: typing.Dict[str, Any] = None) -> Any:
             try:
                 r.raise_for_status()
             except HTTPError as exc:
-                if 400 <= exc.response.status_code < 500:
-                    raise Exception(f'{exc}\nResponse text: {r.text}')
+                if exc.response is not None:
+                    if 400 <= exc.response.status_code < 500:
+                        raise Exception(f'{exc}\nResponse text: {r.text}')
                 raise
     else:
         raise Exception("You have to authenticate first.")
@@ -76,8 +77,9 @@ def post_data(path: str, data) -> requests.Response:
         try:
             response.raise_for_status()
         except HTTPError as exc:
-            if 400 <= exc.response.status_code < 500:
-                raise Exception(f'{exc}\nResponse text: {response.text}')
+            if exc.response is not None:
+                if 400 <= exc.response.status_code < 500:
+                    raise Exception(f'{exc}\nResponse text: {response.text}')
             raise
         return response
     else:
@@ -92,8 +94,9 @@ def put_data(path: str, data) -> requests.Response:
             response = requests.put(address, headers=__headers(), data=data)
             response.raise_for_status()
         except HTTPError as exc:
-            if 400 <= exc.response.status_code < 500:
-                raise Exception(f'{exc}\nResponse text: {response.text}')
+            if exc.response is not None:
+                if 400 <= exc.response.status_code < 500:
+                    raise Exception(f'{exc}\nResponse text: {response.text}')
             raise
         return response
     else:
