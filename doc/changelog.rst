@@ -1,6 +1,16 @@
 Changelog
 =========
 
+Version 0.6.5
+-------------
+
+- Return server response text on 4xx errors (thanks to Malte Deckers)
+- Include missing submodules in documentation (thanks to Malte Deckers)
+- Tests also run on Python 3.12
+- Add url and hash to File object (thanks to Malte Deckers)
+- Add new object log entries endpoint (thanks to Malte Deckers)
+- Fix some type annotations and checks
+
 Version 0.6.4
 -------------
 
