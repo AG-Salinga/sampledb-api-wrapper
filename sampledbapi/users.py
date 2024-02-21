@@ -11,6 +11,8 @@ class User(SampleDBObject):
     name: Optional[str] = None
     orcid: Optional[str] = None
     affiliation: Optional[str] = None
+    role: Optional[str] = None
+    email: Optional[str] = None
 
     def __repr__(self) -> str:
         return f"User {self.user_id} ({self.name})"
