@@ -54,6 +54,8 @@ mirror:
     - chmod 400 ~/.ssh/*
     - git clone --mirror "$CI_REPOSITORY_URL" repo
     - cd repo && git push --mirror git@github.com:AG-Salinga/sampledb-api-wrapper && cd -
+  only:
+    - branches@ag-salinga/sampledb-api-wrapper
 
 deploy_production:
   stage: deploy
@@ -72,7 +74,7 @@ deploy_production:
       - dist/
     expire_in: 6 months
   only:
-    - tags
+    - tags@ag-salinga/sampledb-api-wrapper
 
 pages:
   stage: deploy
@@ -89,7 +91,7 @@ pages:
     - cd ..
     - mv .public public
   only:
-    - tags
+    - tags@ag-salinga/sampledb-api-wrapper
   artifacts:
     paths:
       - public
