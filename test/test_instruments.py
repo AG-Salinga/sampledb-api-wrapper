@@ -19,10 +19,19 @@ def mock_log_entry():
     return '''{
             "log_entry_id": 1,
             "instrument_id": 1,
-            "utc_datetime": "2022-11-21T09:39:08.470159",
+            "versions": [
+                {
+                    "log_entry_id": 1,
+                    "version_id": 1,
+                    "utc_datetime": "2022-11-21T09:39:08.470159",
+                    "content": "Example Log Entry 1",
+                    "categories": ["1"],
+                    "event_utc_datetime": "2022-08-03T12:13:14.000000",
+                    "content_is_markdown": false
+                }
+            ],
             "author": 1,
-            "content": "Dies ist ein Test-Text",
-            "categories": ["1"]
+            "content": "Dies ist ein Test-Text"
         }'''
     
     #"categories": [1] ?
@@ -126,10 +135,10 @@ class TestInstruments():
         log = instruments.get(1).get_log_entry(1)
         assert log.log_entry_id == 1
         assert log.instrument_id == 1
-        assert log.utc_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f') == '2022-11-21T09:39:08.470159'
+        assert log.versions[0].utc_datetime.strftime('%Y-%m-%dT%H:%M:%S.%f') == '2022-11-21T09:39:08.470159'
         assert log.author is not None
-        assert log.content == 'Dies ist ein Test-Text'
-        assert len(log.categories) > 0
+        assert log.versions[0].content == 'Example Log Entry 1'
+        assert len(log.versions[0].categories) > 0
         assert 'InstrumentLogEntry' in repr(log)
         
     def test_get_log_category_list(self, requests_mock):
