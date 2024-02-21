@@ -167,31 +167,50 @@ class InstrumentLogCategory(SampleDBObject):
         return f"InstrumentLogCategory {self.category_id} ({self.title})"
 
 
+class InstrumentLogEntryVersion(SampleDBObject):
+
+    log_entry_id: Optional[int] = None
+    version_id: Optional[int] = None
+    utc_datetime: Optional[datetime] = None
+    content: Optional[str] = None
+    categories: Optional[List[InstrumentLogCategory]] = None
+    event_utc_datetime: Optional[datetime] = None
+    content_is_markdown: Optional[bool] = None
+
+    def __init__(self, d: Dict):
+        """Initialize a new instrument log entry version from dictionary."""
+        super().__init__(d)
+
+        if "categories" in d:
+            self.categories = [InstrumentLogCategory(c) for c in d["categories"]]
+        if "utc_datetime" in d:
+            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+        if "event_utc_datetime" in d and d["event_utc_datetime"] is not None:
+            self.event_utc_datetime = datetime.strptime(d["event_utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+
+    def __repr__(self) -> str:
+        return f"InstrumentLogEntry {self.log_entry_id} (created {self.utc_datetime})"
+
+
 class InstrumentLogEntry(SampleDBObject):
 
     log_entry_id: Optional[int] = None
     instrument_id: Optional[int] = None
-    utc_datetime: Optional[datetime] = None
     author: Optional[users.User] = None
-    content: Optional[str] = None
-    categories: Optional[List[InstrumentLogCategory]] = None
+    versions: Optional[List[InstrumentLogEntryVersion]] = None
 
     def __init__(self, instrument_id: int, d: Dict):
         """Initialize a new instrument log entry from dictionary."""
         super().__init__(d)
         self.instrument_id = instrument_id
-        if "categories" in d:
-            self.categories = [
-                InstrumentLogCategory(c) for c in d["categories"]]
+
         if "author" in d:
             self.author = users.get(d["author"])
-        if "utc_datetime" in d:
-            self.utc_datetime = datetime.strptime(
-                d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+        if "versions" in d:
+            self.versions = [InstrumentLogEntryVersion(v) for v in d["versions"]]
 
     def __repr__(self) -> str:
-        return f"InstrumentLogEntry {self.log_entry_id} " \
-            + f"(created {self.utc_datetime})"
+        return f"InstrumentLogEntry {self.log_entry_id}"
 
     def get_file_attachment_list(self) -> List[InstrumentLogFileAttachment]:
         """Get a list of file attachments.
