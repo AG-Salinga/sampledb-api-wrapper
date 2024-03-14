@@ -63,7 +63,7 @@ class Object(SampleDBObject):
         else:
             raise TypeError()
 
-    def update(self, data: dict) -> Response:
+    def update(self, data: dict, schema: Optional[dict] = None) -> Response:
         """Create a new version.
 
         The data is a dictionary that has to be formatted according to the
@@ -78,8 +78,10 @@ class Object(SampleDBObject):
 
         """
         if isinstance(data, dict):
-            return post_data(f"objects/{self.object_id}/versions/",
-                             {"data": data})
+            data_to_post = {"data": data}
+            if isinstance(schema, dict):
+                data_to_post['schema'] = schema
+            return post_data(f"objects/{self.object_id}/versions/", data_to_post)
         else:
             raise TypeError()
 
