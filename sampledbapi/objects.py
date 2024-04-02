@@ -435,7 +435,6 @@ def get_list(q: str = "", action_id: int = -1, action_type: str = "",
     if (isinstance(q, str) and isinstance(action_id, int) and
             isinstance(action_type, str) and isinstance(limit, int) and
             isinstance(offset, int) and isinstance(name_only, bool)):
-        s = "objects"
         pars: Dict[str, Any] = {}
         if q != "":
             pars["q"] = q
@@ -450,14 +449,7 @@ def get_list(q: str = "", action_id: int = -1, action_type: str = "",
         if name_only:
             pars["name_only"] = "true"
 
-        if len(pars) > 0:
-            s += "?"
-        for i, p in enumerate(pars):
-            s += f"{p}={pars[p]}"
-            if i < len(pars) - 1:
-                s += "&"
-
-        return [Object(o) for o in get_data(s)]
+        return [Object(o) for o in get_data("objects", pars)]
     else:
         raise TypeError()
 
