@@ -19,7 +19,7 @@ out = setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version="0.6.5",
+    version="0.6.6",
 
     description="API wrapper for SampleDB",
     long_description=long_description,
@@ -41,7 +41,7 @@ out = setup(
         #   3 - Alpha
         #   4 - Beta
         #   5 - Production/Stable
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
 
         # Indicate who your project is intended for
         "Intended Audience :: Science/Research",
@@ -58,6 +58,8 @@ out = setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
     ],
 
     # What does your project relate to?
