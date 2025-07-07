@@ -92,12 +92,64 @@ class Object(SampleDBObject):
             Two lists containing referenced objects and referencing objects.
 
         """
-        related_objects = get_data(f"objects/{self.object_id}/related_objects")
-        referenced_object_ids = related_objects['referenced_objects']
-        referencing_object_ids = related_objects['referencing_objects']
-        referenced_objects = list(map(get, map(lambda dic: dic['object_id'], referenced_object_ids)))
-        referencing_objects = list(map(get, map(lambda dic: dic['object_id'], referencing_object_ids)))
+        referenced_object_ids, referencing_object_ids = self.get_related_object_ids()
+        referenced_objects = list(map(get, referenced_object_ids))
+        referencing_objects = list(map(get, referencing_object_ids))
         return referenced_objects, referencing_objects
+
+    def get_referencing_objects(self):
+        """Gets objects referencing an object.
+
+        Returns:
+            A lists containing the referencing objects.
+
+        """
+        referencing_object_ids = self.get_referencing_object_ids()
+        referencing_objects = list(map(get, referencing_object_ids))
+        return referencing_objects
+
+    def get_referenced_objects(self):
+        """Gets objects referenced by an object.
+
+        Returns:
+            A lists containing the referenced objects.
+
+        """
+        referenced_object_ids = self.get_referenced_object_ids()
+        referenced_objects = list(map(get, referenced_object_ids))
+        return referenced_objects
+
+    def get_related_object_ids(self):
+        """Gets IDs of objects related to an object.
+
+        Returns:
+            Two lists containing IDs of referenced objects and referencing objects.
+
+        """
+        related_objects = get_data(f"objects/{self.object_id}/related_objects")
+        referenced_object_ids = map(lambda dic: dic['object_id'], related_objects['referenced_objects'])
+        referencing_object_ids = map(lambda dic: dic['object_id'], related_objects['referencing_objects'])
+        return referenced_object_ids, referencing_object_ids
+
+    def get_referencing_object_ids(self):
+        """Gets IDs of objects referencing an object.
+
+        Returns:
+            A lists containing the IDs of the referencing objects.
+
+        """
+        _, referencing_object_ids = self.get_related_object_ids()
+        return referencing_object_ids
+
+    def get_referenced_object_ids(self):
+        """Gets IDs of objects referenced by an object.
+
+        Returns:
+            A lists containing the IDs of the referenced objects.
+
+        """
+        referenced_object_ids, _ = self.get_related_object_ids()
+        return referenced_object_ids
 
     def get_public(self) -> bool:
         """Get whether or not the object is public.
