@@ -25,13 +25,16 @@ class Object(SampleDBObject):
     schema: Optional[dict] = None
     data: Optional[dict] = None
 
-    def __init__(self, d: Dict):
+    def __init__(self, d: Dict, users_cache: Optional[Dict[int, users.User]] = None):
         """Initialize a new instrument from dictionary."""
         super().__init__(d)
         if "utc_datetime" in d:
             self.version_datetime = utils.str2datetime(d['utc_datetime'])
         if "user_id" in d:
-            self.version_editor = users.get(d['user_id'])
+            if users_cache is not None and d['user_id'] in users_cache:
+                self.version_editor = users_cache[d['user_id']]
+            else:
+                self.version_editor = users.get(d['user_id'])
         if "data" in d:
             self.data = utils.convert_json(d['data'])
 
@@ -92,12 +95,64 @@ class Object(SampleDBObject):
             Two lists containing referenced objects and referencing objects.
 
         """
-        related_objects = get_data(f"objects/{self.object_id}/related_objects")
-        referenced_object_ids = related_objects['referenced_objects']
-        referencing_object_ids = related_objects['referencing_objects']
-        referenced_objects = list(map(get, map(lambda dic: dic['object_id'], referenced_object_ids)))
-        referencing_objects = list(map(get, map(lambda dic: dic['object_id'], referencing_object_ids)))
+        referenced_object_ids, referencing_object_ids = self.get_related_object_ids()
+        referenced_objects = list(map(get, referenced_object_ids))
+        referencing_objects = list(map(get, referencing_object_ids))
         return referenced_objects, referencing_objects
+
+    def get_referencing_objects(self):
+        """Gets objects referencing an object.
+
+        Returns:
+            A lists containing the referencing objects.
+
+        """
+        referencing_object_ids = self.get_referencing_object_ids()
+        referencing_objects = list(map(get, referencing_object_ids))
+        return referencing_objects
+
+    def get_referenced_objects(self):
+        """Gets objects referenced by an object.
+
+        Returns:
+            A lists containing the referenced objects.
+
+        """
+        referenced_object_ids = self.get_referenced_object_ids()
+        referenced_objects = list(map(get, referenced_object_ids))
+        return referenced_objects
+
+    def get_related_object_ids(self):
+        """Gets IDs of objects related to an object.
+
+        Returns:
+            Two lists containing IDs of referenced objects and referencing objects.
+
+        """
+        related_objects = get_data(f"objects/{self.object_id}/related_objects")
+        referenced_object_ids = map(lambda dic: dic['object_id'], related_objects['referenced_objects'])
+        referencing_object_ids = map(lambda dic: dic['object_id'], related_objects['referencing_objects'])
+        return referenced_object_ids, referencing_object_ids
+
+    def get_referencing_object_ids(self):
+        """Gets IDs of objects referencing an object.
+
+        Returns:
+            A lists containing the IDs of the referencing objects.
+
+        """
+        _, referencing_object_ids = self.get_related_object_ids()
+        return referencing_object_ids
+
+    def get_referenced_object_ids(self):
+        """Gets IDs of objects referenced by an object.
+
+        Returns:
+            A lists containing the IDs of the referenced objects.
+
+        """
+        referenced_object_ids, _ = self.get_related_object_ids()
+        return referenced_object_ids
 
     def get_public(self) -> bool:
         """Get whether or not the object is public.
@@ -259,7 +314,24 @@ class Object(SampleDBObject):
             List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#reading-a-list-of-an-object-s-locations>`__
 
         """
-        return [LocationOccurence(i) for i in get_data(f"objects/{self.object_id}/locations")]
+        # Get the raw location occurrence data first
+        locations_data = get_data(f"objects/{self.object_id}/locations")
+        
+        # Collect unique user IDs from the location occurrences
+        user_ids = set()
+        for loc_data in locations_data:
+            if "responsible_user" in loc_data:
+                user_ids.add(loc_data["responsible_user"])
+            if "user" in loc_data:
+                user_ids.add(loc_data["user"])
+        
+        # Fetch all users once and create a cache
+        users_cache = {}
+        for user_id in user_ids:
+            users_cache[user_id] = users.get(user_id)
+        
+        # Create LocationOccurence instances with the users cache
+        return [LocationOccurence(i, users_cache) for i in locations_data]
 
     def get_location_occurence(self, location_id: int) -> LocationOccurence:
         """
@@ -449,7 +521,22 @@ def get_list(q: str = "", action_id: int = -1, action_type: str = "",
         if name_only:
             pars["name_only"] = "true"
 
-        return [Object(o) for o in get_data("objects", pars)]
+        # Get the raw object data first
+        objects_data = get_data("objects", pars)
+        
+        # Collect unique user IDs from the objects
+        user_ids = set()
+        for obj_data in objects_data:
+            if "user_id" in obj_data:
+                user_ids.add(obj_data["user_id"])
+        
+        # Fetch all users once and create a cache
+        users_cache = {}
+        for user_id in user_ids:
+            users_cache[user_id] = users.get(user_id)
+        
+        # Create Object instances with the users cache
+        return [Object(o, users_cache) for o in objects_data]
     else:
         raise TypeError()
 
@@ -517,15 +604,21 @@ class LocationOccurence(SampleDBObject):
     description: Optional[str] = None
     utc_datetime: Optional[datetime] = None
 
-    def __init__(self, d: Dict):
+    def __init__(self, d: Dict, users_cache: Optional[Dict[int, users.User]] = None):
         """Initialize a new instrument from dictionary."""
         super().__init__(d)
         if "location" in d:
             self.location = locations.get(d["location"])
         if "responsible_user" in d:
-            self.responsible_user = users.get(d["responsible_user"])
+            if users_cache is not None and d["responsible_user"] in users_cache:
+                self.responsible_user = users_cache[d["responsible_user"]]
+            else:
+                self.responsible_user = users.get(d["responsible_user"])
         if "user" in d:
-            self.user = users.get(d["user"])
+            if users_cache is not None and d["user"] in users_cache:
+                self.user = users_cache[d["user"]]
+            else:
+                self.user = users.get(d["user"])
         if "utc_datetime" in d:
             self.utc_datetime = datetime.strptime(
                 d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
