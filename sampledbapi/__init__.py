@@ -1,4 +1,14 @@
-from . import actions, actiontypes, instruments, locations, locationtypes, objects, object_log, users, utils
+from . import (
+    actions,
+    actiontypes,
+    instruments,
+    locations,
+    locationtypes,
+    objects,
+    object_log,
+    users,
+    utils,
+)
 from .comm import authenticate
 
 __all__ = [
@@ -11,5 +21,5 @@ __all__ = [
     "objects",
     "object_log",
     "users",
-    "utils"
+    "utils",
 ]
