@@ -25,27 +25,30 @@ class Object(SampleDBObject):
     schema: Optional[dict] = None
     data: Optional[dict] = None
 
-    def __init__(self, d: Dict):
+    def __init__(self, d: Dict, users_cache: Optional[Dict[int, users.User]] = None):
         """Initialize a new instrument from dictionary."""
         super().__init__(d)
         if "utc_datetime" in d:
-            self.version_datetime = utils.str2datetime(d['utc_datetime'])
+            self.version_datetime = utils.str2datetime(d["utc_datetime"])
         if "user_id" in d:
-            self.version_editor = users.get(d['user_id'])
+            if users_cache is not None and d["user_id"] in users_cache:
+                self.version_editor = users_cache[d["user_id"]]
+            else:
+                self.version_editor = users.get(d["user_id"])
         if "data" in d:
-            self.data = utils.convert_json(d['data'])
+            self.data = utils.convert_json(d["data"])
 
     def __repr__(self) -> str:
         return f"Object {self.object_id}"
 
     @classmethod
     def from_json(cls, data: dict) -> Optional[Object]:
-        if '_type' not in data or data['_type'] != 'object_reference':
+        if "_type" not in data or data["_type"] != "object_reference":
             return None
-        return get(int(data['object_id']))
+        return get(int(data["object_id"]))
 
     def to_json(self) -> Dict:
-        return {'_type': 'object_reference', 'object_id': str(self.object_id)}
+        return {"_type": "object_reference", "object_id": str(self.object_id)}
 
     def get_version(self, version_id: int) -> Object:
         """Get the specific version (version_id).
@@ -57,9 +60,7 @@ class Object(SampleDBObject):
             Object: Requested :class:`~sampledbapi.objects.Object`.
         """
         if isinstance(version_id, int):
-            return Object(get_data(
-                f"objects/{self.object_id}/versions/{version_id}"
-            ))
+            return Object(get_data(f"objects/{self.object_id}/versions/{version_id}"))
         else:
             raise TypeError()
 
@@ -80,7 +81,7 @@ class Object(SampleDBObject):
         if isinstance(data, dict):
             data_to_post = {"data": data}
             if isinstance(schema, dict):
-                data_to_post['schema'] = schema
+                data_to_post["schema"] = schema
             return post_data(f"objects/{self.object_id}/versions/", data_to_post)
         else:
             raise TypeError()
@@ -93,10 +94,14 @@ class Object(SampleDBObject):
 
         """
         related_objects = get_data(f"objects/{self.object_id}/related_objects")
-        referenced_object_ids = related_objects['referenced_objects']
-        referencing_object_ids = related_objects['referencing_objects']
-        referenced_objects = list(map(get, map(lambda dic: dic['object_id'], referenced_object_ids)))
-        referencing_objects = list(map(get, map(lambda dic: dic['object_id'], referencing_object_ids)))
+        referenced_object_ids = related_objects["referenced_objects"]
+        referencing_object_ids = related_objects["referencing_objects"]
+        referenced_objects = list(
+            map(get, map(lambda dic: dic["object_id"], referenced_object_ids))
+        )
+        referencing_objects = list(
+            map(get, map(lambda dic: dic["object_id"], referencing_object_ids))
+        )
         return referenced_objects, referencing_objects
 
     def get_public(self) -> bool:
@@ -117,8 +122,7 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#object-permissions>`__
         """
         if isinstance(public, bool):
-            return put_data(f"objects/{self.object_id}/permissions/public",
-                            public)
+            return put_data(f"objects/{self.object_id}/permissions/public", public)
         else:
             raise TypeError()
 
@@ -140,9 +144,7 @@ class Object(SampleDBObject):
             str: Permissions of user for the object.
         """
         if isinstance(user_id, int):
-            return get_data(
-                f"objects/{self.object_id}/permissions/users/{user_id}"
-            )
+            return get_data(f"objects/{self.object_id}/permissions/users/{user_id}")
         else:
             raise TypeError()
 
@@ -158,8 +160,7 @@ class Object(SampleDBObject):
         """
         if isinstance(user_id, int) and isinstance(permissions, str):
             return put_data(
-                f"objects/{self.object_id}/permissions/users/{user_id}",
-                permissions
+                f"objects/{self.object_id}/permissions/users/{user_id}", permissions
             )
         else:
             raise TypeError()
@@ -182,9 +183,7 @@ class Object(SampleDBObject):
             str: Permissions of group for the object.
         """
         if isinstance(group_id, int):
-            return get_data(
-                f"objects/{self.object_id}/permissions/groups/{group_id}"
-            )
+            return get_data(f"objects/{self.object_id}/permissions/groups/{group_id}")
         else:
             raise TypeError()
 
@@ -200,8 +199,7 @@ class Object(SampleDBObject):
         """
         if isinstance(group_id, int) and isinstance(permissions, str):
             return put_data(
-                f"objects/{self.object_id}/permissions/groups/{group_id}",
-                permissions
+                f"objects/{self.object_id}/permissions/groups/{group_id}", permissions
             )
         else:
             raise TypeError()
@@ -230,8 +228,9 @@ class Object(SampleDBObject):
         else:
             raise TypeError()
 
-    def set_project_group_permissions(self, project_id: int,
-                                      permissions: str) -> Response:
+    def set_project_group_permissions(
+        self, project_id: int, permissions: str
+    ) -> Response:
         """Set the permissions of a project group.
 
         Args:
@@ -244,7 +243,7 @@ class Object(SampleDBObject):
         if isinstance(project_id, int) and isinstance(permissions, str):
             return put_data(
                 f"objects/{self.object_id}/permissions/projects/{project_id}",
-                permissions
+                permissions,
             )
         else:
             raise TypeError()
@@ -259,7 +258,24 @@ class Object(SampleDBObject):
             List: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#reading-a-list-of-an-object-s-locations>`__
 
         """
-        return [LocationOccurence(i) for i in get_data(f"objects/{self.object_id}/locations")]
+        # Get the raw location occurrence data first
+        locations_data = get_data(f"objects/{self.object_id}/locations")
+
+        # Collect unique user IDs from the location occurrences
+        user_ids = set()
+        for loc_data in locations_data:
+            if "responsible_user" in loc_data:
+                user_ids.add(loc_data["responsible_user"])
+            if "user" in loc_data:
+                user_ids.add(loc_data["user"])
+
+        # Fetch all users once and create a cache
+        users_cache = {}
+        for user_id in user_ids:
+            users_cache[user_id] = users.get(user_id)
+
+        # Create LocationOccurence instances with the users cache
+        return [LocationOccurence(i, users_cache) for i in locations_data]
 
     def get_location_occurence(self, location_id: int) -> LocationOccurence:
         """
@@ -274,9 +290,9 @@ class Object(SampleDBObject):
 
         """
         if isinstance(location_id, int):
-            return LocationOccurence(get_data(
-                f"objects/{self.object_id}/locations/{location_id}"
-            ))
+            return LocationOccurence(
+                get_data(f"objects/{self.object_id}/locations/{location_id}")
+            )
         else:
             raise TypeError()
 
@@ -298,9 +314,7 @@ class Object(SampleDBObject):
             Dict: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(file_id, int):
-            return File(get_data(
-                f"objects/{self.object_id}/files/{file_id}"
-            ))
+            return File(get_data(f"objects/{self.object_id}/files/{file_id}"))
         else:
             raise TypeError()
 
@@ -336,15 +350,17 @@ class Object(SampleDBObject):
             base64encoded = base64.b64encode(data)
             sha256 = hashlib.sha256()
             sha256.update(data)
-            response = post_data(f"objects/{self.object_id}/files/",
-                                 {"storage": "database", "original_file_name": name,
-                                  "base64_content": base64encoded.decode(),
-                                  "hash": {
-                                      "algorithm": "sha256",
-                                      "hexdigest": sha256.hexdigest()
-                                  }})
+            response = post_data(
+                f"objects/{self.object_id}/files/",
+                {
+                    "storage": "database",
+                    "original_file_name": name,
+                    "base64_content": base64encoded.decode(),
+                    "hash": {"algorithm": "sha256", "hexdigest": sha256.hexdigest()},
+                },
+            )
 
-            return int(response.headers['Location'].rsplit("/files/", 1)[1])
+            return int(response.headers["Location"].rsplit("/files/", 1)[1])
         else:
             raise TypeError()
 
@@ -358,8 +374,9 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#files>`__
         """
         if isinstance(url, str):
-            return post_data(f"objects/{self.object_id}/files/",
-                             {"storage": "url", "url": url})
+            return post_data(
+                f"objects/{self.object_id}/files/", {"storage": "url", "url": url}
+            )
         else:
             raise TypeError()
 
@@ -369,8 +386,7 @@ class Object(SampleDBObject):
         Returns:
             List: List of :class:`~sampledbapi.objects.Comment`.
         """
-        return [Comment(c)
-                for c in get_data(f"objects/{self.object_id}/comments")]
+        return [Comment(c) for c in get_data(f"objects/{self.object_id}/comments")]
 
     def get_comment(self, comment_id: int) -> Comment:
         """Get specific comment (comment_id).
@@ -382,8 +398,7 @@ class Object(SampleDBObject):
             Object: Requested :class:`~sampledbapi.objects.Comment`.
         """
         if isinstance(comment_id, int):
-            return Comment(get_data(
-                f"objects/{self.object_id}/comments/{comment_id}"))
+            return Comment(get_data(f"objects/{self.object_id}/comments/{comment_id}"))
         else:
             raise TypeError()
 
@@ -397,15 +412,21 @@ class Object(SampleDBObject):
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#comments>`__
         """
         if isinstance(comment, str):
-            return post_data(f"objects/{self.object_id}/comments/",
-                             {"content": comment})
+            return post_data(
+                f"objects/{self.object_id}/comments/", {"content": comment}
+            )
         else:
             raise TypeError()
 
 
-def get_list(q: str = "", action_id: int = -1, action_type: str = "",
-             limit: int = -1, offset: int = -1,
-             name_only: bool = False) -> List[Object]:
+def get_list(
+    q: str = "",
+    action_id: int = -1,
+    action_type: str = "",
+    limit: int = -1,
+    offset: int = -1,
+    name_only: bool = False,
+) -> List[Object]:
     """Get a list of all objects visible to the current user.
 
     The list only contains the current version of each object. By passing the
@@ -432,9 +453,14 @@ def get_list(q: str = "", action_id: int = -1, action_type: str = "",
     Returns:
         List: List of :class:`~sampledbapi.objects.Object`.
     """
-    if (isinstance(q, str) and isinstance(action_id, int) and
-            isinstance(action_type, str) and isinstance(limit, int) and
-            isinstance(offset, int) and isinstance(name_only, bool)):
+    if (
+        isinstance(q, str) and
+        isinstance(action_id, int) and
+        isinstance(action_type, str) and
+        isinstance(limit, int) and
+        isinstance(offset, int) and
+        isinstance(name_only, bool)
+    ):
         pars: Dict[str, Any] = {}
         if q != "":
             pars["q"] = q
@@ -449,7 +475,22 @@ def get_list(q: str = "", action_id: int = -1, action_type: str = "",
         if name_only:
             pars["name_only"] = "true"
 
-        return [Object(o) for o in get_data("objects", pars)]
+        # Get the raw object data first
+        objects_data = get_data("objects", pars)
+
+        # Collect unique user IDs from the objects
+        user_ids = set()
+        for obj_data in objects_data:
+            if "user_id" in obj_data:
+                user_ids.add(obj_data["user_id"])
+
+        # Fetch all users once and create a cache
+        users_cache = {}
+        for user_id in user_ids:
+            users_cache[user_id] = users.get(user_id)
+
+        # Create Object instances with the users cache
+        return [Object(o, users_cache) for o in objects_data]
     else:
         raise TypeError()
 
@@ -486,9 +527,12 @@ def create(action_id: int, data: dict) -> int:
         int:
     """
     if isinstance(action_id, int) and isinstance(data, dict):
-        response = post_data(
-            "objects/", {"action_id": action_id, "data": data})
-        return int(response.headers['Location'].rsplit("/objects/", 1)[1].split("/versions/", 1)[0])
+        response = post_data("objects/", {"action_id": action_id, "data": data})
+        return int(
+            response.headers["Location"]
+            .rsplit("/objects/", 1)[1]
+            .split("/versions/", 1)[0]
+        )
     else:
         raise TypeError()
 
@@ -504,8 +548,7 @@ class File(SampleDBObject):
     hash: Optional[str] = None
 
     def __repr__(self) -> str:
-        return f"File {self.file_id}, " \
-            + f"Name {self.original_file_name}"
+        return f"File {self.file_id}, " + f"Name {self.original_file_name}"
 
 
 class LocationOccurence(SampleDBObject):
@@ -517,22 +560,31 @@ class LocationOccurence(SampleDBObject):
     description: Optional[str] = None
     utc_datetime: Optional[datetime] = None
 
-    def __init__(self, d: Dict):
+    def __init__(self, d: Dict, users_cache: Optional[Dict[int, users.User]] = None):
         """Initialize a new instrument from dictionary."""
         super().__init__(d)
         if "location" in d:
             self.location = locations.get(d["location"])
         if "responsible_user" in d:
-            self.responsible_user = users.get(d["responsible_user"])
+            if users_cache is not None and d["responsible_user"] in users_cache:
+                self.responsible_user = users_cache[d["responsible_user"]]
+            else:
+                self.responsible_user = users.get(d["responsible_user"])
         if "user" in d:
-            self.user = users.get(d["user"])
+            if users_cache is not None and d["user"] in users_cache:
+                self.user = users_cache[d["user"]]
+            else:
+                self.user = users.get(d["user"])
         if "utc_datetime" in d:
             self.utc_datetime = datetime.strptime(
-                d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+                d["utc_datetime"], "%Y-%m-%dT%H:%M:%S.%f"
+            )
 
     def __repr__(self) -> str:
-        return f"LocationOccurence of object {self.object_id} " \
-            + "(at {self.location.name})"
+        return (
+            f"LocationOccurence of object {self.object_id} " +
+            "(at {self.location.name})"
+        )
 
 
 class Comment(SampleDBObject):
@@ -548,8 +600,8 @@ class Comment(SampleDBObject):
         super().__init__(d)
         if "utc_datetime" in d:
             self.utc_datetime = datetime.strptime(
-                d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+                d["utc_datetime"], "%Y-%m-%dT%H:%M:%S.%f"
+            )
 
     def __str__(self) -> str:
-        return f"Comment on object {self.object_id}, " \
-            + f"posted {self.utc_datetime}"
+        return f"Comment on object {self.object_id}, " + f"posted {self.utc_datetime}"

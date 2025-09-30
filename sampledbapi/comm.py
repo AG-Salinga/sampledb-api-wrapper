@@ -57,15 +57,16 @@ def get_data(path: str, params: typing.Dict[str, Any] | None = None) -> Any:
                 return json.loads(r.text)
             except Exception as e:
                 # We need better error handling here
-                raise Exception("JSON could not be parsed: " + str(e) +
-                                "\nJSON was\n" + r.text)
+                raise Exception(
+                    "JSON could not be parsed: " + str(e) + "\nJSON was\n" + r.text
+                )
         else:
             try:
                 r.raise_for_status()
             except HTTPError as exc:
                 if exc.response is not None:
                     if 400 <= exc.response.status_code < 500:
-                        raise Exception(f'{exc}\nResponse text: {r.text}')
+                        raise Exception(f"{exc}\nResponse text: {r.text}")
                 raise
     else:
         raise Exception("You have to authenticate first.")
@@ -81,7 +82,7 @@ def post_data(path: str, data) -> requests.Response:
         except HTTPError as exc:
             if exc.response is not None:
                 if 400 <= exc.response.status_code < 500:
-                    raise Exception(f'{exc}\nResponse text: {response.text}')
+                    raise Exception(f"{exc}\nResponse text: {response.text}")
             raise
         return response
     else:
@@ -98,7 +99,7 @@ def put_data(path: str, data) -> requests.Response:
         except HTTPError as exc:
             if exc.response is not None:
                 if 400 <= exc.response.status_code < 500:
-                    raise Exception(f'{exc}\nResponse text: {response.text}')
+                    raise Exception(f"{exc}\nResponse text: {response.text}")
             raise
         return response
     else:
