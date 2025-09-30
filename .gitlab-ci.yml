@@ -73,8 +73,8 @@ deploy_production:
     TWINE_PASSWORD: $PYPI_PASSWORD
   script:
     - apt-get update
-    - apt-get install wget software-properties-common apt-transport-https ca-certificates -y
-    - python -m pip install twine
+    - apt-get install wget apt-transport-https ca-certificates -y
+    - python -m pip install twine setuptools wheel
     - python setup.py install
     - python setup.py sdist bdist_wheel
     - twine upload dist/*
@@ -90,7 +90,7 @@ pages:
   script:
     - apt-get update
     - apt-get install pandoc -y
-    - python -m pip install sphinx sphinx_rtd_theme IPython ipykernel nbsphinx m2r2
+    - python -m pip install sphinx sphinx_rtd_theme IPython ipykernel nbsphinx m2r2 setuptools wheel lxml_html_clean
     - python setup.py install
     - mkdir .public
     - cd doc

@@ -7,3 +7,7 @@ test/__pycache__/*
 doc/_build/*
 .coverage
 mypycov/*
+.gitlab-ci-local
+report.html
+report.xml
+public
