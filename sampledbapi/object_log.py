@@ -19,7 +19,9 @@ class ObjectLogEntry(SampleDBObject):
         return f"ObjectLogEntry {self.log_entry_id}"
 
 
-def get_object_log_entries(after_id: typing.Optional[int] = None) -> typing.List[ObjectLogEntry]:
+def get_object_log_entries(
+    after_id: typing.Optional[int] = None,
+) -> typing.List[ObjectLogEntry]:
     """Query the contents of this object's object log.
 
     Args:
@@ -29,8 +31,11 @@ def get_object_log_entries(after_id: typing.Optional[int] = None) -> typing.List
         List: List of :class:`~sampledbapi.object_log.ObjectLogEntry`.
     """
     if after_id is None:
-        return [ObjectLogEntry(entry) for entry in get_data('object_log_entries/')]
+        return [ObjectLogEntry(entry) for entry in get_data("object_log_entries/")]
     if isinstance(after_id, int):
-        return [ObjectLogEntry(entry) for entry in get_data('object_log_entries/', params={'after_id': after_id})]
+        return [
+            ObjectLogEntry(entry)
+            for entry in get_data("object_log_entries/", params={"after_id": after_id})
+        ]
     else:
         raise TypeError()
