@@ -10,9 +10,15 @@ from requests import Response
 from .comm import SampleDBObject, get_data, post_data
 from . import users
 
-__all__ = ["Instrument", "InstrumentLogCategory", "InstrumentLogEntry",
-           "InstrumentLogFileAttachment", "InstrumentLogObjectAttachment",
-           "get_list", "get"]
+__all__ = [
+    "Instrument",
+    "InstrumentLogCategory",
+    "InstrumentLogEntry",
+    "InstrumentLogFileAttachment",
+    "InstrumentLogObjectAttachment",
+    "get_list",
+    "get",
+]
 
 
 class Instrument(SampleDBObject):
@@ -28,7 +34,8 @@ class Instrument(SampleDBObject):
         super().__init__(d)
         if "instrument_scientists" in d:
             self.instrument_scientists = [
-                users.get(i) for i in d["instrument_scientists"]]
+                users.get(i) for i in d["instrument_scientists"]
+            ]
 
     def __repr__(self) -> str:
         return f"Instrument {self.instrument_id} ({self.name})"
@@ -40,10 +47,12 @@ class Instrument(SampleDBObject):
             List: List of :class:`~sampledbapi.instrument.InstrumentLogEntry`.
         """
         if self.instrument_id is not None:
-            return [InstrumentLogEntry(self.instrument_id, log) for log in get_data(
-                f"instruments/{self.instrument_id}/log_entries")]
+            return [
+                InstrumentLogEntry(self.instrument_id, log)
+                for log in get_data(f"instruments/{self.instrument_id}/log_entries")
+            ]
         else:
-            raise Exception('instrument_id can not be None')
+            raise Exception("instrument_id can not be None")
 
     def get_log_entry(self, log_entry_id: int) -> InstrumentLogEntry:
         """Get the specific log entry (log_entry_id).
@@ -57,11 +66,14 @@ class Instrument(SampleDBObject):
         """
         if isinstance(log_entry_id, int):
             if self.instrument_id is not None:
-                return InstrumentLogEntry(self.instrument_id, get_data(
-                    f"instruments/{self.instrument_id}/log_entries/{log_entry_id}"
-                ))
+                return InstrumentLogEntry(
+                    self.instrument_id,
+                    get_data(
+                        f"instruments/{self.instrument_id}/log_entries/{log_entry_id}"
+                    ),
+                )
             else:
-                raise Exception('instrument_id can not be None')
+                raise Exception("instrument_id can not be None")
         else:
             raise TypeError()
 
@@ -71,8 +83,10 @@ class Instrument(SampleDBObject):
         Returns:
             List: List of :class:`~sampledbapi.instrument.InstrumentLogCategory`.
         """
-        return [InstrumentLogCategory(c) for c in get_data(
-            f"instruments/{self.instrument_id}/log_categories")]
+        return [
+            InstrumentLogCategory(c)
+            for c in get_data(f"instruments/{self.instrument_id}/log_categories")
+        ]
 
     def get_log_category(self, log_category_id: int) -> InstrumentLogCategory:
         """Get a specific log category (log_category_id).
@@ -85,15 +99,21 @@ class Instrument(SampleDBObject):
                 :class:`~sampledbapi.instrument.InstrumentLogCategory`.
         """
         if isinstance(log_category_id, int):
-            return InstrumentLogCategory(get_data(
-                f"instruments/{self.instrument_id}/log_categories/" +
-                f"{log_category_id}"))
+            return InstrumentLogCategory(
+                get_data(
+                    f"instruments/{self.instrument_id}/log_categories/" + f"{log_category_id}"
+                )
+            )
         else:
             raise TypeError()
 
-    def create_log_entry(self, content: str, category_ids: List = [],
-                         file_attachments: List = [],
-                         object_attachments: List = []) -> Response:
+    def create_log_entry(
+        self,
+        content: str,
+        category_ids: List = [],
+        file_attachments: List = [],
+        object_attachments: List = [],
+    ) -> Response:
         """Create a log entry for an instrument (instrument_id) and optionally attach files and objects to it.
 
         Args:
@@ -105,28 +125,32 @@ class Instrument(SampleDBObject):
         Returns:
             HTTPResponse: `See here. <https://scientific-it-systems.iffgit.fz-juelich.de/SampleDB/developer_guide/api.html#instrument-log-entries>`_
         """
-        if (isinstance(content, str) and isinstance(category_ids, list) and
-                isinstance(file_attachments, list) and
-                isinstance(object_attachments, list)):
+        if (
+            isinstance(content, str) and
+            isinstance(category_ids, list) and
+            isinstance(file_attachments, list) and
+            isinstance(object_attachments, list)
+        ):
             data: Dict[str, Any] = {"content": content}
 
             def conv_file(path: str):
                 with open(path, "rb") as f:
                     base64encoded = base64.b64encode(f.read())
-                return {"file_name": os.path.basename(path),
-                        "base64_content": base64encoded.decode()}
+                return {
+                    "file_name": os.path.basename(path),
+                    "base64_content": base64encoded.decode(),
+                }
 
             if len(category_ids) > 0:
                 data["category_ids"] = category_ids
             if len(file_attachments) > 0:
-                data["file_attachments"] = [
-                    conv_file(f) for f in file_attachments]
+                data["file_attachments"] = [conv_file(f) for f in file_attachments]
             if len(object_attachments) > 0:
                 data["object_attachments"] = [
-                    {"object_id": i} for i in object_attachments]
+                    {"object_id": i} for i in object_attachments
+                ]
 
-            return post_data(
-                f"instruments/{self.instrument_id}/log_entries/", data)
+            return post_data(f"instruments/{self.instrument_id}/log_entries/", data)
         else:
             raise TypeError()
 
@@ -184,9 +208,13 @@ class InstrumentLogEntryVersion(SampleDBObject):
         if "categories" in d:
             self.categories = [InstrumentLogCategory(c) for c in d["categories"]]
         if "utc_datetime" in d:
-            self.utc_datetime = datetime.strptime(d["utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+            self.utc_datetime = datetime.strptime(
+                d["utc_datetime"], "%Y-%m-%dT%H:%M:%S.%f"
+            )
         if "event_utc_datetime" in d and d["event_utc_datetime"] is not None:
-            self.event_utc_datetime = datetime.strptime(d["event_utc_datetime"], '%Y-%m-%dT%H:%M:%S.%f')
+            self.event_utc_datetime = datetime.strptime(
+                d["event_utc_datetime"], "%Y-%m-%dT%H:%M:%S.%f"
+            )
 
     def __repr__(self) -> str:
         return f"InstrumentLogEntry {self.log_entry_id} (created {self.utc_datetime})"
@@ -219,12 +247,17 @@ class InstrumentLogEntry(SampleDBObject):
             List: List of
                 :class:`~sampledbapi.instrument.InstrumentLogFileAttachment`.
         """
-        return [InstrumentLogFileAttachment(f) for f in get_data(
-            f"instruments/{self.instrument_id}/log_entries/"
-            f"{self.log_entry_id}/file_attachments")]
+        return [
+            InstrumentLogFileAttachment(f)
+            for f in get_data(
+                f"instruments/{self.instrument_id}/log_entries/"
+                f"{self.log_entry_id}/file_attachments"
+            )
+        ]
 
-    def get_file_attachment(self, file_attachment_id: int
-                            ) -> InstrumentLogFileAttachment:
+    def get_file_attachment(
+        self, file_attachment_id: int
+    ) -> InstrumentLogFileAttachment:
         """Get a specific file attachment (file_attachment_id).
 
         Args:
@@ -235,9 +268,12 @@ class InstrumentLogEntry(SampleDBObject):
                 :class:`~sampledbapi.instrument.InstrumentLogFileAttachment`.
         """
         if isinstance(file_attachment_id, int):
-            return InstrumentLogFileAttachment(get_data(
-                f"instruments/{self.instrument_id}/log_entries/" +
-                f"{self.log_entry_id}/file_attachments/{file_attachment_id}"))
+            return InstrumentLogFileAttachment(
+                get_data(
+                    f"instruments/{self.instrument_id}/log_entries/" +
+                    f"{self.log_entry_id}/file_attachments/{file_attachment_id}"
+                )
+            )
         else:
             raise TypeError()
 
@@ -248,11 +284,17 @@ class InstrumentLogEntry(SampleDBObject):
             List: List of
                 :class:`~sampledbapi.instrument.InstrumentLogObjectAttachment`.
         """
-        return [InstrumentLogObjectAttachment(o) for o in get_data(
-            f"instruments/{self.instrument_id}/log_entries/"
-            f"{self.log_entry_id}/object_attachments")]
+        return [
+            InstrumentLogObjectAttachment(o)
+            for o in get_data(
+                f"instruments/{self.instrument_id}/log_entries/"
+                f"{self.log_entry_id}/object_attachments"
+            )
+        ]
 
-    def get_object_attachment(self, object_attachment_id: int) -> InstrumentLogObjectAttachment:
+    def get_object_attachment(
+        self, object_attachment_id: int
+    ) -> InstrumentLogObjectAttachment:
         """Get a specific object attachment (object_attachment_id).
 
         Args:
@@ -263,10 +305,13 @@ class InstrumentLogEntry(SampleDBObject):
                 :class:`~sampledbapi.instrument.InstrumentLogObjectAttachment`.
         """
         if isinstance(object_attachment_id, int):
-            return InstrumentLogObjectAttachment(get_data(
-                f"instruments/{self.instrument_id}/log_entries/"
-                f"{self.log_entry_id}/object_attachments/"
-                f"{object_attachment_id}"))
+            return InstrumentLogObjectAttachment(
+                get_data(
+                    f"instruments/{self.instrument_id}/log_entries/"
+                    f"{self.log_entry_id}/object_attachments/"
+                    f"{object_attachment_id}"
+                )
+            )
         else:
             raise TypeError()
 
@@ -278,8 +323,10 @@ class InstrumentLogFileAttachment(SampleDBObject):
     content: Optional[str] = None
 
     def __repr__(self) -> str:
-        return f"InstrumentLogFileAttachment {self.file_attachment_id} " \
-            + f"({self.file_name})"
+        return (
+            f"InstrumentLogFileAttachment {self.file_attachment_id} " +
+            f"({self.file_name})"
+        )
 
 
 class InstrumentLogObjectAttachment(SampleDBObject):
@@ -288,5 +335,7 @@ class InstrumentLogObjectAttachment(SampleDBObject):
     object_id: Optional[int] = None
 
     def __repr__(self) -> str:
-        return f"InstrumentLogObjectAttachment {self.object_attachment_id} " \
-            + f"(for object {self.object_id})"
+        return (
+            f"InstrumentLogObjectAttachment {self.object_attachment_id} " +
+            f"(for object {self.object_id})"
+        )
